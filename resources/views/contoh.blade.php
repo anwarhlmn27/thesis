@@ -1,39 +1,20 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 	<!-- Title -->
-	<title>EduMin - Education Admin Dashboard Template | dexignlabs</title>
+	<title>Thesis</title>
 
 	<!-- Meta -->
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="author" content="dexignlabs">
 	<meta name="robots" content="index, follow">
-
-	<meta name="keywords" content="admin, dashboard, admin dashboard, admin template, template, admin panel, administration, analytics, bootstrap, modern, responsive, creative, retina ready, modern Dashboard responsive dashboard, responsive template, user experience, user interface, Bootstrap Dashboard, Analytics Dashboard, Customizable Admin Panel, EduMin template, ui kit, web app, EduMin, School Management,Dashboard Template, academy, course, courses, e-learning, education, learning, learning management system, lms, school, student, teacher">   
-
-	<meta name="description" content="EduMin - Empower your educational institution with the all-in-one Education Admin Dashboard Template. Streamline administrative tasks, manage courses, track student performance, and gain valuable insights with ease. Elevate your education management experience with a modern, responsive, and feature-packed solution. Explore EduMin now for a smarter, more efficient approach to education administration.">
-
-	<meta property="og:title" content="EduMin - Education Admin Dashboard Template | dexignlabs">
-	<meta property="og:description" content="EduMin - Empower your educational institution with the all-in-one Education Admin Dashboard Template. Streamline administrative tasks, manage courses, track student performance, and gain valuable insights with ease. Elevate your education management experience with a modern, responsive, and feature-packed solution. Explore EduMin now for a smarter, more efficient approach to education administration.">
-	
-	<meta property="og:image" content="https://edumin.dexignlab.com/xhtml/social-image.png">
-
-	<meta name="format-detection" content="telephone=no">
-
-	<meta name="twitter:title" content="EduMin - Education Admin Dashboard Template | dexignlabs">
-	<meta name="twitter:description" content="EduMin - Empower your educational institution with the all-in-one Education Admin Dashboard Template. Streamline administrative tasks, manage courses, track student performance, and gain valuable insights with ease. Elevate your education management experience with a modern, responsive, and feature-packed solution. Explore EduMin now for a smarter, more efficient approach to education administration.">
-
-	<meta name="twitter:image" content="https://edumin.dexignlab.com/xhtml/social-image.png">
-	<meta name="twitter:card" content="summary_large_image">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="icon" type="image/png" sizes="16x16" href="./images/favicon.png">
-
 	<!-- STYLESHEETS -->
-    <link rel="stylesheet" href="vendor/jqvmap/css/jqvmap.min.css">
-	<link rel="stylesheet" href="vendor/chartist/css/chartist.min.css">
-	<link rel="stylesheet" href="vendor/bootstrap-select/dist/css/bootstrap-select.min.css">
-    <link class="main-css" rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="{{ asset('vendor/jqvmap/css/jqvmap.min.css')}}">
+	<link rel="stylesheet" href="{{ asset('vendor/chartist/css/chartist.min.css')}}">
+	<link rel="stylesheet" href="{{ asset('vendor/bootstrap-select/dist/css/bootstrap-select.min.css')}}">
+    <link class="main-css" rel="stylesheet" href="{{ asset('css/style.css')}}">
 
 </head>
 <body>
@@ -620,146 +601,6 @@
                                     <i id="icon-dark" class="fas fa-moon"></i>
                                 </a>
 							</li>
-							<li class="nav-item dropdown notification_dropdown">
-                                <a class="nav-link bell-link " href="javascript:void(0);">
-								<svg xmlns="http://www.w3.org/2000/svg" width="24" height="22.871" viewBox="0 0 24 22.871">
-								  <g  data-name="Layer 2" transform="translate(-2 -2)">
-									<path id="Path_9" data-name="Path 9" d="M23.268,2H4.73A2.733,2.733,0,0,0,2,4.73V17.471A2.733,2.733,0,0,0,4.73,20.2a.911.911,0,0,1,.91.91v1.94a1.82,1.82,0,0,0,2.83,1.514l6.317-4.212a.9.9,0,0,1,.5-.153h4.436a2.742,2.742,0,0,0,2.633-2L25.9,5.462A2.735,2.735,0,0,0,23.268,2Zm.879,2.978-3.539,12.74a.915.915,0,0,1-.88.663H15.292a2.718,2.718,0,0,0-1.514.459L7.46,23.051v-1.94a2.733,2.733,0,0,0-2.73-2.73.911.911,0,0,1-.91-.91V4.73a.911.911,0,0,1,.91-.91H23.268a.914.914,0,0,1,.879,1.158Z" transform="translate(0 0)"/>
-									<path id="Path_10" data-name="Path 10" d="M7.91,10.82h4.55a.91.91,0,1,0,0-1.82H7.91a.91.91,0,1,0,0,1.82Z" transform="translate(-0.45 -0.63)"/>
-									<path id="Path_11" data-name="Path 11" d="M16.1,13H7.91a.91.91,0,1,0,0,1.82H16.1a.91.91,0,1,0,0-1.82Z" transform="translate(-0.45 -0.99)"/>
-								  </g>
-								</svg>
-									<span class="badge light text-white bg-primary rounded-circle">76</span>
-                                </a>
-							</li>
-                            <li class="nav-item dropdown notification_dropdown">
-                                <a class="nav-link bell ai-icon" href="javascript:void(0);" role="button" data-bs-toggle="dropdown">
-                                    <svg id="icon-user" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-bell">
-										<path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
-										<path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
-									</svg>
-                                    <div class="pulse-css"></div>
-                                </a>
-                                <div class="dropdown-menu dropdown-menu-right">
-                                    <ul class="list-unstyled">
-                                        <li class="media dropdown-item align-items-center gap-3">
-                                            <span class="success"><i class="ti-user"></i></span>
-                                            <div class="media-body">
-                                                <a href="javascript:void(0);">
-                                                    <p><strong>Martin</strong> has added a <strong>customer</strong> Successfully
-                                                    </p>
-                                                </a>
-                                            </div>
-                                            <span class="notify-time">3:20 am</span>
-                                        </li>
-                                        <li class="media dropdown-item align-items-center gap-3">
-                                            <span class="primary"><i class="ti-shopping-cart"></i></span>
-                                            <div class="media-body">
-                                                <a href="javascript:void(0);">
-                                                    <p><strong>Jennifer</strong> purchased Light Dashboard 2.0.</p>
-                                                </a>
-                                            </div>
-                                            <span class="notify-time">3:20 am</span>
-                                        </li>
-                                        <li class="media dropdown-item align-items-center gap-3">
-                                            <span class="danger"><i class="ti-bookmark"></i></span>
-                                            <div class="media-body">
-                                                <a href="javascript:void(0);">
-                                                    <p><strong>Robin</strong> marked a <strong>ticket</strong> as unsolved.
-                                                    </p>
-                                                </a>
-                                            </div>
-                                            <span class="notify-time">3:20 am</span>
-                                        </li>
-                                        <li class="media dropdown-item align-items-center gap-3">
-                                            <span class="primary"><i class="ti-heart"></i></span>
-                                            <div class="media-body">
-                                                <a href="javascript:void(0);">
-                                                    <p><strong>David</strong> purchased Light Dashboard 1.0.</p>
-                                                </a>
-                                            </div>
-                                            <span class="notify-time">3:20 am</span>
-                                        </li>
-                                        <li class="media dropdown-item align-items-center gap-3">
-                                            <span class="success"><i class="ti-image"></i></span>
-                                            <div class="media-body">
-                                                <a href="javascript:void(0);">
-                                                    <p><strong> James.</strong> has added a<strong>customer</strong> Successfully
-                                                    </p>
-                                                </a>
-                                            </div>
-                                            <span class="notify-time">3:20 am</span>
-                                        </li>
-                                    </ul>
-                                    <a class="all-notification" href="javascript:void(0);">See all notifications <i
-                                            class="ti-arrow-right"></i></a>
-                                </div>
-                            </li>
-                            <li class="nav-item dropdown notification_dropdown">
-                                <a class="nav-link ai-icon" href="javascript:void(0);" data-bs-toggle="dropdown">
-									<svg xmlns="http://www.w3.org/2000/svg" width="23.262" height="24" viewBox="0 0 23.262 24">
-									  <g id="icon" transform="translate(-1565 90)">
-										<path id="setting_1_" data-name="setting (1)" d="M30.45,13.908l-1-.822a1.406,1.406,0,0,1,0-2.171l1-.822a1.869,1.869,0,0,0,.432-2.385L28.911,4.293a1.869,1.869,0,0,0-2.282-.818l-1.211.454a1.406,1.406,0,0,1-1.88-1.086l-.213-1.276A1.869,1.869,0,0,0,21.475,0H17.533a1.869,1.869,0,0,0-1.849,1.567L15.47,2.842a1.406,1.406,0,0,1-1.88,1.086l-1.211-.454a1.869,1.869,0,0,0-2.282.818L8.126,7.707a1.869,1.869,0,0,0,.432,2.385l1,.822a1.406,1.406,0,0,1,0,2.171l-1,.822a1.869,1.869,0,0,0-.432,2.385L10.1,19.707a1.869,1.869,0,0,0,2.282.818l1.211-.454a1.406,1.406,0,0,1,1.88,1.086l.213,1.276A1.869,1.869,0,0,0,17.533,24h3.943a1.869,1.869,0,0,0,1.849-1.567l.213-1.276a1.406,1.406,0,0,1,1.88-1.086l1.211.454a1.869,1.869,0,0,0,2.282-.818l1.972-3.415a1.869,1.869,0,0,0-.432-2.385ZM27.287,18.77l-1.211-.454a3.281,3.281,0,0,0-4.388,2.533l-.213,1.276H17.533l-.213-1.276a3.281,3.281,0,0,0-4.388-2.533l-1.211.454L9.75,15.355l1-.822a3.281,3.281,0,0,0,0-5.067l-1-.822L11.721,5.23l1.211.454A3.281,3.281,0,0,0,17.32,3.151l.213-1.276h3.943l.213,1.276a3.281,3.281,0,0,0,4.388,2.533l1.211-.454,1.972,3.414h0l-1,.822a3.281,3.281,0,0,0,0,5.067l1,.822ZM19.5,7.375A4.625,4.625,0,1,0,24.129,12,4.63,4.63,0,0,0,19.5,7.375Zm0,7.375A2.75,2.75,0,1,1,22.254,12,2.753,2.753,0,0,1,19.5,14.75Z" transform="translate(1557.127 -90)"></path>
-									  </g>
-									</svg>
-
-									<span class="badge light text-white bg-primary rounded-circle">15</span>
-                                </a>
-								<div class="dropdown-menu dropdown-menu-end">
-									<div id="DZ_W_TimeLine02" class="widget-timeline dlab-scroll style-1 p-3 height370">
-                                    <ul class="timeline">
-                                        <li>
-                                            <div class="timeline-badge primary"></div>
-                                            <a class="timeline-panel text-muted" href="javascript:void(0);">
-                                                <span>10 minutes ago</span>
-                                                <h6 class="mb-0">Youtube, a video-sharing website, goes live <strong class="text-primary">$500</strong>.</h6>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <div class="timeline-badge info">
-                                            </div>
-                                            <a class="timeline-panel text-muted" href="javascript:void(0);">
-                                                <span>20 minutes ago</span>
-                                                <h6 class="mb-0">New order placed <strong class="text-info">#XF-2356.</strong></h6>
-												<p class="mb-0">Quisque a consequat ante Sit amet magna at volutapt...</p>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <div class="timeline-badge danger">
-                                            </div>
-                                            <a class="timeline-panel text-muted" href="javascript:void(0);">
-                                                <span>30 minutes ago</span>
-                                                <h6 class="mb-0">john just buy your product <strong class="text-warning">Sell $250</strong></h6>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <div class="timeline-badge success">
-                                            </div>
-                                            <a class="timeline-panel text-muted" href="javascript:void(0);">
-                                                <span>15 minutes ago</span>
-                                                <h6 class="mb-0">StumbleUpon is acquired by eBay. </h6>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <div class="timeline-badge warning">
-                                            </div>
-                                            <a class="timeline-panel text-muted" href="javascript:void(0);">
-                                                <span>20 minutes ago</span>
-                                                <h6 class="mb-0">Mashable, a news website and blog, goes live.</h6>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <div class="timeline-badge dark">
-                                            </div>
-                                            <a class="timeline-panel text-muted" href="javascript:void(0);">
-                                                <span>20 minutes ago</span>
-                                                <h6 class="mb-0">Mashable, a news website and blog, goes live.</h6>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-								</div>
-							</li>
                             <li class="nav-item dropdown header-profile">
                                 <a class="nav-link" href="javascript:void(0);" role="button" data-bs-toggle="dropdown">
                                     <img src="images/profile/education/pic1.jpg" width="20" alt=""/>
@@ -795,259 +636,67 @@
             <div class="dlabnav-scroll">
                 <ul class="metismenu" id="menu">
                     <li class="nav-label first">Main Menu</li>
-                    <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                    <li><a href="/" aria-expanded="false">
 							<i class="la la-home"></i>
 							<span class="nav-text">Dashboard</span>
 						</a>
-                        <ul aria-expanded="false">
-                            <li><a href="index.html">Dashboard 1</a></li>
-                            <li><a href="index-2.html">Dashboard 2</a></li>
-                            <li><a href="index-3.html">Dashboard 3</a></li>
-                        </ul>
                     </li>
-					<li><a class="ai-icon" href="event-management.html" aria-expanded="false">
-							<i class="la la-calendar"></i>
-							<span class="nav-text">Event Management</span>
-						</a>
-                    </li>
-					<li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
-							<i class="la la-user"></i>
-							<span class="nav-text">Professors</span>
-						</a>
-                        <ul aria-expanded="false">
-                            <li><a href="all-professors.html">All Professor</a></li>
-                            <li><a href="add-professor.html">Add Professor</a></li>
-                            <li><a href="edit-professor.html">Edit Professor</a></li>
-                            <li><a href="professor-profile.html">Professor Profile</a></li>
-                        </ul>
-                    </li>
+					
+                    <li class="nav-label">Data Master</li>
 					<li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
 							<i class="la la-users"></i>
-							<span class="nav-text">Students</span>
+							<span class="nav-text">Data Pengguna</span>
 						</a>
                         <ul aria-expanded="false">
-                            <li><a href="all-students.html">All Students</a></li>
-                            <li><a href="add-student.html">Add Students</a></li>
-                            <li><a href="edit-student.html">Edit Students</a></li>
-                            <li><a href="about-student.html">About Students</a></li>
+                            <li><a href="javascript:void()">Data Admin</a></li>
+                            <li><a href="javascript:void()">Data Dosen</a></li>
+                            <li><a href="javascript:void()">Data Mahasiswa</a></li>
                         </ul>
                     </li>
+
+                    <li class="nav-label">Manajemen Skripsi</li>
 					<li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
 							<i class="la la-graduation-cap"></i>
-							<span class="nav-text">Courses</span>
+							<span class="nav-text">Data Skripsi</span>
 						</a>
                         <ul aria-expanded="false">
-                            <li><a href="all-courses.html">All Courses</a></li>
-                            <li><a href="add-courses.html">Add Courses</a></li>
-                            <li><a href="edit-courses.html">Edit Courses</a></li>
-                            <li><a href="about-courses.html">About Courses</a></li>
+                            <li><a href="javascript:void()">Daftar Skripsi</a></li>
+                            <li><a href="javascript:void()">Pembimbing Skripsi</a></li>
                         </ul>
                     </li>
-					<li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
+					<li><a href="javascript:void()" aria-expanded="false">
 							<i class="la la-book"></i>
-							<span class="nav-text">Library</span>
+							<span class="nav-text">Log Bimbingan</span>
 						</a>
-                        <ul aria-expanded="false">
-                            <li><a href="all-library.html">All Library</a></li>
-                            <li><a href="add-library.html">Add Library</a></li>
-                            <li><a href="edit-library.html">Edit Library</a></li>
-                        </ul>
                     </li>
+
+                    <li class="nav-label">Ujian & Sidang</li>
 					<li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
-							<i class="la la-building"></i>
-							<span class="nav-text">Departments</span>
-						</a>
-                        <ul aria-expanded="false">
-                            <li><a href="all-departments.html">All Departments</a></li>
-                            <li><a href="add-departments.html">Add Departments</a></li>
-                            <li><a href="edit-departments.html">Edit Departments</a></li>
-                        </ul>
-                    </li>
-					<li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
-							<i class="la la-users"></i>
-							<span class="nav-text">Staff</span>
-						</a>
-                        <ul aria-expanded="false">
-                            <li><a href="all-staff.html">All Staff</a></li>
-                            <li><a href="add-staff.html">Add Staff</a></li>
-                            <li><a href="edit-staff.html">Edit Staff</a></li>
-                            <li><a href="staff-profile.html">Staff Profile</a></li>
-                        </ul>
-                    </li>
-					<li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
-							<i class="la la-gift"></i>
-							<span class="nav-text">Holiday</span>
-						</a>
-                        <ul aria-expanded="false">
-                            <li><a href="all-holiday.html">All Holiday</a></li>
-                            <li><a href="add-holiday.html">Add Holiday</a></li>
-                            <li><a href="edit-holiday.html">Edit Holiday</a></li>
-                            <li><a href="holiday-calendar.html">Holiday Calendar</a></li>
-                        </ul>
-                    </li>
-					<li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
-							<i class="la la-dollar"></i>
-							<span class="nav-text">Fees</span>
-						</a>
-                        <ul aria-expanded="false">
-                            <li><a href="fees-collection.html">Fees Collection</a></li>
-                            <li><a href="add-fees.html">Add Fees</a></li>
-                            <li><a href="fees-receipt.html">Fees Receipt</a></li>
-                        </ul>
-                    </li>
-                    <li class="nav-label">Apps</li>
-                    <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
-							<i class="la la-users"></i>
-							<span class="nav-text">Apps</span>
-						</a>
-                        <ul aria-expanded="false">
-                            <li><a href="./app-profile.html">Profile</a></li>
-                            <li><a href="./post-details.html">Post Details<span class="badge badge-danger badge-xs ms-2">NEW</span></a></li>
-                            <li><a href="./edit-profile.html">Edit Profile<span class="badge badge-danger badge-xs ms-2">NEW</span></a></li>
-                            <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">Email</a>
-                                <ul aria-expanded="false">
-                                    <li><a href="./email-compose.html">Compose</a></li>
-                                    <li><a href="./email-inbox.html">Inbox</a></li>
-                                    <li><a href="./email-read.html">Read</a></li>
-                                </ul>
-                            </li>
-                            <li><a href="./app-calender.html">Calendar</a></li>
-							<li><a class="has-arrow" href="javascript:void()" aria-expanded="false">Shop</a>
-                                <ul aria-expanded="false">
-                                    <li><a href="./ecom-product-grid.html">Product Grid</a></li>
-									<li><a href="./ecom-product-list.html">Product List</a></li>
-									<li><a href="./ecom-product-detail.html">Product Details</a></li>
-									<li><a href="./ecom-product-order.html">Order</a></li>
-									<li><a href="./ecom-checkout.html">Checkout</a></li>
-									<li><a href="./ecom-invoice.html">Invoice</a></li>
-									<li><a href="./ecom-customers.html">Customers</a></li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </li>
-                    <li><a class="has-arrow ai-icon" href="javascript:void(0)" aria-expanded="false">
-							<i class="flaticon-381-database-1"></i>
-							<span class="nav-text">CMS</span>
-							<span class="badge badge-danger badge-xs ms-2">NEW</span>
-						</a>
-						<ul aria-expanded="false">
-							<li><a href="content.html">Content</a></li>
-							<li><a href="menu.html">Menus</a></li>
-							<li><a href="email-template.html">Email Template</a>
-							</li>
-							<li><a href="blog.html">Blog</a></li>
-							<li><a href="content-add.html"> Add Content</a></li>
-							<li><a href="add-email.html">Add Email</a></li>
-							<li><a href="add-blog.html">Add Blog</a></li>
-							<li><a href="blog-category.html">Blog Category</a></li>
-						</ul>
-					</li>
-                    <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
-							<i class="la la-signal"></i>
-							<span class="nav-text">Charts</span>
-						</a>
-                        <ul aria-expanded="false">
-                            <li><a href="./chart-flot.html">Flot</a></li>
-                            <li><a href="./chart-morris.html">Morris</a></li>
-                            <li><a href="./chart-chartjs.html">Chartjs</a></li>
-                            <li><a href="./chart-chartist.html">Chartist</a></li>
-                            <li><a href="./chart-sparkline.html">Sparkline</a></li>
-                            <li><a href="./chart-peity.html">Peity</a></li>
-                        </ul>
-                    </li>
-                    <li class="nav-label">Components</li>
-                    <li class="ui-menu"><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
-							<i class="la la-globe"></i>
-							<span class="nav-text">Bootstrap</span>
-						</a>
-                        <ul aria-expanded="false">
-                            <li><a href="./ui-accordion.html">Accordion</a></li>
-                            <li><a href="./ui-alert.html">Alert</a></li>
-                            <li><a href="./ui-badge.html">Badge</a></li>
-                            <li><a href="./ui-button.html">Button</a></li>
-                            <li><a href="./ui-modal.html">Modal</a></li>
-                            <li><a href="./ui-button-group.html">Button Group</a></li>
-                            <li><a href="./ui-list-group.html">List Group</a></li>
-                            <li><a href="./ui-media-object.html">Media Object</a></li>
-                            <li><a href="./ui-card.html">Cards</a></li>
-                            <li><a href="./ui-carousel.html">Carousel</a></li>
-                            <li><a href="./ui-dropdown.html">Dropdown</a></li>
-                            <li><a href="./ui-popover.html">Popover</a></li>
-                            <li><a href="./ui-progressbar.html">Progressbar</a></li>
-                            <li><a href="./ui-tab.html">Tab</a></li>
-                            <li><a href="./ui-typography.html">Typography</a></li>
-                            <li><a href="./ui-pagination.html">Pagination</a></li>
-                            <li><a href="./ui-grid.html">Grid</a></li>
-                        </ul>
-                    </li>
-                    <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
-							<i class="la la-plus-square-o"></i>
-							<span class="nav-text">Plugins</span>
-						</a>
-                        <ul aria-expanded="false">
-                            <li><a href="./uc-select2.html">Select 2</a></li>
-                            <li><a href="./uc-nestable.html">Nestedable</a></li>
-                            <li><a href="./uc-noui-slider.html">Noui Slider</a></li>
-                            <li><a href="./uc-sweetalert.html">Sweet Alert</a></li>
-                            <li><a href="./uc-toastr.html">Toastr</a></li>
-                            <li><a href="./map-jqvmap.html">Jqv Map</a></li>
-                            <li><a href="./uc-lightgallery.html">Light Gallery<span class="badge badge-danger badge-xs ms-2">NEW</span></a></li>
-                        </ul>
-                    </li>
-                    <li><a href="widget-basic.html" aria-expanded="false">
-							<i class="la la-desktop"></i>
-							<span class="nav-text">Widget</span>
-						</a></li>
-                    <li class="nav-label">Forms</li>
-                    <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
 							<i class="la la-file-text"></i>
-							<span class="nav-text">Forms</span>
+							<span class="nav-text">Seminar Proposal</span>
 						</a>
                         <ul aria-expanded="false">
-                            <li><a href="./form-element.html">Form Elements</a></li>
-                            <li><a href="./form-wizard.html">Wizard</a></li>
-                            <li><a href="form-ckeditor.html">CkEditor</a></li>
-                            <li><a href="form-pickers.html">Pickers</a></li>
-                            <li><a href="form-validation.html">Form Validate</a></li>
+                            <li><a href="javascript:void()">Jadwal Seminar</a></li>
+                            <li><a href="javascript:void()">Penguji Seminar</a></li>
+                            <li><a href="javascript:void()">Revisi & Komentar</a></li>
                         </ul>
                     </li>
-                    <li class="nav-label">Table</li>
-                    <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
-							<i class="la la-table"></i>
-							<span class="nav-text">Table</span>
+					<li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
+							<i class="la la-certificate"></i>
+							<span class="nav-text">Sidang Skripsi</span>
 						</a>
                         <ul aria-expanded="false">
-                            <li><a href="table-bootstrap-basic.html">Bootstrap</a></li>
-                            <li><a href="table-datatable-basic.html">Datatable</a></li>
+                            <li><a href="javascript:void()">Jadwal Sidang</a></li>
+                            <li><a href="javascript:void()">Penguji Sidang</a></li>
+                            <li><a href="javascript:void()">Revisi Sidang</a></li>
                         </ul>
                     </li>
-                    <li class="nav-label">Extra</li>
-                    <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
-							<i class="la la-th-list"></i>
-							<span class="nav-text">Pages</span>
+					<li><a href="javascript:void()" aria-expanded="false">
+							<i class="la la-trophy"></i>
+							<span class="nav-text">Yudisium</span>
 						</a>
-                        <ul aria-expanded="false">
-                            <li><a href="./page-register.html">Register</a></li>
-                            <li><a href="./page-login.html">Login</a></li>
-                            <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">Error</a>
-                                <ul aria-expanded="false">
-                                    <li><a href="./page-error-400.html">Error 400</a></li>
-                                    <li><a href="./page-error-403.html">Error 403</a></li>
-                                    <li><a href="./page-error-404.html">Error 404</a></li>
-                                    <li><a href="./page-error-500.html">Error 500</a></li>
-                                    <li><a href="./page-error-503.html">Error 503</a></li>
-                                </ul>
-                            </li>
-                            <li><a href="./page-lock-screen.html">Lock Screen</a></li>
-                        </ul>
                     </li>
 				</ul>
-
-
-				<div class="copyright">
-					<p>Edumin Saas Admin © 2023 All Rights Reserved</p>
-					<p class="fs-12">Made with <span class="heart"></span> by DexignLab</p>
-				</div>
             </div>
         </div>
         <!--**********************************
@@ -1138,236 +787,6 @@
 							</div>
 						</div>
                     </div>
-					<div class="col-xl-6 col-xxl-6 col-lg-12 col-sm-12">
-						<div class="card">
-							<div class="card-header">
-								<h3 class="card-title">University Survey</h3>
-							</div>
-							<div class="card-body">
-								<div id="morris_bar_stalked" class="morris_chart_height ltr" style="height: 300px !important;"></div>
-							</div>
-						</div>
-					</div>
-					<div class="col-xl-3 col-xxl-3 col-sm-6">
-						<div class="card">
-							<div class="card-header">
-								<h3 class="card-title">Donught Chart</h3>
-							</div>
-							<div class="card-body">
-								<div id="morris_donught_2" class="morris_chart_height ltr" style="height: 300px !important;"></div>
-							</div>
-						</div>
-					</div>
-					<div class="col-xl-3 col-xxl-3 col-sm-6">
-						<div class="card">
-							<div class="card-header">
-								<h3 class="card-title">University Survey</h3>
-							</div>
-							<div class="card-body">
-								<div id="morris_area" class="morris_chart_height ltr" style="height: 300px !important;"></div>
-							</div>
-						</div>
-					</div>
-					<div class="col-xl-3 col-md-6">
-						<div class="card">
-							<img class="img-fluid rounded-top" src="images/courses/pic1.jpg" alt="">
-							<div class="card-body">
-								<h4><a href="about-courses.html">When Is the Best Time to Take an Education Course?</a></h4>
-								<ul class="list-group mb-3 list-group-flush">
-									<li class="list-group-item px-0 border-top-0 d-flex justify-content-between"><span class="mb-0">April 23</span>
-										<a href="javascript:void(0);" class="add-wishlist-btn">
-											<i class="la la-heart-o outline"></i>
-											<i class="la la-heart fill"></i>
-											<span>230</span>
-										</a>
-									</li>
-									<li class="list-group-item px-0 d-flex justify-content-between">
-										<span class="mb-0">Duration :</span><strong>12 Months</strong></li>
-									<li class="list-group-item px-0 d-flex justify-content-between">
-										<span class="mb-0">Professor :</span><strong>Jack Ronan</strong></li>
-									<li class="list-group-item px-0 d-flex justify-content-between">
-										<span><i class="fa fa-graduation-cap text-primary me-2"></i>Student</span><strong>+120</strong></li>
-								</ul>
-								<a href="about-courses.html" class="btn btn-primary">Read More</a>
-							</div>
-						</div>
-					</div>
-					<div class="col-xl-3 col-md-6">
-						<div class="card">
-							<img class="img-fluid rounded-top" src="images/courses/pic2.jpg" alt="">
-							<div class="card-body">
-								<h4><a href="about-courses.html">Education Courses: A Guide to Unlocking Your Potential</a></h4>
-								<ul class="list-group mb-3 list-group-flush">
-									<li class="list-group-item px-0 border-top-0 d-flex justify-content-between"><span class="mb-0">April 23</span>
-										<a href="javascript:void(0);" class="add-wishlist-btn">
-											<i class="la la-heart-o outline"></i>
-											<i class="la la-heart fill"></i>
-											<span>450</span>
-										</a>
-									</li>
-									<li class="list-group-item px-0 d-flex justify-content-between">
-										<span class="mb-0">Duration :</span><strong>12 Months</strong></li>
-									<li class="list-group-item px-0 d-flex justify-content-between">
-										<span class="mb-0">Professor :</span><strong>Jimmy Morris</strong></li>
-									<li class="list-group-item px-0 d-flex justify-content-between">
-										<span><i class="fa fa-graduation-cap text-primary me-2"></i>Student</span><strong>+120</strong></li>
-								</ul>
-								<a href="about-courses.html" class="btn btn-primary">Read More</a>
-							</div>
-						</div>
-					</div>
-					<div class="col-xl-3 col-md-6">
-						<div class="card">
-							<img class="img-fluid rounded-top" src="images/courses/pic3.jpg" alt="">
-							<div class="card-body">
-								<h4><a href="about-courses.html">A Comprehensive Guide to Taking an Education Course</a></h4>
-								<ul class="list-group mb-3 list-group-flush">
-									<li class="list-group-item px-0 border-top-0 d-flex justify-content-between"><span class="mb-0">April 23</span>
-										<a href="javascript:void(0);" class="add-wishlist-btn">
-											<i class="la la-heart-o outline"></i>
-											<i class="la la-heart fill"></i>
-											<span>120</span>
-										</a>
-									</li>
-									<li class="list-group-item px-0 d-flex justify-content-between">
-										<span class="mb-0">Duration :</span><strong>12 Months</strong></li>
-									<li class="list-group-item px-0 d-flex justify-content-between">
-										<span class="mb-0">Professor :</span><strong>Konne Backfield</strong></li>
-									<li class="list-group-item px-0 d-flex justify-content-between">
-										<span><i class="fa fa-graduation-cap text-primary me-2"></i>Student</span><strong>+120</strong></li>
-								</ul>
-								<a href="about-courses.html" class="btn btn-primary">Read More</a>
-							</div>
-						</div>
-					</div>
-					<div class="col-xl-3 col-md-6">
-						<div class="card">
-							<img class="img-fluid rounded-top" src="images/courses/pic4.jpg" alt="">
-							<div class="card-body">
-								<h4><a href="about-courses.html">Why Should You Consider Taking an Education Course?</a></h4>
-								<ul class="list-group mb-3 list-group-flush">
-									<li class="list-group-item px-0 border-top-0 d-flex justify-content-between"><span class="mb-0">April 23</span>
-										<a href="javascript:void(0);" class="add-wishlist-btn">
-											<i class="la la-heart-o outline"></i>
-											<i class="la la-heart fill"></i>
-											<span>275</span>
-										</a>
-									</li>
-									<li class="list-group-item px-0 d-flex justify-content-between">
-										<span class="mb-0">Duration :</span><strong>12 Months</strong></li>
-									<li class="list-group-item px-0 d-flex justify-content-between">
-										<span class="mb-0">Professor :</span><strong>Nashid Martines</strong></li>
-									<li class="list-group-item px-0 d-flex justify-content-between">
-										<span><i class="fa fa-graduation-cap text-primary me-2"></i>Student</span><strong>+120</strong></li>
-								</ul>
-								<a href="about-courses.html" class="btn btn-primary">Read More</a>
-							</div>
-						</div>
-					</div>
-
-					<div class="col-lg-6">
-						<div class="card">
-                            <div class="card-body">
-								<form action="#" method="post">
-									<div class="form-group">
-										<div class="input-group mb-3">
-											<span class="input-group-text">To</span>
-                                            <input type="text" class="form-control" placeholder="Username">
-                                        </div>
-										<div class="input-group mb-3">
-											<span class="input-group-text">Subject</span>
-                                            <input type="text" class="form-control" placeholder="Subject">
-                                        </div>
-									</div>
-									<div class="form-group">
-										<div class="custom-ekeditor">
-                                            <div id="ckeditor"></div>
-                                        </div>
-									</div>
-									<div class="row align-items-center my-3">
-										<div class="col-xl-6">
-											<div class="mb-xl-0 mb-3">
-												<input type="file" class="form-control" data-default-file="">
-											</div>
-										</div>
-										<div class="col-xl-6 ">
-											<button type="submit" class="btn btn-primary float-xl-end">
-												Send <i class="fa fa-paper-plane-o"></i>
-											</button>
-										</div>
-									</div>
-								</form>
-							</div>
-						</div>
-					</div>
-					<div class="col-lg-6">
-						<div class="card">
-                            <div class="card-header">
-                                <h4 class="card-title">Exam Toppers</h4>
-                            </div>
-                            <div class="card-body">
-                                <div class="table-responsive">
-                                    <table class="table verticle-middle text-nowrap">
-                                        <thead>
-                                            <tr>
-                                                <th scope="col">Roll No.</th>
-                                                <th scope="col">Name</th>
-                                                <th scope="col">Status</th>
-                                                <th scope="col">Edit</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>542</td>
-												<td>Jack Ronan</td>
-                                                <td><span id="widget_sparklinedash"><canvas></canvas></span></td>
-                                                <td>
-                                                    <a href="javascript:void(0);" class="btn btn-xs sharp btn-primary"><i class="fa fa-pencil"></i></a>
-                                                    <a href="javascript:void(0);" class="btn btn-xs sharp btn-danger"><i class="fa fa-trash"></i></a>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>243 </td>
-                                                <td>Jimmy Morris</td>
-                                                <td><div class="ico-sparkline"><div id="widget_spark-bar"></div></div></td>
-												<td>
-                                                    <a href="javascript:void(0);" class="btn btn-xs sharp btn-primary"><i class="fa fa-pencil"></i></a>
-                                                    <a href="javascript:void(0);" class="btn btn-xs sharp btn-danger"><i class="fa fa-trash"></i></a>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>452 </td>
-                                                <td>Nashid Martines</td>
-                                                <td><div class="ico-sparkline"><div id="widget_StackedBarChart"></div></div></td>
-												<td>
-                                                    <a href="javascript:void(0);" class="btn btn-xs sharp btn-primary"><i class="fa fa-pencil"></i></a>
-                                                    <a href="javascript:void(0);" class="btn btn-xs sharp btn-danger"><i class="fa fa-trash"></i></a>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>124</td>
-                                                <td>Roman Aurora</td>
-                                                <td> <div class="ico-sparkline"> <div id="widget_tristate"></div></div></td>
-												<td>
-                                                    <a href="javascript:void(0);" class="btn btn-xs sharp btn-primary"><i class="fa fa-pencil"></i></a>
-                                                    <a href="javascript:void(0);" class="btn btn-xs sharp btn-danger"><i class="fa fa-trash"></i></a>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>234</td>
-                                                <td>Samantha</td>
-                                                <td> <div class="ico-sparkline"> <div id="widget_composite-bar"></div> </div> </td>
-												<td>
-                                                    <a href="javascript:void(0);" class="btn btn-xs sharp btn-primary"><i class="fa fa-pencil"></i></a>
-                                                    <a href="javascript:void(0);" class="btn btn-xs sharp btn-danger"><i class="fa fa-trash"></i></a>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-					</div>
 					<div class="col-xl-12 col-xxl-12 col-lg-12 col-md-12 col-sm-12">
                         <div class="card">
                             <div class="card-header">
@@ -1473,7 +892,7 @@
         ***********************************-->
         <div class="footer">
             <div class="copyright">
-                <p>Copyright © Designed &amp; Developed by <a href="http://dexignlab.com/" target="_blank">DexignLab</a> 2023</p>
+                <p>Copyright © 2026 All Rights Reserved</p>
             </div>
         </div>
         <!--**********************************
@@ -1489,30 +908,29 @@
         Scripts
     ***********************************-->
     <!-- Required vendors -->
-    <script src="vendor/global/global.min.js"></script>
-	<script src="vendor/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
-    <script src="vendor/ckeditor/ckeditor.js"></script>
+    <script src="{{ asset('vendor/global/global.min.js') }}"></script>
+	<script src="{{ asset('vendor/bootstrap-select/dist/js/bootstrap-select.min.js') }}"></script>
 
 	<!-- Chart sparkline plugin files -->
-    <script src="vendor/jquery-sparkline/jquery.sparkline.min.js"></script>
-	<script src="js/plugins-init/sparkline-init.js"></script>
+    <script src="{{ asset('vendor/jquery-sparkline/jquery.sparkline.min.js') }}"></script>
+	<script src="{{ asset('js/plugins-init/sparkline-init.js') }}"></script>
 
 	<!-- Chart Morris plugin files -->
-    <script src="vendor/raphael/raphael.min.js"></script>
-    <script src="vendor/morris/morris.min.js"></script>
+    <script src="{{ asset('vendor/raphael/raphael.min.js') }}"></script>
+    <script src="{{ asset('vendor/morris/morris.min.js') }}"></script>
 
     <!-- Init file -->
-    <script src="js/plugins-init/widgets-script-init.js"></script>
+    <script src="{{ asset('js/plugins-init/widgets-script-init.js') }}"></script>
 
 	<!-- Svganimation scripts -->
-    <script src="vendor/svganimation/vivus.min.js"></script>
-    <script src="vendor/svganimation/svg.animation.js"></script>
+    <script src="{{ asset('vendor/svganimation/vivus.min.js') }}"></script>
+    <script src="{{ asset('vendor/svganimation/svg.animation.js') }}"></script>
 
 	<!-- Demo scripts -->
-    <script src="js/dashboard/dashboard.js"></script>
+    <script src="{{ asset('js/dashboard/dashboard.js') }}"></script>
     
-	<script src="js/custom.min.js"></script>
-    <script src="js/dlabnav-init.js"></script>
+	<script src="{{ asset('js/custom.min.js') }}"></script>
+    <script src="{{ asset('js/dlabnav-init.js') }}"></script>
     
     
 

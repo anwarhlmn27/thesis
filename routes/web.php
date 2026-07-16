@@ -1,7 +1,40 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\LecturerController;
+use App\Http\Controllers\Admin\StudentController;
+use App\Http\Controllers\Admin\ThesisController;
+use App\Http\Controllers\Admin\ThesisAdvisorController;
+use App\Http\Controllers\Admin\MentoringLogController;
+use App\Http\Controllers\Admin\ProposalSeminarController;
+use App\Http\Controllers\Admin\ProposalExaminerController;
+use App\Http\Controllers\Admin\ProposalCommentController;
+use App\Http\Controllers\Admin\ThesisDefenseController;
+use App\Http\Controllers\Admin\DefenseExaminerController;
+use App\Http\Controllers\Admin\DefenseRevisionController;
+use App\Http\Controllers\Admin\YudisiumController;
 
 Route::get('/', function () {
-    return view('dashboard');
+    return redirect()->route('dashboard');
+});
+
+Route::get('/dashboard', function() {
+    return view('admin.dashboard');
+})->name('dashboard');
+
+Route::prefix('admin')->group(function () {
+    Route::resource('users', UserController::class);
+    Route::resource('lecturers', LecturerController::class);
+    Route::resource('students', StudentController::class);
+    Route::resource('theses', ThesisController::class);
+    Route::resource('thesis-advisors', ThesisAdvisorController::class);
+    Route::resource('mentoring-logs', MentoringLogController::class);
+    Route::resource('proposal-seminars', ProposalSeminarController::class);
+    Route::resource('proposal-examiners', ProposalExaminerController::class);
+    Route::resource('proposal-comments', ProposalCommentController::class);
+    Route::resource('thesis-defenses', ThesisDefenseController::class);
+    Route::resource('defense-examiners', DefenseExaminerController::class);
+    Route::resource('defense-revisions', DefenseRevisionController::class);
+    Route::resource('yudisiums', YudisiumController::class);
 });

@@ -13,8 +13,10 @@ class ThesisAdvisorController extends Controller
     public function index()
     {
         $advisors = ThesisAdvisor::with(['thesis.student.user', 'lecturer.user'])->orderBy('id', 'desc')->get();
-        $theses = Thesis::with('student.user')->get();
+        // Theses that passed proposal seminar
+        $theses = Thesis::with('student.user')->orderBy('id', 'desc')->get();
         $lecturers = Lecturer::with('user')->get();
+
         return view('admin.thesis_advisors.index', compact('advisors', 'theses', 'lecturers'));
     }
 
@@ -34,6 +36,12 @@ class ThesisAdvisorController extends Controller
             'is_approved_for_defense' => $request->has('is_approved_for_defense'),
             'approved_at' => $request->approved_at,
         ]);
+
+        // Update thesis status to mentoring
+        $thesis = Thesis::find($request->thesis_id);
+        if ($thesis) {
+            $thesis->update(['status' => 'mentoring']);
+        }
 
         return redirect()->back()->with('success', 'Pembimbing Skripsi berhasil ditambahkan.');
     }

@@ -4,48 +4,33 @@
 <div class="row page-titles mx-0">
     <div class="col-sm-6 p-md-0">
         <div class="welcome-text">
-            <h4>Jadwal Sidang Skripsi</h4>
-            <p class="mb-0">Kelola tanggal sidang, ruangan, skor akhir, nilai huruf, dan status kelulusan mahasiswa</p>
+            <h4>Pendaftaran & Jadwal Sidang Skripsi</h4>
+            <p class="mb-0">Kelola pendaftaran sidang skripsi, tanggal sidang, tim penguji, dan verifikasi 5 prasyarat kelayakan sidang</p>
         </div>
     </div>
     <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addModal">
-            <i class="fa fa-plus me-2"></i>Tambah Jadwal Sidang
+            <i class="fa fa-plus me-2"></i>Daftarkan / Jadwalkan Sidang
         </button>
     </div>
 </div>
-
-@if(session('success'))
-<div class="alert alert-success alert-dismissible fade show">
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="btn-close"></button>
-    <strong>Sukses!</strong> {{ session('success') }}
-</div>
-@endif
-
-@if($errors->any())
-<div class="alert alert-danger alert-dismissible fade show">
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="btn-close"></button>
-    <strong>Error!</strong> Mohon periksa form kembali.
-</div>
-@endif
 
 <div class="row">
     <div class="col-lg-12">
         <div class="card">
             <div class="card-header">
-                <h4 class="card-title">Daftar Jadwal Sidang Skripsi</h4>
+                <h4 class="card-title">Daftar Pendaftaran & Jadwal Sidang Skripsi</h4>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
                     <table class="table table-responsive-md">
                         <thead>
                             <tr>
-                                <th style="width:80px;"><strong>#</strong></th>
+                                <th style="width:50px;"><strong>#</strong></th>
                                 <th><strong>SKRIPSI (MAHASISWA)</strong></th>
-                                <th><strong>TANGGAL & WAKTU</strong></th>
-                                <th><strong>RUANGAN</strong></th>
-                                <th><strong>NILAI (SKOR/GRADE)</strong></th>
-                                <th><strong>STATUS</strong></th>
+                                <th><strong>TANGGAL & RUANG</strong></th>
+                                <th><strong>FILE FINAL SKRIPSI</strong></th>
+                                <th><strong>NILAI & STATUS</strong></th>
                                 <th><strong>AKSI</strong></th>
                             </tr>
                         </thead>
@@ -57,14 +42,23 @@
                                     <strong>{{ Str::limit($defense->thesis->title ?? '-', 50) }}</strong><br>
                                     <small class="text-muted">Mhs: {{ $defense->thesis->student->user->name ?? '-' }} (NIM: {{ $defense->thesis->student->nim ?? '-' }})</small>
                                 </td>
-                                <td>{{ $defense->defense_date ? $defense->defense_date->format('d M Y - H:i') : '-' }} WIB</td>
-                                <td>{{ $defense->room ?? '-' }}</td>
                                 <td>
-                                    <strong>Skor:</strong> {{ $defense->score ?? '-' }}<br>
-                                    <strong>Grade:</strong> <span class="badge badge-info">{{ $defense->grade ?? '-' }}</span>
+                                    {{ $defense->defense_date ? $defense->defense_date->format('d M Y, H:i') : '-' }} WIB<br>
+                                    <small class="text-muted"><i class="fa fa-map-marker me-1"></i>Ruang: {{ $defense->room ?? '-' }}</small>
                                 </td>
                                 <td>
-                                    <span class="badge {{ $defense->status === 'passed' ? 'badge-success' : ($defense->status === 'failed' ? 'badge-danger' : 'badge-warning') }}">
+                                    @if($defense->final_file_path)
+                                    <a href="{{ asset($defense->final_file_path) }}" target="_blank" class="btn btn-outline-info btn-xs">
+                                        <i class="fa fa-file-pdf-o me-1"></i>Lihat Skripsi Akhir
+                                    </a>
+                                    @else
+                                    <span class="text-muted fs-12">Belum diunggah</span>
+                                    @endif
+                                </td>
+                                <td>
+                                    <strong>Skor:</strong> {{ $defense->score ?? '-' }} | 
+                                    <strong>Grade:</strong> <span class="badge badge-info">{{ $defense->grade ?? '-' }}</span><br>
+                                    <span class="badge {{ $defense->status === 'passed' ? 'badge-success' : ($defense->status === 'failed' ? 'badge-danger' : 'badge-warning') }} text-capitalize mt-1">
                                         {{ $defense->status }}
                                     </span>
                                 </td>
@@ -78,11 +72,12 @@
                                                 data-status="{{ $defense->status }}"
                                                 data-score="{{ $defense->score }}"
                                                 data-grade="{{ $defense->grade }}"
+                                                data-final_file_path="{{ $defense->final_file_path }}"
                                                 data-bs-toggle="modal" 
                                                 data-bs-target="#editModal">
                                             <i class="fa fa-pencil"></i>
                                         </button>
-                                        <form action="{{ route('thesis-defenses.destroy', $defense->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus jadwal sidang ini?')">
+                                        <form action="{{ route('thesis-defenses.destroy', $defense->id) }}" method="POST" onsubmit="return confirmDelete(event, this)" class="d-inline" data-confirm-message="Apakah Anda yakin ingin menghapus jadwal sidang ini?">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-danger shadow btn-xs sharp">
@@ -94,7 +89,7 @@
                             </tr>
                             @empty
                             <tr>
-                                <td colspan="7" class="text-center">Belum ada data jadwal sidang.</td>
+                                <td colspan="6" class="text-center">Belum ada pendaftaran sidang skripsi.</td>
                             </tr>
                             @endforelse
                         </tbody>
@@ -107,39 +102,51 @@
 
 <!-- Add Modal -->
 <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Tambah Jadwal Sidang</h5>
+                <h5 class="modal-title">Daftar & Jadwalkan Sidang Skripsi</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <form action="{{ route('thesis-defenses.store') }}" method="POST">
                 @csrf
                 <div class="modal-body">
                     <div class="form-group mb-3">
-                        <label class="form-label">Skripsi Mahasiswa</label>
+                        <label class="form-label fw-bold">Pilih Skripsi Mahasiswa (Cek Status Prasyarat)</label>
                         <select name="thesis_id" class="form-control" required>
                             <option value="">-- Pilih Skripsi --</option>
                             @foreach($theses as $thesis)
-                            <option value="{{ $thesis->id }}">{{ $thesis->student->nim }} - {{ Str::limit($thesis->title, 50) }}</option>
+                            @php
+                                $statusBadge = $thesis->is_eligible_for_defense ? '[ELIGIBLE SIDANG]' : '[BELUM ELIGIBLE - Min 10x Bimbingan, ACC Pembimbing, Finance, BAAK, Library]';
+                            @endphp
+                            <option value="{{ $thesis->id }}">
+                                {{ $thesis->student->nim ?? '' }} - {{ $thesis->student->user->name ?? '' }} | {{ Str::limit($thesis->title, 35) }} {{ $statusBadge }}
+                            </option>
                             @endforeach
                         </select>
+                        <small class="text-muted d-block mt-1">Syarat Eligible: Min 10x bimbingan approved + ACC Pembimbing + Lunas UKT/Finance + BAAK Clear + Library Clear</small>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Tanggal & Waktu Sidang</label>
+                            <input type="datetime-local" name="defense_date" class="form-control">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Ruangan Sidang</label>
+                            <input type="text" name="room" class="form-control" placeholder="Contoh: Ruang Sidang Utama FEB">
+                        </div>
                     </div>
                     <div class="form-group mb-3">
-                        <label class="form-label">Tanggal & Waktu Sidang</label>
-                        <input type="datetime-local" name="defense_date" class="form-control">
-                    </div>
-                    <div class="form-group mb-3">
-                        <label class="form-label">Ruangan</label>
-                        <input type="text" name="room" class="form-control" placeholder="Contoh: Ruang Sidang FEB, Ruang 103">
+                        <label class="form-label">Path File Laporan Skripsi Akhir PDF</label>
+                        <input type="text" name="final_file_path" class="form-control" placeholder="uploads/skripsi_final.pdf">
                     </div>
                     <div class="form-group mb-3">
                         <label class="form-label">Status Sidang</label>
                         <select name="status" class="form-control" required>
-                            <option value="registered">Registered</option>
-                            <option value="scheduled">Scheduled</option>
-                            <option value="passed">Passed</option>
-                            <option value="failed">Failed</option>
+                            <option value="registered">Registered (Pendaftaran Baru)</option>
+                            <option value="scheduled">Scheduled (Jadwal Terbit)</option>
+                            <option value="passed">Passed (Lulus Sidang)</option>
+                            <option value="failed">Failed (Tidak Lulus)</option>
                         </select>
                     </div>
                     <div class="row">
@@ -164,10 +171,10 @@
 
 <!-- Edit Modal -->
 <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Edit Jadwal Sidang</h5>
+                <h5 class="modal-title">Edit Status / Jadwal Sidang</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <form id="editForm" method="POST">
@@ -178,25 +185,31 @@
                         <label class="form-label">Skripsi Mahasiswa</label>
                         <select name="thesis_id" id="edit_thesis_id" class="form-control" required>
                             @foreach($theses as $thesis)
-                            <option value="{{ $thesis->id }}">{{ $thesis->student->nim }} - {{ Str::limit($thesis->title, 50) }}</option>
+                            <option value="{{ $thesis->id }}">{{ $thesis->student->nim ?? '' }} - {{ $thesis->student->user->name ?? '' }} | {{ Str::limit($thesis->title, 40) }}</option>
                             @endforeach
                         </select>
                     </div>
-                    <div class="form-group mb-3">
-                        <label class="form-label">Tanggal & Waktu Sidang</label>
-                        <input type="datetime-local" name="defense_date" id="edit_defense_date" class="form-control">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Tanggal & Waktu Sidang</label>
+                            <input type="datetime-local" name="defense_date" id="edit_defense_date" class="form-control">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Ruangan Sidang</label>
+                            <input type="text" name="room" id="edit_room" class="form-control">
+                        </div>
                     </div>
                     <div class="form-group mb-3">
-                        <label class="form-label">Ruangan</label>
-                        <input type="text" name="room" id="edit_room" class="form-control">
+                        <label class="form-label">Path File Laporan Skripsi Akhir PDF</label>
+                        <input type="text" name="final_file_path" id="edit_final_file_path" class="form-control">
                     </div>
                     <div class="form-group mb-3">
                         <label class="form-label">Status Sidang</label>
                         <select name="status" id="edit_status" class="form-control" required>
-                            <option value="registered">Registered</option>
-                            <option value="scheduled">Scheduled</option>
-                            <option value="passed">Passed</option>
-                            <option value="failed">Failed</option>
+                            <option value="registered">Registered (Pendaftaran Baru)</option>
+                            <option value="scheduled">Scheduled (Jadwal Terbit)</option>
+                            <option value="passed">Passed (Lulus Sidang)</option>
+                            <option value="failed">Failed (Tidak Lulus)</option>
                         </select>
                     </div>
                     <div class="row">
@@ -234,6 +247,7 @@
                 const status = this.getAttribute('data-status');
                 const score = this.getAttribute('data-score');
                 const grade = this.getAttribute('data-grade');
+                const finalFile = this.getAttribute('data-final_file_path');
                 
                 document.getElementById('editForm').action = `/admin/thesis-defenses/${id}`;
                 document.getElementById('edit_thesis_id').value = thesisId;
@@ -242,6 +256,7 @@
                 document.getElementById('edit_status').value = status;
                 document.getElementById('edit_score').value = score || '';
                 document.getElementById('edit_grade').value = grade || '';
+                document.getElementById('edit_final_file_path').value = finalFile || '';
             });
         });
     });

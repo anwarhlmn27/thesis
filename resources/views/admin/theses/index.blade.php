@@ -15,19 +15,9 @@
     </div>
 </div>
 
-@if(session('success'))
-<div class="alert alert-success alert-dismissible fade show">
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="btn-close"></button>
-    <strong>Sukses!</strong> {{ session('success') }}
-</div>
-@endif
 
-@if($errors->any())
-<div class="alert alert-danger alert-dismissible fade show">
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="btn-close"></button>
-    <strong>Error!</strong> Mohon periksa form kembali.
-</div>
-@endif
+
+
 
 <div class="row">
     <div class="col-lg-12">
@@ -81,7 +71,7 @@
                                                 data-bs-target="#editModal">
                                             <i class="fa fa-pencil"></i>
                                         </button>
-                                        <form action="{{ route('theses.destroy', $thesis->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus skripsi ini?')">
+                                        <form action="{{ route('theses.destroy', $thesis->id) }}" method="POST" onsubmit="return confirmDelete(event, this)" class="d-inline" data-confirm-message="Apakah Anda yakin ingin menghapus skripsi ini?">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-danger shadow btn-xs sharp">

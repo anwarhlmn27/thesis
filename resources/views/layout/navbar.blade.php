@@ -57,7 +57,7 @@
 							</li>
                             <li class="nav-item dropdown header-profile">
                                 <a class="nav-link" href="javascript:void(0);" role="button" data-bs-toggle="dropdown">
-                                    <img src="images/profile/education/pic1.jpg" width="20" alt=""/>
+                                    <img src="{{ asset('images/profile/education/pic1.jpg') }}" width="20" alt=""/>
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-right">
                                     <a href="./app-profile.html" class="dropdown-item ai-icon">

@@ -48,4 +48,14 @@ class Thesis extends Model
     {
         return $this->hasMany(Yudisium::class);
     }
+
+    public function proposals()
+    {
+        return $this->hasMany(ThesisProposal::class);
+    }
+
+    public function latestProposal()
+    {
+        return $this->hasOne(ThesisProposal::class)->latestOfMany();
+    }
 }

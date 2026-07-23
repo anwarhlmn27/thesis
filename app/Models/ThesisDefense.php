@@ -14,6 +14,8 @@ class ThesisDefense extends Model
         'defense_date',
         'room',
         'status',
+        'is_advisor_approved',
+        'final_file_path',
         'score',
         'grade',
     ];
@@ -21,6 +23,7 @@ class ThesisDefense extends Model
     protected $casts = [
         'defense_date' => 'datetime',
         'score' => 'double',
+        'is_advisor_approved' => 'boolean',
     ];
 
     public function thesis()

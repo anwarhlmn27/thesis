@@ -17,6 +17,9 @@ class Yudisium extends Model
         'sk_number',
         'sk_file_path',
         'graduation_date',
+        'dekan_name',
+        'dekan_nip',
+        'status',
     ];
 
     protected $casts = [

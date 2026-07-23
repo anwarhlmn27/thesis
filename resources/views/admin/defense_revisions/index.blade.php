@@ -4,47 +4,34 @@
 <div class="row page-titles mx-0">
     <div class="col-sm-6 p-md-0">
         <div class="welcome-text">
-            <h4>Revisi Sidang Skripsi</h4>
-            <p class="mb-0">Kelola catatan revisi dari penguji sidang skripsi beserta status persetujuan</p>
+            <h4>Revisi & Persetujuan Pasca-Sidang</h4>
+            <p class="mb-0">Kelola berkas revisi skripsi mahasiswa dan verifikasi persetujuan oleh Dosen Penguji & Kaprodi</p>
         </div>
     </div>
     <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addModal">
-            <i class="fa fa-plus me-2"></i>Tambah Revisi Sidang
+            <i class="fa fa-plus me-2"></i>Tambah Catatan Revisi
         </button>
     </div>
 </div>
-
-@if(session('success'))
-<div class="alert alert-success alert-dismissible fade show">
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="btn-close"></button>
-    <strong>Sukses!</strong> {{ session('success') }}
-</div>
-@endif
-
-@if($errors->any())
-<div class="alert alert-danger alert-dismissible fade show">
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="btn-close"></button>
-    <strong>Error!</strong> Mohon periksa form kembali.
-</div>
-@endif
 
 <div class="row">
     <div class="col-lg-12">
         <div class="card">
             <div class="card-header">
-                <h4 class="card-title">Daftar Revisi Sidang Skripsi</h4>
+                <h4 class="card-title">Daftar Revisi Sidang & Status Approval (Penguji & Kaprodi)</h4>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
                     <table class="table table-responsive-md">
                         <thead>
                             <tr>
-                                <th style="width:80px;"><strong>#</strong></th>
-                                <th><strong>SIDANG SKRIPSI (MHS)</strong></th>
-                                <th><strong>DOSEN PENGUJI</strong></th>
+                                <th style="width:50px;"><strong>#</strong></th>
+                                <th><strong>SIDANG (MAHASISWA)</strong></th>
+                                <th><strong>FILE REVISI</strong></th>
                                 <th><strong>DESKRIPSI REVISI</strong></th>
-                                <th><strong>STATUS</strong></th>
+                                <th><strong>VERIFIKASI REVISI</strong></th>
+                                <th><strong>STATUS YUDISIUM</strong></th>
                                 <th><strong>AKSI</strong></th>
                             </tr>
                         </thead>
@@ -54,31 +41,66 @@
                                 <td><strong>{{ $index + 1 }}</strong></td>
                                 <td>
                                     <strong>{{ Str::limit($revision->thesisDefense->thesis->title ?? '-', 45) }}</strong><br>
-                                    <small class="text-muted">Mhs: {{ $revision->thesisDefense->thesis->student->user->name ?? '-' }}</small>
+                                    <small class="text-muted">Mhs: {{ $revision->thesisDefense->thesis->student->user->name ?? '-' }}</small><br>
+                                    <small class="text-info">Penguji: {{ $revision->lecturer->user->name ?? '-' }}</small>
                                 </td>
-                                <td>{{ $revision->lecturer->user->name ?? '-' }}</td>
-                                <td><span class="text-wrap d-block" style="max-width:400px;">{{ $revision->description }}</span></td>
+                                <td>
+                                    @if($revision->revision_file_path)
+                                    <a href="{{ asset($revision->revision_file_path) }}" target="_blank" class="btn btn-outline-info btn-xs mb-1">
+                                        <i class="fa fa-file-pdf-o me-1"></i>File Revisi
+                                    </a>
+                                    @else
+                                    <span class="text-muted fs-12">Belum diunggah</span>
+                                    @endif
+                                </td>
+                                <td><span class="text-wrap d-block" style="max-width:300px;">{{ $revision->description }}</span></td>
+                                <td>
+                                    <div class="d-flex flex-column gap-1">
+                                        <!-- EXAMINER -->
+                                        <span class="badge {{ $revision->is_approved_by_examiner ? 'badge-success' : 'badge-warning' }}">
+                                            <i class="fa {{ $revision->is_approved_by_examiner ? 'fa-check' : 'fa-clock-o' }} me-1"></i>
+                                            Penguji: {{ $revision->is_approved_by_examiner ? 'Approved' : 'Pending' }}
+                                        </span>
+                                        <!-- KAPRODI -->
+                                        <span class="badge {{ $revision->is_approved_by_kaprodi ? 'badge-success' : 'badge-warning' }}">
+                                            <i class="fa {{ $revision->is_approved_by_kaprodi ? 'fa-check' : 'fa-clock-o' }} me-1"></i>
+                                            Kaprodi: {{ $revision->is_approved_by_kaprodi ? 'Approved' : 'Pending' }}
+                                        </span>
+                                    </div>
+                                </td>
                                 <td>
                                     @if($revision->is_approved)
-                                    <span class="badge badge-success">Approved ({{ $revision->approved_at ? $revision->approved_at->format('d M Y') : '-' }})</span>
+                                    <span class="badge badge-success fs-13 py-2 px-3">
+                                        <i class="fa fa-check-circle me-1"></i>SIAP YUDISIUM
+                                    </span>
                                     @else
-                                    <span class="badge badge-warning">Pending</span>
+                                    <span class="badge badge-warning fs-12 py-1 px-2">
+                                        Pending Approval
+                                    </span>
                                     @endif
                                 </td>
                                 <td>
-                                    <div class="d-flex">
+                                    <div class="d-flex flex-wrap gap-1">
+                                        <button type="button" class="btn btn-secondary shadow btn-xs me-1 approve-btn" 
+                                                data-id="{{ $revision->id }}" 
+                                                data-student="{{ $revision->thesisDefense->thesis->student->user->name ?? '' }}"
+                                                data-examiner="{{ $revision->is_approved_by_examiner ? '1' : '0' }}"
+                                                data-kaprodi="{{ $revision->is_approved_by_kaprodi ? '1' : '0' }}"
+                                                data-bs-toggle="modal" 
+                                                data-bs-target="#approveModal">
+                                            <i class="fa fa-check-square-o me-1"></i>Approve
+                                        </button>
                                         <button type="button" class="btn btn-primary shadow btn-xs sharp me-1 edit-btn" 
                                                 data-id="{{ $revision->id }}" 
                                                 data-thesis_defense_id="{{ $revision->thesis_defense_id }}" 
                                                 data-lecturer_id="{{ $revision->lecturer_id }}"
                                                 data-description="{{ $revision->description }}"
-                                                data-is_approved="{{ $revision->is_approved ? '1' : '0' }}"
-                                                data-approved_at="{{ $revision->approved_at ? $revision->approved_at->format('Y-m-d') : '' }}"
+                                                data-revision_file_path="{{ $revision->revision_file_path }}"
                                                 data-bs-toggle="modal" 
                                                 data-bs-target="#editModal">
                                             <i class="fa fa-pencil"></i>
                                         </button>
-                                        <form action="{{ route('defense-revisions.destroy', $revision->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus revisi sidang ini?')">
+                                        <form action="{{ route('defense-revisions.destroy', $revision->id) }}" method="POST" onsubmit="return confirmDelete(event, this)" class="d-inline" data-confirm-message="Apakah Anda yakin ingin menghapus revisi sidang ini?">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-danger shadow btn-xs sharp">
@@ -90,7 +112,7 @@
                             </tr>
                             @empty
                             <tr>
-                                <td colspan="6" class="text-center">Belum ada data revisi sidang.</td>
+                                <td colspan="7" class="text-center">Belum ada data revisi sidang.</td>
                             </tr>
                             @endforelse
                         </tbody>
@@ -106,7 +128,7 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Tambah Catatan Revisi</h5>
+                <h5 class="modal-title">Tambah Catatan / File Revisi</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <form action="{{ route('defense-revisions.store') }}" method="POST">
@@ -131,23 +153,17 @@
                         </select>
                     </div>
                     <div class="form-group mb-3">
-                        <label class="form-label">Deskripsi Revisi</label>
+                        <label class="form-label">Deskripsi / Catatan Revisi</label>
                         <textarea name="description" class="form-control" rows="3" placeholder="Masukkan detail catatan revisi dari penguji" required></textarea>
                     </div>
                     <div class="form-group mb-3">
-                        <div class="form-check custom-checkbox">
-                            <input type="checkbox" name="is_approved" class="form-check-input" id="add_is_approved" value="1">
-                            <label class="form-check-label" for="add_is_approved">Tandai sudah disetujui (Approved)</label>
-                        </div>
-                    </div>
-                    <div class="form-group mb-3">
-                        <label class="form-label">Tanggal Persetujuan</label>
-                        <input type="date" name="approved_at" class="form-control">
+                        <label class="form-label">Path File Revisi Skripsi PDF (Unggah Mahasiswa)</label>
+                        <input type="text" name="revision_file_path" class="form-control" placeholder="uploads/revisi/revisi_skripsi_final.pdf">
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger light" data-bs-dismiss="modal">Tutup</button>
-                    <button type="submit" class="btn btn-primary">Simpan</button>
+                    <button type="submit" class="btn btn-primary">Simpan Catatan</button>
                 </div>
             </form>
         </div>
@@ -187,19 +203,54 @@
                         <textarea name="description" id="edit_description" class="form-control" rows="3" required></textarea>
                     </div>
                     <div class="form-group mb-3">
-                        <div class="form-check custom-checkbox">
-                            <input type="checkbox" name="is_approved" class="form-check-input" id="edit_is_approved" value="1">
-                            <label class="form-check-label" for="edit_is_approved">Tandai sudah disetujui (Approved)</label>
-                        </div>
-                    </div>
-                    <div class="form-group mb-3">
-                        <label class="form-label">Tanggal Persetujuan</label>
-                        <input type="date" name="approved_at" id="edit_approved_at" class="form-control">
+                        <label class="form-label">Path File Revisi Skripsi PDF</label>
+                        <input type="text" name="revision_file_path" id="edit_revision_file_path" class="form-control">
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger light" data-bs-dismiss="modal">Tutup</button>
                     <button type="submit" class="btn btn-primary">Update</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Approve Modal -->
+<div class="modal fade" id="approveModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Approval Revisi Skripsi Pasca-Sidang</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="approveForm" method="POST">
+                @csrf
+                <div class="modal-body">
+                    <div class="alert alert-info py-2">
+                        <strong id="approve_student">Mahasiswa</strong>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label class="form-label fw-bold">Pilih Peran Verifikator</label>
+                        <select name="validator" id="approve_validator" class="form-control" required>
+                            <option value="examiner">Dosen Penguji Sidang</option>
+                            <option value="kaprodi">Kaprodi (Ketua Program Studi)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label class="form-label fw-bold">Status Persetujuan Revisi</label>
+                        <select name="status" id="approve_status" class="form-control" required>
+                            <option value="1">✓ Approve (Revisi Diterima)</option>
+                            <option value="0">✗ Pending (Revisi Belum Sesuai)</option>
+                        </select>
+                    </div>
+                    <small class="text-muted d-block">Catatan: Apabila disetujui Penguji AND Kaprodi, mahasiswa otomatis terdaftar ke Draft SK Yudisium.</small>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger light" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-success">Simpan Persetujuan</button>
                 </div>
             </form>
         </div>
@@ -218,16 +269,24 @@
                 const defenseId = this.getAttribute('data-thesis_defense_id');
                 const lecturerId = this.getAttribute('data-lecturer_id');
                 const description = this.getAttribute('data-description');
-                const isApproved = this.getAttribute('data-is_approved');
-                const approvedAt = this.getAttribute('data-approved_at');
+                const filePath = this.getAttribute('data-revision_file_path');
                 
                 document.getElementById('editForm').action = `/admin/defense-revisions/${id}`;
                 document.getElementById('edit_thesis_defense_id').value = defenseId;
                 document.getElementById('edit_lecturer_id').value = lecturerId;
                 document.getElementById('edit_description').value = description;
-                document.getElementById('edit_approved_at').value = approvedAt || '';
-                
-                document.getElementById('edit_is_approved').checked = isApproved === '1';
+                document.getElementById('edit_revision_file_path').value = filePath || '';
+            });
+        });
+
+        const approveBtns = document.querySelectorAll('.approve-btn');
+        approveBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const id = this.getAttribute('data-id');
+                const student = this.getAttribute('data-student');
+
+                document.getElementById('approveForm').action = `/admin/defense-revisions/${id}/approve`;
+                document.getElementById('approve_student').innerText = student;
             });
         });
     });

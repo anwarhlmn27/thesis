@@ -65,6 +65,32 @@
         Main wrapper end
     ***********************************-->
 
+    <!-- Global Interactive PDF Viewer Modal -->
+    <div class="modal fade" id="pdfPreviewModal" tabindex="-1" aria-labelledby="pdfPreviewModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title text-white" id="pdfPreviewModalLabel"><i class="fa fa-file-pdf-o me-2"></i> Preview Dokumen PDF</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-0" style="background-color: #525659;">
+                    <iframe id="pdfPreviewIframe" src="" width="100%" height="650px" style="border: none;"></iframe>
+                </div>
+                <div class="modal-footer bg-light d-flex justify-content-between">
+                    <a id="pdfOpenNewTabBtn" href="#" target="_blank" class="btn btn-outline-secondary btn-sm">
+                        <i class="fa fa-external-link me-1"></i> Buka di Tab Baru
+                    </a>
+                    <div>
+                        <a id="pdfDownloadBtn" href="#" download class="btn btn-primary btn-sm me-2">
+                            <i class="fa fa-download me-1"></i> Unduh File PDF
+                        </a>
+                        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Tutup</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     @include('layout.js')
     @yield('scripts')
 
@@ -123,6 +149,17 @@
                 }
             });
             return false;
+        }
+
+        // Global helper for Interactive PDF Modal Preview
+        function previewPdf(url, title = 'Preview Dokumen PDF') {
+            document.getElementById('pdfPreviewModalLabel').innerHTML = '<i class="fa fa-file-pdf-o me-2"></i> ' + title;
+            document.getElementById('pdfPreviewIframe').src = url;
+            document.getElementById('pdfOpenNewTabBtn').href = url;
+            document.getElementById('pdfDownloadBtn').href = url;
+            
+            var pdfModal = new bootstrap.Modal(document.getElementById('pdfPreviewModal'));
+            pdfModal.show();
         }
     </script>
 </body>

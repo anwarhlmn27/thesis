@@ -16,14 +16,20 @@ use App\Http\Controllers\Admin\ThesisDefenseController;
 use App\Http\Controllers\Admin\DefenseExaminerController;
 use App\Http\Controllers\Admin\DefenseRevisionController;
 use App\Http\Controllers\Admin\YudisiumController;
+use App\Http\Controllers\DashboardController;
 
 Route::get('/', function () {
     return redirect()->route('dashboard');
 });
 
-Route::get('/dashboard', function() {
-    return view('admin.dashboard');
-})->name('dashboard');
+Route::prefix('dashboard')->group(function () {
+    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/mahasiswa', [DashboardController::class, 'mahasiswa'])->name('dashboard.mahasiswa');
+    Route::get('/baak', [DashboardController::class, 'baak'])->name('dashboard.baak');
+    Route::get('/finance', [DashboardController::class, 'finance'])->name('dashboard.finance');
+    Route::get('/perpustakaan', [DashboardController::class, 'perpustakaan'])->name('dashboard.perpustakaan');
+    Route::get('/dosen', [DashboardController::class, 'dosen'])->name('dashboard.dosen');
+});
 
 Route::prefix('admin')->group(function () {
     Route::resource('users', UserController::class);

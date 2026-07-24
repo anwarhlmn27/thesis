@@ -45,12 +45,21 @@
                                 </td>
                                 <td>
                                     @if($prop->proposal_file_path)
-                                    <a href="{{ asset($prop->proposal_file_path) }}" target="_blank" class="btn btn-outline-info btn-xs mb-1">
-                                        <i class="fa fa-file-pdf-o me-1"></i>Lihat Berkas
-                                    </a>
-                                    <br>
+                                    @php
+                                        $fileUrl = asset(str_starts_with($prop->proposal_file_path, 'proposals/') ? 'storage/' . $prop->proposal_file_path : $prop->proposal_file_path);
+                                    @endphp
+                                    <div class="d-flex flex-wrap gap-1 mb-1">
+                                        <button type="button" class="btn btn-info btn-xs text-white" onclick="previewPdf('{{ $fileUrl }}', 'Proposal Skripsi - {{ addslashes($prop->thesis->student->user->name ?? '') }}')">
+                                            <i class="fa fa-eye me-1"></i>Lihat PDF
+                                        </button>
+                                        <a href="{{ $fileUrl }}" download class="btn btn-outline-secondary btn-xs">
+                                            <i class="fa fa-download me-1"></i>Unduh
+                                        </a>
+                                    </div>
+                                    @else
+                                    <span class="badge bg-light text-muted">Belum ada berkas</span>
                                     @endif
-                                    <small class="text-muted"><i class="fa fa-clock-o me-1"></i>{{ $prop->submission_date ? $prop->submission_date->format('d M Y, H:i') : '-' }}</small>
+                                    <small class="text-muted d-block"><i class="fa fa-clock-o me-1"></i>{{ $prop->submission_date ? $prop->submission_date->format('d M Y, H:i') : '-' }}</small>
                                 </td>
                                 <td>
                                     <div class="d-flex flex-column gap-1">
@@ -149,7 +158,7 @@
                 <h5 class="modal-title">Upload / Daftar Proposal Skripsi</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <form action="{{ route('thesis-proposals.store') }}" method="POST">
+            <form action="{{ route('thesis-proposals.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="modal-body">
                     <div class="form-group mb-3">
@@ -164,8 +173,12 @@
                         </select>
                     </div>
                     <div class="form-group mb-3">
-                        <label class="form-label">Path File Proposal PDF (Opsional)</label>
-                        <input type="text" name="proposal_file_path" class="form-control" placeholder="uploads/proposals/proposal_skripsi.pdf">
+                        <label class="form-label">Upload Berkas Proposal (Ke Folder Storage / PDF/DOCX)</label>
+                        <input type="file" name="proposal_file" class="form-control" accept=".pdf,.doc,.docx">
+                    </div>
+                    <div class="form-group mb-3">
+                        <label class="form-label">Atau Input Manual Path File (Opsional)</label>
+                        <input type="text" name="proposal_file_path" class="form-control" placeholder="proposals/proposal_skripsi.pdf">
                     </div>
                 </div>
                 <div class="modal-footer">

@@ -7,18 +7,6 @@
 							<span class="nav-text">Dashboard</span>
 						</a>
                     </li>
-					
-                    <li class="nav-label">Data Master</li>
-					<li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
-							<i class="la la-users"></i>
-							<span class="nav-text">Data Pengguna</span>
-						</a>
-                        <ul aria-expanded="false">
-                            <li><a href="{{ route('staff.index') }}">Data Staf (BAAK, Finance, Library)</a></li>
-                            <li><a href="{{ route('lecturers.index') }}">Data Dosen / Kaprodi</a></li>
-                            <li><a href="{{ route('students.index') }}">Data Mahasiswa</a></li>
-                        </ul>
-                    </li>
 
                     <li class="nav-label">Tahap 1: Proposal Skripsi</li>
 					<li><a class="has-arrow" href="javascript:void()" aria-expanded="false">

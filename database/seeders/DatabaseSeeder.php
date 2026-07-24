@@ -15,6 +15,7 @@ use App\Models\ThesisDefense;
 use App\Models\DefenseExaminer;
 use App\Models\DefenseRevision;
 use App\Models\Yudisium;
+use App\Models\Staff;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
@@ -31,6 +32,28 @@ class DatabaseSeeder extends Seeder
             'email' => 'admin@example.com',
             'password' => Hash::make('password'),
         ]);
+
+        // 1b. Seed Staff Users (BAAK, Finance, Library)
+        $staffData = [
+            ['name' => 'Staf BAAK Academic', 'email' => 'baak@example.com', 'nip' => '198501012010011001', 'department' => 'BAAK', 'phone' => '081234567890'],
+            ['name' => 'Staf Finance & Keuangan', 'email' => 'finance@example.com', 'nip' => '198602022010012002', 'department' => 'Finance', 'phone' => '081234567891'],
+            ['name' => 'Staf Perpustakaan', 'email' => 'library@example.com', 'nip' => '198703032010011003', 'department' => 'Library', 'phone' => '081234567892'],
+        ];
+
+        foreach ($staffData as $s) {
+            $user = User::create([
+                'name' => $s['name'],
+                'email' => $s['email'],
+                'password' => Hash::make('password'),
+            ]);
+
+            Staff::create([
+                'user_id' => $user->id,
+                'nip' => $s['nip'],
+                'department' => $s['department'],
+                'phone' => $s['phone'],
+            ]);
+        }
 
         // 2. Seed Lecturers
         $lecturerData = [

@@ -46,9 +46,17 @@
                                 </td>
                                 <td>
                                     @if($revision->revision_file_path)
-                                    <a href="{{ asset($revision->revision_file_path) }}" target="_blank" class="btn btn-outline-info btn-xs mb-1">
-                                        <i class="fa fa-file-pdf-o me-1"></i>File Revisi
-                                    </a>
+                                    @php
+                                        $fileUrl = asset(str_starts_with($revision->revision_file_path, 'revisions/') ? 'storage/' . $revision->revision_file_path : $revision->revision_file_path);
+                                    @endphp
+                                    <div class="d-flex flex-wrap gap-1">
+                                        <button type="button" class="btn btn-info btn-xs text-white" onclick="previewPdf('{{ $fileUrl }}', 'File Revisi - {{ addslashes($revision->thesisDefense->thesis->student->user->name ?? '') }}')">
+                                            <i class="fa fa-eye me-1"></i>Lihat PDF
+                                        </button>
+                                        <a href="{{ $fileUrl }}" download class="btn btn-outline-secondary btn-xs">
+                                            <i class="fa fa-download me-1"></i>Unduh
+                                        </a>
+                                    </div>
                                     @else
                                     <span class="text-muted fs-12">Belum diunggah</span>
                                     @endif
@@ -131,7 +139,7 @@
                 <h5 class="modal-title">Tambah Catatan / File Revisi</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <form action="{{ route('defense-revisions.store') }}" method="POST">
+            <form action="{{ route('defense-revisions.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="modal-body">
                     <div class="form-group mb-3">
@@ -157,8 +165,12 @@
                         <textarea name="description" class="form-control" rows="3" placeholder="Masukkan detail catatan revisi dari penguji" required></textarea>
                     </div>
                     <div class="form-group mb-3">
-                        <label class="form-label">Path File Revisi Skripsi PDF (Unggah Mahasiswa)</label>
-                        <input type="text" name="revision_file_path" class="form-control" placeholder="uploads/revisi/revisi_skripsi_final.pdf">
+                        <label class="form-label">Upload File Revisi (Ke Storage / PDF/DOCX)</label>
+                        <input type="file" name="revision_file" class="form-control" accept=".pdf,.doc,.docx,.jpg,.png">
+                    </div>
+                    <div class="form-group mb-3">
+                        <label class="form-label">Atau Input Manual Path File (Opsional)</label>
+                        <input type="text" name="revision_file_path" class="form-control" placeholder="revisions/revisi_skripsi_final.pdf">
                     </div>
                 </div>
                 <div class="modal-footer">

@@ -22,25 +22,31 @@ class ThesisProposalController extends Controller
     {
         $request->validate([
             'thesis_id' => 'required|exists:theses,id',
+            'proposal_file' => 'nullable|file|mimes:pdf,doc,docx|max:10240',
             'proposal_file_path' => 'nullable|string|max:255',
         ]);
 
+        $filePath = $request->proposal_file_path;
+        if ($request->hasFile('proposal_file')) {
+            $filePath = $request->file('proposal_file')->store('proposals', 'public');
+        }
+
         $proposal = ThesisProposal::create([
             'thesis_id' => $request->thesis_id,
-            'proposal_file_path' => $request->proposal_file_path,
+            'proposal_file_path' => $filePath,
             'submission_date' => now(),
             'eligibility_status' => 'pending',
         ]);
 
         // Sync proposal_file_path in thesis if provided
-        if ($request->filled('proposal_file_path')) {
+        if ($filePath) {
             $thesis = Thesis::find($request->thesis_id);
             if ($thesis) {
-                $thesis->update(['proposal_file_path' => $request->proposal_file_path]);
+                $thesis->update(['proposal_file_path' => $filePath]);
             }
         }
 
-        return redirect()->back()->with('success', 'Proposal skripsi berhasil diunggah / didaftarkan.');
+        return redirect()->back()->with('success', 'Proposal skripsi berhasil diunggah ke storage sistem.');
     }
 
     public function approve(Request $request, $id)

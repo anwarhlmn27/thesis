@@ -25,6 +25,7 @@ class YudisiumController extends Controller
             'student_id' => 'required|exists:students,id',
             'thesis_id' => 'required|exists:theses,id',
             'sk_number' => 'nullable|string|max:255',
+            'sk_file' => 'nullable|file|mimes:pdf,doc,docx,png,jpg,jpeg|max:10240',
             'sk_file_path' => 'nullable|string|max:255',
             'graduation_date' => 'nullable|date',
             'dekan_name' => 'nullable|string|max:255',
@@ -32,11 +33,16 @@ class YudisiumController extends Controller
             'status' => 'required|in:draft,approved,printed',
         ]);
 
+        $filePath = $request->sk_file_path;
+        if ($request->hasFile('sk_file')) {
+            $filePath = $request->file('sk_file')->store('yudisiums', 'public');
+        }
+
         Yudisium::create([
             'student_id' => $request->student_id,
             'thesis_id' => $request->thesis_id,
             'sk_number' => $request->sk_number ?: 'SK-YUD/' . date('Y') . '/' . sprintf('%04d', $request->thesis_id),
-            'sk_file_path' => $request->sk_file_path,
+            'sk_file_path' => $filePath,
             'graduation_date' => $request->graduation_date ?: now(),
             'dekan_name' => $request->dekan_name ?: 'Dr. H. Ahmad Dahlan, M.Pd.',
             'dekan_nip' => $request->dekan_nip ?: '197508152002121001',
@@ -54,6 +60,7 @@ class YudisiumController extends Controller
             'student_id' => 'required|exists:students,id',
             'thesis_id' => 'required|exists:theses,id',
             'sk_number' => 'nullable|string|max:255',
+            'sk_file' => 'nullable|file|mimes:pdf,doc,docx,png,jpg,jpeg|max:10240',
             'sk_file_path' => 'nullable|string|max:255',
             'graduation_date' => 'nullable|date',
             'dekan_name' => 'nullable|string|max:255',
@@ -61,7 +68,12 @@ class YudisiumController extends Controller
             'status' => 'required|in:draft,approved,printed',
         ]);
 
-        $yudisium->update($request->all());
+        $data = $request->all();
+        if ($request->hasFile('sk_file')) {
+            $data['sk_file_path'] = $request->file('sk_file')->store('yudisiums', 'public');
+        }
+
+        $yudisium->update($data);
 
         return redirect()->back()->with('success', 'Data SK Yudisium berhasil diperbarui.');
     }

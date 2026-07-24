@@ -26,14 +26,20 @@ class DefenseRevisionController extends Controller
             'thesis_defense_id' => 'required|exists:thesis_defenses,id',
             'lecturer_id' => 'required|exists:lecturers,id',
             'description' => 'required|string',
+            'revision_file' => 'nullable|file|mimes:pdf,doc,docx,png,jpg,jpeg|max:10240',
             'revision_file_path' => 'nullable|string|max:255',
         ]);
+
+        $filePath = $request->revision_file_path;
+        if ($request->hasFile('revision_file')) {
+            $filePath = $request->file('revision_file')->store('revisions', 'public');
+        }
 
         DefenseRevision::create([
             'thesis_defense_id' => $request->thesis_defense_id,
             'lecturer_id' => $request->lecturer_id,
             'description' => $request->description,
-            'revision_file_path' => $request->revision_file_path,
+            'revision_file_path' => $filePath,
             'is_approved_by_examiner' => false,
             'is_approved_by_kaprodi' => false,
             'is_approved' => false,

@@ -110,7 +110,7 @@
                 <h5 class="modal-title">Tambah Draft SK Yudisium</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <form action="{{ route('yudisiums.store') }}" method="POST">
+            <form action="{{ route('yudisiums.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="modal-body">
                     <div class="form-group mb-3">
@@ -140,6 +140,10 @@
                             <label class="form-label">Tanggal Kelulusan / Yudisium</label>
                             <input type="date" name="graduation_date" class="form-control">
                         </div>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label class="form-label">Upload Berkas SK Yudisium (PDF Ke Folder Storage)</label>
+                        <input type="file" name="sk_file" class="form-control" accept=".pdf,.doc,.docx">
                     </div>
                     <div class="row">
                         <div class="col-md-6 mb-3">

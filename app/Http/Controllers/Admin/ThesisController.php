@@ -22,13 +22,23 @@ class ThesisController extends Controller
             'student_id' => 'required|exists:students,id',
             'title' => 'required|string|max:500',
             'abstract' => 'nullable|string',
+            'proposal_file' => 'nullable|file|mimes:pdf,doc,docx|max:10240',
+            'final_file' => 'nullable|file|mimes:pdf,doc,docx|max:10240',
             'proposal_file_path' => 'nullable|string|max:255',
             'final_file_path' => 'nullable|string|max:255',
             'signed_revision_proof_path' => 'nullable|string|max:255',
             'status' => 'required|in:proposal_submitted,proposal_seminar_scheduled,proposal_seminar_done,advisor_assigned,mentoring,defense_registered,defense_scheduled,defense_done,revision_period,revision_approved,yudisium_ready,graduated',
         ]);
 
-        Thesis::create($request->all());
+        $data = $request->all();
+        if ($request->hasFile('proposal_file')) {
+            $data['proposal_file_path'] = $request->file('proposal_file')->store('proposals', 'public');
+        }
+        if ($request->hasFile('final_file')) {
+            $data['final_file_path'] = $request->file('final_file')->store('final_theses', 'public');
+        }
+
+        Thesis::create($data);
 
         return redirect()->back()->with('success', 'Skripsi berhasil ditambahkan.');
     }
@@ -41,13 +51,23 @@ class ThesisController extends Controller
             'student_id' => 'required|exists:students,id',
             'title' => 'required|string|max:500',
             'abstract' => 'nullable|string',
+            'proposal_file' => 'nullable|file|mimes:pdf,doc,docx|max:10240',
+            'final_file' => 'nullable|file|mimes:pdf,doc,docx|max:10240',
             'proposal_file_path' => 'nullable|string|max:255',
             'final_file_path' => 'nullable|string|max:255',
             'signed_revision_proof_path' => 'nullable|string|max:255',
             'status' => 'required|in:proposal_submitted,proposal_seminar_scheduled,proposal_seminar_done,advisor_assigned,mentoring,defense_registered,defense_scheduled,defense_done,revision_period,revision_approved,yudisium_ready,graduated',
         ]);
 
-        $thesis->update($request->all());
+        $data = $request->all();
+        if ($request->hasFile('proposal_file')) {
+            $data['proposal_file_path'] = $request->file('proposal_file')->store('proposals', 'public');
+        }
+        if ($request->hasFile('final_file')) {
+            $data['final_file_path'] = $request->file('final_file')->store('final_theses', 'public');
+        }
+
+        $thesis->update($data);
 
         return redirect()->back()->with('success', 'Skripsi berhasil diperbarui.');
     }

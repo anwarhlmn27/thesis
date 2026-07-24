@@ -3,118 +3,139 @@
 @section('content')
 <div class="container-fluid">
     <!-- Header Banner -->
-    <div class="row page-titles mx-0 mb-4 bg-info text-white rounded p-3 align-items-center shadow-sm">
-        <div class="col-sm-8 p-md-0">
+    <div class="row page-titles mx-0 mb-4 bg-gradient-info text-white rounded p-3 align-items-center shadow-sm" style="background: linear-gradient(90deg, #17a2b8 0%, #138496 100%);">
+        <div class="col-sm-6 p-md-0">
             <div class="welcome-text">
-                <h3 class="text-white mb-1"><i class="la la-university me-2"></i>Dashboard Staf BAAK (Biro Administrasi Akademik)</h3>
-                <p class="mb-0 text-white-50">Pengelolaan Syarat Akademik, Verifikasi Proposal, Jadwal Seminar/Sidang & Yudisium</p>
+                <h4 class="text-white mb-1"><i class="la la-university mr-2"></i>Dashboard Staf BAAK</h4>
+                <p class="mb-0 text-white-50">Sistem Manajemen Skripsi & Yudisium</p>
             </div>
         </div>
-        <div class="col-sm-4 p-md-0 text-end">
-            <span class="badge bg-white text-info font-w600 px-3 py-2"><i class="la la-user-tie me-1"></i> Akses Staf BAAK</span>
-        </div>
-    </div>
-
-    <!-- Stat Widgets -->
-    <div class="row">
-        <div class="col-xl-3 col-sm-6">
-            <div class="widget-stat card bg-primary shadow-sm">
-                <div class="card-body">
-                    <div class="media">
-                        <span class="me-3"><i class="la la-user-graduate"></i></span>
-                        <div class="media-body text-white">
-                            <p class="mb-1">Total Mahasiswa</p>
-                            <h3 class="text-white mb-0">{{ $stats['total_students'] }}</h3>
-                            <small>{{ $stats['pending_coursework'] }} Belum Clear Syarat SKS</small>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-xl-3 col-sm-6">
-            <div class="widget-stat card bg-warning shadow-sm">
-                <div class="card-body">
-                    <div class="media">
-                        <span class="me-3"><i class="la la-file-alt"></i></span>
-                        <div class="media-body text-white">
-                            <p class="mb-1">Pending Proposal</p>
-                            <h3 class="text-white mb-0">{{ $stats['pending_proposals'] }}</h3>
-                            <small>Menunggu Verifikasi BAAK</small>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-xl-3 col-sm-6">
-            <div class="widget-stat card bg-info shadow-sm">
-                <div class="card-body">
-                    <div class="media">
-                        <span class="me-3"><i class="la la-calendar-check-o"></i></span>
-                        <div class="media-body text-white">
-                            <p class="mb-1">Jadwal Seminar/Sidang</p>
-                            <h3 class="text-white mb-0">{{ $stats['scheduled_seminars'] + $stats['scheduled_defenses'] }}</h3>
-                            <small>{{ $stats['scheduled_seminars'] }} Seminar, {{ $stats['scheduled_defenses'] }} Sidang</small>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-xl-3 col-sm-6">
-            <div class="widget-stat card bg-success shadow-sm">
-                <div class="card-body">
-                    <div class="media">
-                        <span class="me-3"><i class="la la-trophy"></i></span>
-                        <div class="media-body text-white">
-                            <p class="mb-1">Total SK Yudisium</p>
-                            <h3 class="text-white mb-0">{{ $stats['total_yudisiums'] }}</h3>
-                            <small>Siap Cetak & Diterbitkan</small>
-                        </div>
-                    </div>
-                </div>
+        <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+            <div class="d-flex align-items-center">
+                <span class="mr-3">Role Aktif:</span>
+                <span class="badge badge-light text-info border-0 px-3 py-2" style="font-size: 14px;">Staf BAAK</span>
             </div>
         </div>
     </div>
 
-    <!-- Tables Row -->
+    <!-- Overview Cards -->
     <div class="row">
-        <!-- Verifikasi Kelayakan Akademik Mahasiswa -->
-        <div class="col-lg-6 mb-4">
-            <div class="card shadow-sm border-0 h-100">
-                <div class="card-header bg-white d-flex justify-content-between align-items-center">
-                    <h5 class="card-title text-primary mb-0"><i class="la la-user-check me-1"></i> Verifikasi SKS / Syarat Akademik</h5>
-                    <a href="{{ route('students.index') }}" class="btn btn-xs btn-outline-primary">Kelola Mahasiswa</a>
-                </div>
+        <div class="col-xl-3 col-xxl-3 col-sm-6">
+            <div class="widget-stat card border-0 shadow-sm overflow-hidden">
                 <div class="card-body p-0">
+                    <div class="d-flex p-4 bg-primary text-white">
+                        <div class="align-self-center mr-auto">
+                            <h4 class="text-white mb-1">Total Mahasiswa</h4>
+                            <h2 class="text-white font-weight-bold mb-0">1,245</h2>
+                        </div>
+                        <div class="align-self-center text-center">
+                            <i class="la la-users" style="font-size: 40px; opacity: 0.8;"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-xxl-3 col-sm-6">
+            <div class="widget-stat card border-0 shadow-sm overflow-hidden">
+                <div class="card-body p-0">
+                    <div class="d-flex p-4 bg-warning text-white">
+                        <div class="align-self-center mr-auto">
+                            <h4 class="text-white mb-1">Antrean Validasi BAAK</h4>
+                            <h2 class="text-white font-weight-bold mb-0">12</h2>
+                        </div>
+                        <div class="align-self-center text-center">
+                            <i class="la la-file-alt" style="font-size: 40px; opacity: 0.8;"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-xxl-3 col-sm-6">
+            <div class="widget-stat card border-0 shadow-sm overflow-hidden">
+                <div class="card-body p-0">
+                    <div class="d-flex p-4 bg-info text-white">
+                        <div class="align-self-center mr-auto">
+                            <h4 class="text-white mb-1">Skripsi Aktif</h4>
+                            <h2 class="text-white font-weight-bold mb-0">84</h2>
+                        </div>
+                        <div class="align-self-center text-center">
+                            <i class="la la-book" style="font-size: 40px; opacity: 0.8;"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-xxl-3 col-sm-6">
+            <div class="widget-stat card border-0 shadow-sm overflow-hidden">
+                <div class="card-body p-0">
+                    <div class="d-flex p-4 bg-success text-white">
+                        <div class="align-self-center mr-auto">
+                            <h4 class="text-white mb-1">Pendaftar Yudisium</h4>
+                            <h2 class="text-white font-weight-bold mb-0">28</h2>
+                        </div>
+                        <div class="align-self-center text-center">
+                            <i class="la la-graduation-cap" style="font-size: 40px; opacity: 0.8;"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">Aksi Cepat</h5>
+                    <div class="d-flex flex-wrap gap-2">
+                        <a href="javascript:void(0)" class="btn btn-outline-primary mr-2 mb-2"><i class="la la-check-square mr-1"></i> Validasi Nilai & Akademik</a>
+                        <a href="{{ route('yudisiums.index') }}" class="btn btn-outline-success mr-2 mb-2"><i class="la la-graduation-cap mr-1"></i> Kelola Periode Yudisium</a>
+                        <a href="javascript:void(0)" class="btn btn-outline-info mr-2 mb-2"><i class="la la-user-plus mr-1"></i> Tambah Data Mahasiswa</a>
+                        <a href="javascript:void(0)" class="btn btn-outline-warning mr-2 mb-2"><i class="la la-calendar mr-1"></i> Jadwal Sidang</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Antrean Validasi Akademik (BAAK) -->
+        <div class="col-xl-8 col-lg-8">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header border-bottom-0 pb-0 d-flex justify-content-between align-items-center">
+                    <h4 class="card-title mb-0">Antrean Validasi Akademik (Syarat Yudisium)</h4>
+                    <span class="badge badge-warning text-white">12 Pending</span>
+                </div>
+                <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-hover align-middle mb-0">
-                            <thead class="table-light">
+                        <table class="table table-hover table-responsive-sm">
+                            <thead>
                                 <tr>
-                                    <th>NIM & Nama</th>
-                                    <th>Prodi / Sem</th>
-                                    <th>Status Akademik</th>
+                                    <th>NIM</th>
+                                    <th>Nama Mahasiswa</th>
+                                    <th>Program Studi</th>
+                                    <th>Status Dokumen</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @forelse($pendingStudents as $st)
+                                @for($i = 1; $i <= 5; $i++)
                                 <tr>
+                                    <td><strong>191051{{ 100 + $i }}</strong></td>
                                     <td>
-                                        <strong>{{ $st->user?->name }}</strong><br>
-                                        <small class="text-muted">NIM: {{ $st->nim }}</small>
+                                        <div class="d-flex align-items-center">
+                                            <img src="https://ui-avatars.com/api/?name=Mahasiswa+{{ $i }}&background=random" class="rounded-circle mr-2" width="30" alt="">
+                                            Mahasiswa Teknik {{ $i }}
+                                        </div>
                                     </td>
-                                    <td>{{ $st->prodi }} (Sem {{ $st->semester }})</td>
+                                    <td>Teknik Informatika</td>
+                                    <td><span class="badge badge-light text-warning"><i class="fa fa-clock-o mr-1"></i> Menunggu Validasi</span></td>
                                     <td>
-                                        <span class="badge bg-danger"><i class="la la-clock"></i> Belum Verifikasi</span>
-                                    </td>
-                                    <td>
-                                        <a href="{{ route('students.edit', $st->id) }}" class="btn btn-xs btn-primary"><i class="la la-edit"></i> Verifikasi</a>
+                                        <button class="btn btn-sm btn-primary">Review</button>
                                     </td>
                                 </tr>
-                                @empty
-                                <tr>
-                                    <td colspan="4" class="text-center text-muted py-3">Semua mahasiswa telah memenuhi kelayakan akademik.</td>
-                                </tr>
-                                @endforelse
+                                @endfor
                             </tbody>
                         </table>
                     </div>
@@ -122,133 +143,26 @@
             </div>
         </div>
 
-        <!-- Pending Proposals BAAK -->
-        <div class="col-lg-6 mb-4">
-            <div class="card shadow-sm border-0 h-100">
-                <div class="card-header bg-white d-flex justify-content-between align-items-center">
-                    <h5 class="card-title text-primary mb-0"><i class="la la-file-signature me-1"></i> Verifikasi Proposal Masuk</h5>
-                    <a href="{{ route('thesis-proposals.index') }}" class="btn btn-xs btn-outline-primary">Lihat Semua Proposal</a>
+        <!-- Periode Yudisium Aktif -->
+        <div class="col-xl-4 col-lg-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header border-bottom-0 pb-0">
+                    <h4 class="card-title mb-0">Jadwal Yudisium Aktif</h4>
                 </div>
-                <div class="card-body p-0">
-                    <div class="table-responsive">
-                        <table class="table table-hover align-middle mb-0">
-                            <thead class="table-light">
-                                <tr>
-                                    <th>Mahasiswa</th>
-                                    <th>Judul Proposal</th>
-                                    <th>Approval BAAK</th>
-                                    <th>Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @forelse($pendingProposals as $prop)
-                                <tr>
-                                    <td>
-                                        <strong>{{ $prop->student?->user?->name }}</strong><br>
-                                        <small class="text-muted">{{ $prop->student?->nim }}</small>
-                                    </td>
-                                    <td>{{ Str::limit($prop->title, 40) }}</td>
-                                    <td>
-                                        <span class="badge bg-warning text-dark"><i class="la la-exclamation-circle"></i> Pending BAAK</span>
-                                    </td>
-                                    <td>
-                                        <a href="{{ route('thesis-proposals.index') }}" class="btn btn-xs btn-success"><i class="la la-check"></i> Process</a>
-                                    </td>
-                                </tr>
-                                @empty
-                                <tr>
-                                    <td colspan="4" class="text-center text-muted py-3">Tidak ada proposal pending approval BAAK.</td>
-                                </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
+                <div class="card-body">
+                    <div class="alert alert-success border-0 shadow-sm">
+                        <h4 class="alert-heading font-weight-bold text-success mb-2">Periode Ganjil 2026/2027</h4>
+                        <p class="mb-1"><i class="fa fa-calendar-alt mr-2"></i> Pendaftaran: 10 Ags - 25 Ags 2026</p>
+                        <p class="mb-2"><i class="fa fa-clock mr-2"></i> Pelaksanaan: 10 Sep 2026</p>
+                        <hr>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span>Peserta: <strong>154 Mahasiswa</strong></span>
+                            <a href="{{ route('yudisiums.index') }}" class="btn btn-sm btn-success text-white">Detail</a>
+                        </div>
                     </div>
-                </div>
-            </div>
-        </div>
-    </div>
 
-    <!-- Schedules Overview Row -->
-    <div class="row">
-        <!-- Scheduled Seminars -->
-        <div class="col-lg-6 mb-4">
-            <div class="card shadow-sm border-0">
-                <div class="card-header bg-white d-flex justify-content-between align-items-center">
-                    <h5 class="card-title text-primary mb-0"><i class="la la-calendar me-1"></i> Jadwal Seminar Proposal Aktif</h5>
-                    <a href="{{ route('proposal-seminars.index') }}" class="btn btn-xs btn-outline-primary">Atur Jadwal</a>
-                </div>
-                <div class="card-body p-0">
-                    <div class="table-responsive">
-                        <table class="table table-hover align-middle mb-0">
-                            <thead class="table-light">
-                                <tr>
-                                    <th>Mahasiswa</th>
-                                    <th>Waktu & Ruangan</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @forelse($upcomingSeminars as $sem)
-                                <tr>
-                                    <td>
-                                        <strong>{{ $sem->thesis?->student?->user?->name }}</strong><br>
-                                        <small class="text-muted">{{ $sem->thesis?->student?->nim }}</small>
-                                    </td>
-                                    <td>
-                                        <i class="la la-calendar text-primary"></i> {{ \Carbon\Carbon::parse($sem->seminar_date)->format('d M Y, H:i') }}<br>
-                                        <i class="la la-map-marker text-danger"></i> {{ $sem->room }}
-                                    </td>
-                                    <td><span class="badge bg-info">Terjadwal</span></td>
-                                </tr>
-                                @empty
-                                <tr>
-                                    <td colspan="3" class="text-center text-muted py-3">Belum ada seminar proposal yang dijadwalkan.</td>
-                                </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Scheduled Defenses -->
-        <div class="col-lg-6 mb-4">
-            <div class="card shadow-sm border-0">
-                <div class="card-header bg-white d-flex justify-content-between align-items-center">
-                    <h5 class="card-title text-primary mb-0"><i class="la la-gavel me-1"></i> Jadwal Sidang Skripsi Aktif</h5>
-                    <a href="{{ route('thesis-defenses.index') }}" class="btn btn-xs btn-outline-primary">Atur Sidang</a>
-                </div>
-                <div class="card-body p-0">
-                    <div class="table-responsive">
-                        <table class="table table-hover align-middle mb-0">
-                            <thead class="table-light">
-                                <tr>
-                                    <th>Mahasiswa</th>
-                                    <th>Waktu & Ruangan</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @forelse($upcomingDefenses as $def)
-                                <tr>
-                                    <td>
-                                        <strong>{{ $def->thesis?->student?->user?->name }}</strong><br>
-                                        <small class="text-muted">{{ $def->thesis?->student?->nim }}</small>
-                                    </td>
-                                    <td>
-                                        <i class="la la-calendar text-primary"></i> {{ \Carbon\Carbon::parse($def->defense_date)->format('d M Y, H:i') }}<br>
-                                        <i class="la la-map-marker text-danger"></i> {{ $def->room }}
-                                    </td>
-                                    <td><span class="badge bg-warning text-dark">{{ ucfirst($def->status) }}</span></td>
-                                </tr>
-                                @empty
-                                <tr>
-                                    <td colspan="3" class="text-center text-muted py-3">Belum ada sidang skripsi yang dijadwalkan.</td>
-                                </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
+                    <div class="alert alert-secondary border-0 mt-3">
+                        <p class="mb-0 text-muted text-center"><i class="fa fa-info-circle mr-1"></i> Tidak ada periode yudisium lain yang terbuka saat ini.</p>
                     </div>
                 </div>
             </div>

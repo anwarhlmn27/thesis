@@ -3,167 +3,126 @@
 @section('content')
 <div class="container-fluid">
     <!-- Header Banner -->
-    <div class="row page-titles mx-0 mb-4 bg-success text-white rounded p-3 align-items-center shadow-sm">
-        <div class="col-sm-8 p-md-0">
+    <div class="row page-titles mx-0 mb-4 bg-gradient-success text-white rounded p-3 align-items-center shadow-sm" style="background: linear-gradient(90deg, #28a745 0%, #20c997 100%);">
+        <div class="col-sm-6 p-md-0">
             <div class="welcome-text">
-                <h3 class="text-white mb-1"><i class="la la-wallet me-2"></i>Dashboard Staf Finance / Keuangan</h3>
-                <p class="mb-0 text-white-50">Pengelolaan Verifikasi Pembayaran UKT & Clearance Financial Skripsi</p>
+                <h4 class="text-white mb-1"><i class="la la-money mr-2"></i>Dashboard Staf Finance</h4>
+                <p class="mb-0 text-white-50">Verifikasi Keuangan & Pembayaran Mahasiswa</p>
             </div>
         </div>
-        <div class="col-sm-4 p-md-0 text-end">
-            <span class="badge bg-white text-success font-w600 px-3 py-2"><i class="la la-money me-1"></i> Akses Staf Finance</span>
+        <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+            <div class="d-flex align-items-center">
+                <span class="mr-3">Role Aktif:</span>
+                <span class="badge badge-light text-success border-0 px-3 py-2" style="font-size: 14px;">Staf Finance</span>
+            </div>
         </div>
     </div>
 
-    <!-- Stat Cards -->
+    <!-- Overview Cards -->
     <div class="row">
-        <div class="col-xl-3 col-sm-6">
-            <div class="widget-stat card bg-primary shadow-sm">
-                <div class="card-body">
-                    <div class="media">
-                        <span class="me-3"><i class="la la-users"></i></span>
-                        <div class="media-body text-white">
-                            <p class="mb-1">Total Mahasiswa</p>
-                            <h3 class="text-white mb-0">{{ $stats['total_students'] }}</h3>
-                            <small>Terdaftar di Sistem</small>
-                        </div>
+        <div class="col-xl-4 col-lg-4 col-sm-6">
+            <div class="widget-stat card border-0 shadow-sm overflow-hidden bg-primary">
+                <div class="card-body p-4 text-center">
+                    <span class="mr-3 mb-2 d-inline-block">
+                        <i class="la la-money text-white" style="font-size: 50px; opacity: 0.9;"></i>
+                    </span>
+                    <div class="mb-2">
+                        <h4 class="text-white">Menunggu Verifikasi</h4>
+                        <p class="text-white-50 mb-0">Pembayaran SPP/Skripsi</p>
                     </div>
+                    <h2 class="text-white font-weight-bold mb-0">24</h2>
                 </div>
             </div>
         </div>
-        <div class="col-xl-3 col-sm-6">
-            <div class="widget-stat card bg-success shadow-sm">
-                <div class="card-body">
-                    <div class="media">
-                        <span class="me-3"><i class="la la-check-circle"></i></span>
-                        <div class="media-body text-white">
-                            <p class="mb-1">Lunas UKT (Paid)</p>
-                            <h3 class="text-white mb-0">{{ $stats['paid_count'] }}</h3>
-                            <small>{{ $stats['paid_percentage'] }}% dari Total Mahasiswa</small>
-                        </div>
+        <div class="col-xl-4 col-lg-4 col-sm-6">
+            <div class="widget-stat card border-0 shadow-sm overflow-hidden bg-success">
+                <div class="card-body p-4 text-center">
+                    <span class="mr-3 mb-2 d-inline-block">
+                        <i class="la la-check-circle text-white" style="font-size: 50px; opacity: 0.9;"></i>
+                    </span>
+                    <div class="mb-2">
+                        <h4 class="text-white">Telah Diverifikasi</h4>
+                        <p class="text-white-50 mb-0">Bulan Ini (Juli 2026)</p>
                     </div>
+                    <h2 class="text-white font-weight-bold mb-0">142</h2>
                 </div>
             </div>
         </div>
-        <div class="col-xl-3 col-sm-6">
-            <div class="widget-stat card bg-danger shadow-sm">
-                <div class="card-body">
-                    <div class="media">
-                        <span class="me-3"><i class="la la-exclamation-triangle"></i></span>
-                        <div class="media-body text-white">
-                            <p class="mb-1">Belum Lunas (Unpaid)</p>
-                            <h3 class="text-white mb-0">{{ $stats['unpaid_count'] }}</h3>
-                            <small>Menunggak / Belum Verifikasi</small>
-                        </div>
+        <div class="col-xl-4 col-lg-4 col-sm-12">
+            <div class="widget-stat card border-0 shadow-sm overflow-hidden bg-info">
+                <div class="card-body p-4 text-center">
+                    <span class="mr-3 mb-2 d-inline-block">
+                        <i class="la la-file-invoice text-white" style="font-size: 50px; opacity: 0.9;"></i>
+                    </span>
+                    <div class="mb-2">
+                        <h4 class="text-white">Tagihan Belum Lunas</h4>
+                        <p class="text-white-50 mb-0">Mahasiswa Tingkat Akhir</p>
                     </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-xl-3 col-sm-6">
-            <div class="widget-stat card bg-warning shadow-sm">
-                <div class="card-body">
-                    <div class="media">
-                        <span class="me-3"><i class="la la-file-invoice"></i></span>
-                        <div class="media-body text-white">
-                            <p class="mb-1">Pending Proposal Approval</p>
-                            <h3 class="text-white mb-0">{{ $stats['pending_proposals'] }}</h3>
-                            <small>Verifikasi Keuangan Syarat Skripsi</small>
-                        </div>
-                    </div>
+                    <h2 class="text-white font-weight-bold mb-0">58</h2>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Main Table: Student Financial Status -->
     <div class="row">
-        <div class="col-lg-8 mb-4">
-            <div class="card shadow-sm border-0">
-                <div class="card-header bg-white d-flex justify-content-between align-items-center">
-                    <h5 class="card-title text-success mb-0"><i class="la la-list-alt me-1"></i> Data Kelayakan Keuangan Mahasiswa</h5>
-                    <a href="{{ route('students.index') }}" class="btn btn-xs btn-outline-success">Kelola Data Mahasiswa</a>
-                </div>
-                <div class="card-body p-0">
-                    <div class="table-responsive">
-                        <table class="table table-hover align-middle mb-0">
-                            <thead class="table-light">
-                                <tr>
-                                    <th>NIM & Nama</th>
-                                    <th>Program Studi</th>
-                                    <th>Semester</th>
-                                    <th>Status UKT / Financial</th>
-                                    <th>Aksi Verifikasi</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @forelse($students as $st)
-                                <tr>
-                                    <td>
-                                        <strong>{{ $st->user?->name }}</strong><br>
-                                        <small class="text-muted">NIM: {{ $st->nim }}</small>
-                                    </td>
-                                    <td>{{ $st->prodi }}</td>
-                                    <td>Semester {{ $st->semester }}</td>
-                                    <td>
-                                        @if($st->is_paid)
-                                            <span class="badge bg-success"><i class="la la-check"></i> Lunas (Approved)</span>
-                                        @else
-                                            <span class="badge bg-danger"><i class="la la-times"></i> Belum Lunas</span>
-                                        @endif
-                                    </td>
-                                    <td>
-                                        <a href="{{ route('students.edit', $st->id) }}" class="btn btn-xs {{ $st->is_paid ? 'btn-outline-secondary' : 'btn-success' }}">
-                                            <i class="la la-edit"></i> {{ $st->is_paid ? 'Ubah Status' : 'Set Lunas' }}
-                                        </a>
-                                    </td>
-                                </tr>
-                                @empty
-                                <tr>
-                                    <td colspan="5" class="text-center text-muted py-3">Belum ada data mahasiswa.</td>
-                                </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
+        <!-- Antrean Verifikasi Keuangan -->
+        <div class="col-xl-12 col-lg-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header border-bottom-0 pb-0 d-flex justify-content-between align-items-center">
+                    <h4 class="card-title mb-0">Antrean Verifikasi Keuangan (Syarat Ujian/Yudisium)</h4>
+                    <div class="d-flex">
+                        <select class="form-control form-control-sm mr-2" style="width: 150px;">
+                            <option value="">Semua Jenis</option>
+                            <option value="SPP">SPP Semester</option>
+                            <option value="Bimbingan">Biaya Bimbingan</option>
+                            <option value="Sidang">Biaya Sidang</option>
+                        </select>
+                        <button class="btn btn-sm btn-primary"><i class="fa fa-filter"></i> Filter</button>
                     </div>
                 </div>
-            </div>
-        </div>
-
-        <!-- Pending Proposal Approvals for Finance -->
-        <div class="col-lg-4 mb-4">
-            <div class="card shadow-sm border-0">
-                <div class="card-header bg-white">
-                    <h5 class="card-title text-success mb-0"><i class="la la-clipboard-check me-1"></i> Approval Proposal Masuk</h5>
-                </div>
-                <div class="card-body p-0">
+                <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-hover align-middle mb-0">
-                            <thead class="table-light">
+                        <table class="table table-hover">
+                            <thead class="thead-light">
                                 <tr>
+                                    <th>Tanggal Upload</th>
                                     <th>Mahasiswa</th>
-                                    <th>Status Finance</th>
+                                    <th>NIM</th>
+                                    <th>Jenis Pembayaran</th>
+                                    <th>Nominal</th>
+                                    <th>Bukti Transaksi</th>
+                                    <th>Status</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @forelse($pendingProposals as $prop)
+                                @for($i = 1; $i <= 5; $i++)
                                 <tr>
+                                    <td>{{ \Carbon\Carbon::now()->subHours($i * 2)->format('d M Y, H:i') }}</td>
                                     <td>
-                                        <strong>{{ $prop->student?->user?->name }}</strong><br>
-                                        <small class="text-muted">{{ $prop->student?->nim }}</small>
+                                        <div class="d-flex align-items-center">
+                                            <img src="https://ui-avatars.com/api/?name=MHS+{{ $i }}&background=random" class="rounded-circle mr-2" width="30" alt="">
+                                            Mahasiswa Keuangan {{ $i }}
+                                        </div>
                                     </td>
-                                    <td><span class="badge bg-warning text-dark">Pending</span></td>
+                                    <td>191052{{ 100 + $i }}</td>
+                                    <td><span class="badge badge-outline-primary">Biaya Sidang Skripsi</span></td>
+                                    <td>Rp 500.000,-</td>
                                     <td>
-                                        <a href="{{ route('thesis-proposals.index') }}" class="btn btn-xs btn-success"><i class="la la-check"></i> Approve</a>
+                                        <a href="javascript:void(0)" class="text-info"><i class="fa fa-file-image-o mr-1"></i> bukti_tf_{{ $i }}.jpg</a>
+                                    </td>
+                                    <td><span class="badge badge-light text-warning"><i class="fa fa-clock-o mr-1"></i> Menunggu Verifikasi</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-success mr-1" title="Approve"><i class="fa fa-check"></i></button>
+                                        <button class="btn btn-sm btn-danger" title="Reject"><i class="fa fa-times"></i></button>
                                     </td>
                                 </tr>
-                                @empty
-                                <tr>
-                                    <td colspan="3" class="text-center text-muted py-3">Semua proposal disetujui Finance.</td>
-                                </tr>
-                                @endforelse
+                                @endfor
                             </tbody>
                         </table>
+                    </div>
+                    <div class="text-center mt-3">
+                        <a href="javascript:void(0)" class="text-primary">Lihat Semua Antrean (24) <i class="fa fa-arrow-right ml-1"></i></a>
                     </div>
                 </div>
             </div>

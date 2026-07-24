@@ -13,6 +13,8 @@ class ProposalExaminer extends Model
         'proposal_seminar_id',
         'lecturer_id',
         'position',
+        'status',
+        'notes',
     ];
 
     public function proposalSeminar()

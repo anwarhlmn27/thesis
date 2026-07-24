@@ -43,7 +43,12 @@
                             <tr>
                                 <td><strong>{{ $index + 1 }}</strong></td>
                                 <td>{{ $lecturer->nidn }}</td>
-                                <td>{{ $lecturer->user->name ?? '-' }}</td>
+                                <td>
+                                    {{ $lecturer->user->name ?? '-' }}
+                                    @if($lecturer->is_kaprodi)
+                                        <span class="badge badge-xs badge-info ms-1">Kaprodi</span>
+                                    @endif
+                                </td>
                                 <td>{{ $lecturer->user->email ?? '-' }}</td>
                                 <td>{{ $lecturer->prodi }}</td>
                                 <td>
@@ -54,6 +59,7 @@
                                                 data-email="{{ $lecturer->user->email ?? '' }}"
                                                 data-nidn="{{ $lecturer->nidn }}"
                                                 data-prodi="{{ $lecturer->prodi }}"
+                                                data-iskaprodi="{{ $lecturer->is_kaprodi ? '1' : '0' }}"
                                                 data-bs-toggle="modal" 
                                                 data-bs-target="#editModal">
                                             <i class="fa fa-pencil"></i>
@@ -112,6 +118,10 @@
                         <label class="form-label">Program Studi</label>
                         <input type="text" name="prodi" class="form-control" placeholder="Masukkan program studi" required>
                     </div>
+                    <div class="form-check form-switch mb-3">
+                        <input class="form-check-input" type="checkbox" id="isKaprodiAdd" name="is_kaprodi">
+                        <label class="form-check-label" for="isKaprodiAdd">Jadikan sebagai Kaprodi</label>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger light" data-bs-dismiss="modal">Tutup</button>
@@ -154,6 +164,10 @@
                         <label class="form-label">Program Studi</label>
                         <input type="text" name="prodi" id="edit_prodi" class="form-control" required>
                     </div>
+                    <div class="form-check form-switch mb-3">
+                        <input class="form-check-input" type="checkbox" id="edit_is_kaprodi" name="is_kaprodi">
+                        <label class="form-check-label" for="edit_is_kaprodi">Jadikan sebagai Kaprodi</label>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger light" data-bs-dismiss="modal">Tutup</button>
@@ -177,12 +191,14 @@
                 const email = this.getAttribute('data-email');
                 const nidn = this.getAttribute('data-nidn');
                 const prodi = this.getAttribute('data-prodi');
+                const is_kaprodi = this.getAttribute('data-iskaprodi');
                 
                 document.getElementById('editForm').action = `/admin/lecturers/${id}`;
                 document.getElementById('edit_name').value = name;
                 document.getElementById('edit_email').value = email;
                 document.getElementById('edit_nidn').value = nidn;
                 document.getElementById('edit_prodi').value = prodi;
+                document.getElementById('edit_is_kaprodi').checked = is_kaprodi == '1';
             });
         });
     });

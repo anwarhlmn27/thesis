@@ -3,269 +3,206 @@
 @section('content')
 <div class="container-fluid">
     <!-- Header Banner -->
-    <div class="row page-titles mx-0 mb-4 bg-secondary text-white rounded p-3 align-items-center shadow-sm">
-        <div class="col-sm-7 p-md-0">
+    <div class="row mx-0 mb-4 bg-dark text-white rounded p-4 align-items-center shadow-sm">
+        <div class="col-sm-6 p-md-0">
             <div class="welcome-text">
-                <h3 class="text-white mb-1"><i class="la la-chalkboard-teacher me-2"></i>Dashboard Dosen Pembimbing & Penguji</h3>
-                <p class="mb-0 text-white-50">Monitoring Bimbingan, Pengujian Seminar/Sidang & Approval Revisi</p>
+                <h4 class="text-white mb-1"><i class="la la-chalkboard-teacher mr-2 text-white"></i>Dashboard Dosen</h4>
+                <p class="mb-0 text-white-50">Monitoring Mahasiswa Bimbingan & Jadwal Ujian</p>
             </div>
         </div>
-        <div class="col-sm-5 p-md-0 text-end">
-            <!-- Lecturer Selector for Switcher Demo -->
-            <form method="GET" action="{{ route('dashboard.dosen') }}" class="d-inline-block">
-                <select name="lecturer_id" onchange="this.form.submit()" class="form-select form-select-sm border-0 text-dark fw-bold shadow-sm">
-                    @foreach($lecturers as $l)
-                    <option value="{{ $l->id }}" {{ $lecturer?->id == $l->id ? 'selected' : '' }}>
-                        👨‍🏫 Demo: {{ $l->user?->name }} (NIDN: {{ $l->nidn }})
-                    </option>
-                    @endforeach
-                </select>
-            </form>
-        </div>
-    </div>
-
-    @if(!$lecturer)
-    <div class="alert alert-warning">Data dosen tidak ditemukan.</div>
-    @else
-    <!-- Stat Widgets -->
-    <div class="row">
-        <div class="col-xl-3 col-sm-6">
-            <div class="widget-stat card bg-primary shadow-sm">
-                <div class="card-body">
-                    <div class="media">
-                        <span class="me-3"><i class="la la-users"></i></span>
-                        <div class="media-body text-white">
-                            <p class="mb-1">Mahasiswa Bimbingan</p>
-                            <h3 class="text-white mb-0">{{ $stats['total_advisees'] }}</h3>
-                            <small>Aktif Dibimbing</small>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-xl-3 col-sm-6">
-            <div class="widget-stat card bg-warning shadow-sm">
-                <div class="card-body">
-                    <div class="media">
-                        <span class="me-3"><i class="la la-clock-o"></i></span>
-                        <div class="media-body text-white">
-                            <p class="mb-1">Log Bimbingan Pending</p>
-                            <h3 class="text-white mb-0">{{ $stats['pending_logs'] }}</h3>
-                            <small>Menunggu Persetujuan Dosen</small>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-xl-3 col-sm-6">
-            <div class="widget-stat card bg-info shadow-sm">
-                <div class="card-body">
-                    <div class="media">
-                        <span class="me-3"><i class="la la-calendar-check-o"></i></span>
-                        <div class="media-body text-white">
-                            <p class="mb-1">Jadwal Menguji</p>
-                            <h3 class="text-white mb-0">{{ $stats['proposal_exams'] + $stats['defense_exams'] }}</h3>
-                            <small>{{ $stats['proposal_exams'] }} Seminar, {{ $stats['defense_exams'] }} Sidang</small>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-xl-3 col-sm-6">
-            <div class="widget-stat card bg-danger shadow-sm">
-                <div class="card-body">
-                    <div class="media">
-                        <span class="me-3"><i class="la la-edit"></i></span>
-                        <div class="media-body text-white">
-                            <p class="mb-1">Approval Revisi Sidang</p>
-                            <h3 class="text-white mb-0">{{ $stats['pending_revisions'] }}</h3>
-                            <small>Revisi Menunggu Persetujuan</small>
-                        </div>
-                    </div>
-                </div>
+        <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+            <div class="d-flex align-items-center">
+                <span class="mr-3">Role Aktif:</span>
+                <span class="badge badge-light text-dark border-0 px-3 py-2" style="font-size: 14px;">Dosen Pembimbing/Penguji</span>
             </div>
         </div>
     </div>
 
-    <!-- Main Content Tables -->
-    <div class="row">
-        <!-- Advisees List -->
-        <div class="col-lg-6 mb-4">
-            <div class="card shadow-sm border-0 h-100">
-                <div class="card-header bg-white d-flex justify-content-between align-items-center">
-                    <h5 class="card-title text-primary mb-0"><i class="la la-user-graduate me-1"></i> Daftar Anak Bimbingan</h5>
-                    <a href="{{ route('mentoring-logs.index') }}" class="btn btn-xs btn-outline-primary">Kelola Bimbingan</a>
+    <!-- Dosen Selector (For Testing/Preview) -->
+    @if(auth()->user()->role !== 'lecturer' && $lecturers->isNotEmpty())
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm bg-light">
+                <div class="card-body p-3 d-flex align-items-center">
+                    <span class="mr-3 font-weight-bold text-dark"><i class="fa fa-eye mr-1"></i> Preview Dashboard Sebagai:</span>
+                    <form action="{{ route('dashboard.dosen') }}" method="GET" class="d-flex flex-grow-1 mr-3">
+                        <select name="lecturer_id" class="form-control form-control-sm mr-2 w-100" onchange="this.form.submit()">
+                            @foreach($lecturers as $lecturerItem)
+                                <option value="{{ $lecturerItem->id }}" {{ isset($lecturer) && $lecturer->id == $lecturerItem->id ? 'selected' : '' }}>
+                                    {{ $lecturerItem->user?->name }} (NIDN: {{ $lecturerItem->nidn }})
+                                </option>
+                            @endforeach
+                        </select>
+                    </form>
+                    @if(isset($lecturer))
+                        <span class="badge badge-primary px-3 py-2">Dosen Aktif: {{ $lecturer->user?->name }}</span>
+                    @endif
                 </div>
+            </div>
+        </div>
+    </div>
+    @endif
+
+
+
+    @if(isset($lecturer))
+    <!-- Overview Cards -->
+    <div class="row">
+        <div class="col-xl-3 col-xxl-3 col-sm-6">
+            <div class="widget-stat card border-0 shadow-sm overflow-hidden">
                 <div class="card-body p-0">
+                    <div class="d-flex p-4 bg-primary text-white">
+                        <div class="align-self-center mr-auto">
+                            <h4 class="text-white mb-1">Mahasiswa Bimbingan</h4>
+                            <h2 class="text-white font-weight-bold mb-0">8</h2>
+                        </div>
+                        <div class="align-self-center text-center">
+                            <i class="la la-users" style="font-size: 40px; opacity: 0.8;"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-xxl-3 col-sm-6">
+            <div class="widget-stat card border-0 shadow-sm overflow-hidden">
+                <div class="card-body p-0">
+                    <div class="d-flex p-4 bg-warning text-white">
+                        <div class="align-self-center mr-auto">
+                            <h4 class="text-white mb-1">Menunggu Persetujuan</h4>
+                            <h2 class="text-white font-weight-bold mb-0">3</h2>
+                        </div>
+                        <div class="align-self-center text-center">
+                            <i class="la la-edit" style="font-size: 40px; opacity: 0.8;"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-xxl-3 col-sm-6">
+            <div class="widget-stat card border-0 shadow-sm overflow-hidden">
+                <div class="card-body p-0">
+                    <div class="d-flex p-4 bg-info text-white">
+                        <div class="align-self-center mr-auto">
+                            <h4 class="text-white mb-1">Jadwal Ujian (Penguji)</h4>
+                            <h2 class="text-white font-weight-bold mb-0">2</h2>
+                        </div>
+                        <div class="align-self-center text-center">
+                            <i class="la la-calendar-check" style="font-size: 40px; opacity: 0.8;"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-xxl-3 col-sm-6">
+            <div class="widget-stat card border-0 shadow-sm overflow-hidden">
+                <div class="card-body p-0">
+                    <div class="d-flex p-4 bg-success text-white">
+                        <div class="align-self-center mr-auto">
+                            <h4 class="text-white mb-1">Bimbingan Selesai</h4>
+                            <h2 class="text-white font-weight-bold mb-0">14</h2>
+                        </div>
+                        <div class="align-self-center text-center">
+                            <i class="la la-check-circle" style="font-size: 40px; opacity: 0.8;"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Mahasiswa Bimbingan Aktif -->
+        <div class="col-xl-8 col-lg-8">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header border-bottom-0 pb-0 d-flex justify-content-between align-items-center">
+                    <h4 class="card-title mb-0">Mahasiswa Bimbingan Aktif</h4>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-outline-primary">Lihat Semua</a>
+                </div>
+                <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-hover align-middle mb-0">
-                            <thead class="table-light">
+                        <table class="table table-hover">
+                            <thead>
                                 <tr>
                                     <th>Mahasiswa</th>
                                     <th>Judul Skripsi</th>
-                                    <th>Progress Log</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @forelse($adviseeTheses as $th)
-                                @php
-                                    $approvedCount = $th->mentoringLogs->where('status', 'approved')->count();
-                                @endphp
-                                <tr>
-                                    <td>
-                                        <strong>{{ $th->student?->user?->name }}</strong><br>
-                                        <small class="text-muted">NIM: {{ $th->student?->nim }}</small>
-                                    </td>
-                                    <td>{{ Str::limit($th->title, 40) }}</td>
-                                    <td>
-                                        <span class="badge {{ $approvedCount >= 10 ? 'bg-success' : 'bg-warning' }}">
-                                            {{ $approvedCount }} / 10 Log
-                                        </span>
-                                    </td>
-                                </tr>
-                                @empty
-                                <tr>
-                                    <td colspan="3" class="text-center text-muted py-3">Belum ada mahasiswa bimbingan yang ditugaskan.</td>
-                                </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Pending Mentoring Logs Needing Approval -->
-        <div class="col-lg-6 mb-4">
-            <div class="card shadow-sm border-0 h-100">
-                <div class="card-header bg-white d-flex justify-content-between align-items-center">
-                    <h5 class="card-title text-primary mb-0"><i class="la la-clock me-1"></i> Log Bimbingan Masuk (Perlu Review)</h5>
-                    <a href="{{ route('mentoring-logs.index') }}" class="btn btn-xs btn-outline-primary">Lihat Semua</a>
-                </div>
-                <div class="card-body p-0">
-                    <div class="table-responsive">
-                        <table class="table table-hover align-middle mb-0">
-                            <thead class="table-light">
-                                <tr>
-                                    <th>Tanggal</th>
-                                    <th>Mahasiswa</th>
-                                    <th>Catatan / Draf</th>
+                                    <th>Progress</th>
+                                    <th>Terakhir Bimbingan</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @forelse($pendingLogs as $log)
+                                @for($i = 1; $i <= 4; $i++)
                                 <tr>
-                                    <td>{{ \Carbon\Carbon::parse($log->mentoring_date)->format('d M Y') }}</td>
                                     <td>
-                                        <strong>{{ $log->thesis?->student?->user?->name }}</strong>
+                                        <div class="d-flex align-items-center">
+                                            <img src="https://ui-avatars.com/api/?name=Bimbingan+{{ $i }}&background=random" class="rounded-circle mr-2" width="30" alt="">
+                                            <div>
+                                                <h6 class="mb-0">Mahasiswa Bimbingan {{ $i }}</h6>
+                                                <small class="text-muted">191054{{ 100 + $i }}</small>
+                                            </div>
+                                        </div>
                                     </td>
-                                    <td>{{ Str::limit($log->notes, 30) }}</td>
+                                    <td><span class="text-truncate d-inline-block" style="max-width: 200px;">Implementasi Sistem Pakar Diagnosa Penyakit Menggunakan Metode Certainty Factor</span></td>
                                     <td>
-                                        <a href="{{ route('mentoring-logs.edit', $log->id) }}" class="btn btn-xs btn-success"><i class="la la-check"></i> Review</a>
+                                        <div class="d-flex align-items-center">
+                                            <div class="progress mr-2" style="height: 6px; width: 60px;">
+                                                <div class="progress-bar bg-{{ $i == 1 ? 'warning' : ($i == 2 ? 'primary' : 'success') }}" role="progressbar" style="width: {{ $i * 20 + 20 }}%;" aria-valuenow="{{ $i * 20 + 20 }}" aria-valuemin="0" aria-valuemax="100"></div>
+                                            </div>
+                                            <small>{{ $i * 20 + 20 }}%</small>
+                                        </div>
+                                        <small class="text-muted d-block mt-1">{{ $i == 1 ? 'BAB II' : ($i == 2 ? 'BAB IV' : 'Revisi Sidang') }}</small>
+                                    </td>
+                                    <td>{{ \Carbon\Carbon::now()->subDays($i * 2)->format('d M Y') }}</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-info text-white" title="Log Bimbingan"><i class="fa fa-list"></i></button>
+                                        <button class="btn btn-sm btn-success text-white" title="Acc Bab"><i class="fa fa-check"></i></button>
                                     </td>
                                 </tr>
-                                @empty
-                                <tr>
-                                    <td colspan="4" class="text-center text-muted py-3">Tidak ada log bimbingan pending.</td>
-                                </tr>
-                                @endforelse
+                                @endfor
                             </tbody>
                         </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Jadwal Ujian (Sebagai Penguji) -->
+        <div class="col-xl-4 col-lg-4">
+            <div class="card border-0 shadow-sm bg-gradient-info text-white" style="background: linear-gradient(180deg, #17a2b8 0%, #117a8b 100%);">
+                <div class="card-header border-bottom-0 pb-0">
+                    <h4 class="card-title text-white mb-0">Jadwal Ujian Terdekat (Sebagai Penguji)</h4>
+                </div>
+                <div class="card-body">
+                    <div class="timeline-widget">
+                        <div class="p-3 bg-white text-dark rounded mb-3 shadow-sm">
+                            <h6 class="text-primary font-weight-bold mb-1">Sidang Skripsi</h6>
+                            <p class="mb-1 font-weight-bold">Mahasiswa: Budi Santoso</p>
+                            <p class="mb-1 text-muted small"><i class="fa fa-calendar mr-1"></i> Kamis, 30 Jul 2026</p>
+                            <p class="mb-2 text-muted small"><i class="fa fa-clock-o mr-1"></i> 09:00 - 11:00 WIB di Ruang R.201</p>
+                            <div class="d-flex justify-content-between align-items-center mt-2">
+                                <span class="badge badge-light text-primary border border-primary">Penguji 1</span>
+                                <a href="#" class="btn btn-xs btn-primary">Lihat Berkas</a>
+                            </div>
+                        </div>
+
+                        <div class="p-3 bg-white text-dark rounded shadow-sm">
+                            <h6 class="text-info font-weight-bold mb-1">Seminar Proposal</h6>
+                            <p class="mb-1 font-weight-bold">Mahasiswa: Siti Aminah</p>
+                            <p class="mb-1 text-muted small"><i class="fa fa-calendar mr-1"></i> Jumat, 31 Jul 2026</p>
+                            <p class="mb-2 text-muted small"><i class="fa fa-clock-o mr-1"></i> 13:30 - 15:00 WIB di Ruang Seminar B</p>
+                            <div class="d-flex justify-content-between align-items-center mt-2">
+                                <span class="badge badge-light text-info border border-info">Penguji 2</span>
+                                <a href="#" class="btn btn-xs btn-info text-white">Lihat Berkas</a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
-    <!-- Exam & Revision Rows -->
-    <div class="row">
-        <!-- Proposal Seminar Exams -->
-        <div class="col-lg-6 mb-4">
-            <div class="card shadow-sm border-0">
-                <div class="card-header bg-white d-flex justify-content-between align-items-center">
-                    <h5 class="card-title text-primary mb-0"><i class="la la-calendar-alt me-1"></i> Jadwal Menguji Seminar Proposal</h5>
-                    <a href="{{ route('proposal-examiners.index') }}" class="btn btn-xs btn-outline-primary">Detail Tim Penguji</a>
-                </div>
-                <div class="card-body p-0">
-                    <div class="table-responsive">
-                        <table class="table table-hover align-middle mb-0">
-                            <thead class="table-light">
-                                <tr>
-                                    <th>Mahasiswa</th>
-                                    <th>Waktu & Tempat</th>
-                                    <th>Posisi Penguji</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @forelse($proposalExams as $sem)
-                                @php
-                                    $ex = $sem->proposalExaminers->where('lecturer_id', $lecturer->id)->first();
-                                @endphp
-                                <tr>
-                                    <td>
-                                        <strong>{{ $sem->thesis?->student?->user?->name }}</strong><br>
-                                        <small class="text-muted">{{ $sem->thesis?->student?->nim }}</small>
-                                    </td>
-                                    <td>
-                                        <i class="la la-clock text-primary"></i> {{ \Carbon\Carbon::parse($sem->seminar_date)->format('d M Y, H:i') }}<br>
-                                        <i class="la la-map-marker text-danger"></i> {{ $sem->room }}
-                                    </td>
-                                    <td>
-                                        <span class="badge bg-info text-capitalize">{{ $ex?->position ?? 'Penguji' }}</span>
-                                    </td>
-                                </tr>
-                                @empty
-                                <tr>
-                                    <td colspan="3" class="text-center text-muted py-3">Belum ada jadwal menguji seminar proposal.</td>
-                                </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Pending Defense Revisions Approval -->
-        <div class="col-lg-6 mb-4">
-            <div class="card shadow-sm border-0">
-                <div class="card-header bg-white d-flex justify-content-between align-items-center">
-                    <h5 class="card-title text-primary mb-0"><i class="la la-check-double me-1"></i> Approval Revisi Sidang Skripsi</h5>
-                    <a href="{{ route('defense-revisions.index') }}" class="btn btn-xs btn-outline-primary">Daftar Revisi</a>
-                </div>
-                <div class="card-body p-0">
-                    <div class="table-responsive">
-                        <table class="table table-hover align-middle mb-0">
-                            <thead class="table-light">
-                                <tr>
-                                    <th>Mahasiswa</th>
-                                    <th>Deskripsi Revisi</th>
-                                    <th>Aksi Approval</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @forelse($pendingRevisions as $rev)
-                                <tr>
-                                    <td>
-                                        <strong>{{ $rev->thesisDefense?->thesis?->student?->user?->name }}</strong>
-                                    </td>
-                                    <td>{{ Str::limit($rev->description, 40) }}</td>
-                                    <td>
-                                        <a href="{{ route('defense-revisions.index') }}" class="btn btn-xs btn-success"><i class="la la-check"></i> Approve Revisi</a>
-                                    </td>
-                                </tr>
-                                @empty
-                                <tr>
-                                    <td colspan="3" class="text-center text-muted py-3">Tidak ada revisi sidang yang belum disetujui.</td>
-                                </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
+    @else
+    <div class="alert alert-info">
+        Silakan pilih Dosen pada dropdown di atas untuk melihat preview dashboard.
     </div>
     @endif
 </div>

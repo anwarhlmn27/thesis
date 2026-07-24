@@ -27,17 +27,27 @@
                     <div class="card mb-0 h-auto">
                         <div class="card-body">
                             <div class="text-center mb-2">
-                                <img src="{{ asset('images/logo-white-3.png')}}" alt="Logo" width="100">
+                                <img src="{{ asset('images/profile/logo_UHI.png')}}" alt="Logo" width="250">
                             </div>
                             <h4 class="text-center mb-4">Sign in your account</h4>
-                            <form action="index.html">
+                            <form action="{{ route('login.post') }}" method="POST">
+                                @csrf
+                                @if ($errors->any())
+                                    <div class="alert alert-danger shadow-sm border-0">
+                                        <ul class="mb-0 pl-3">
+                                            @foreach ($errors->all() as $error)
+                                                <li>{{ $error }}</li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                @endif
                                 <div class="form-group">
-                                    <label class="form-label" for="username">Username</label>
-                                    <input type="text" class="form-control" placeholder="username" id="username">
+                                    <label class="form-label" for="email">Email</label>
+                                    <input type="email" class="form-control" name="email" value="{{ old('email') }}" placeholder="admin@example.com" id="email" required>
                                 </div>
                                 <div class="mb-4 position-relative">
                                     <label class="form-label" for="dlabPassword">Password</label>
-                                    <input type="password" id="dlabPassword" class="form-control" value="123456">
+                                    <input type="password" name="password" id="dlabPassword" class="form-control" value="" required>
                                     <span class="show-pass eye">
                                         <i class="fa fa-eye-slash"></i>
                                         <i class="fa fa-eye"></i>
@@ -46,12 +56,12 @@
                                 <div class="form-row d-flex flex-wrap justify-content-between mt-4 mb-2">
                                     <div class="form-group">
                                         <div class="form-check custom-checkbox ms-1">
-                                            <input type="checkbox" class="form-check-input" id="basic_checkbox_1">
+                                            <input type="checkbox" class="form-check-input" name="remember" id="basic_checkbox_1">
                                             <label class="form-check-label" for="basic_checkbox_1">Remember my preference</label>
                                         </div>
                                     </div>
                                     <div class="form-group ms-2">
-                                        <a class="btn-link" href="page-forgot-password.html">Forgot Password?</a>
+                                        <a class="btn-link" href="javascript:void(0)">Forgot Password?</a>
                                     </div>
                                 </div>
                                 <div class="text-center">

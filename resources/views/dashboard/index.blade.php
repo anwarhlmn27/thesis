@@ -21,7 +21,7 @@
             <h5 class="mb-3 text-secondary font-w600"><i class="la la-exchange-alt me-1"></i> Pilih Dashboard Sesuai Akses Peran:</h5>
         </div>
         <div class="col-xl-2 col-md-4 col-sm-6 mb-3">
-            <a href="{{ route('dashboard.mahasiswa') }}" class="card text-decoration-none shadow-sm hover-top border-0 bg-gradient-primary text-white h-100">
+            <a href="{{ route('dashboard.mahasiswa') }}" class="card text-decoration-none shadow-sm hover-top border-0 bg-primary text-white h-100">
                 <div class="card-body text-center p-3">
                     <i class="la la-user-graduate la-3x mb-2"></i>
                     <h6 class="text-white mb-1 font-w600">Mahasiswa</h6>

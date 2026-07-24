@@ -13,6 +13,7 @@ class Lecturer extends Model
         'user_id',
         'nidn',
         'prodi',
+        'is_kaprodi',
     ];
 
     public function user()

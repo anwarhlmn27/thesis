@@ -3,15 +3,16 @@
 @section('content')
 <div class="container-fluid">
     <!-- Header Banner -->
-    <div class="row page-titles mx-0 mb-4 bg-gradient-primary text-white rounded p-3 align-items-center shadow-sm">
+    <div class="row mx-0 mb-4 bg-primary text-white rounded p-4 align-items-center shadow-sm">
         <div class="col-sm-7 p-md-0">
             <div class="welcome-text">
-                <h3 class="text-white mb-1"><i class="la la-user-graduate me-2"></i>Dashboard Portal Mahasiswa</h3>
+                <h3 class="text-white mb-1"><i class="la la-user-graduate me-2 text-white"></i>Dashboard Portal Mahasiswa</h3>
                 <p class="mb-0 text-white-50">Monitoring Alur Pendaftaran, Bimbingan & Kelulusan Skripsi</p>
             </div>
         </div>
         <div class="col-sm-5 p-md-0 text-end">
-            <!-- Student Selector for Switcher Demo -->
+            <!-- Student Selector for Switcher Demo (Only for Admin/Staff) -->
+            @if(auth()->user()->role !== 'student' && $students->isNotEmpty())
             <form method="GET" action="{{ route('dashboard.mahasiswa') }}" class="d-inline-block">
                 <select name="student_id" onchange="this.form.submit()" class="form-select form-select-sm border-0 text-dark fw-bold shadow-sm">
                     @foreach($students as $s)
@@ -21,6 +22,7 @@
                     @endforeach
                 </select>
             </form>
+            @endif
         </div>
     </div>
 

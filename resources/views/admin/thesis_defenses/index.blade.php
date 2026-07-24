@@ -48,9 +48,17 @@
                                 </td>
                                 <td>
                                     @if($defense->final_file_path)
-                                    <a href="{{ asset($defense->final_file_path) }}" target="_blank" class="btn btn-outline-info btn-xs">
-                                        <i class="fa fa-file-pdf-o me-1"></i>Lihat Skripsi Akhir
-                                    </a>
+                                    @php
+                                        $fileUrl = asset(str_starts_with($defense->final_file_path, 'final_theses/') ? 'storage/' . $defense->final_file_path : $defense->final_file_path);
+                                    @endphp
+                                    <div class="d-flex flex-wrap gap-1 mb-1">
+                                        <button type="button" class="btn btn-info btn-xs text-white" onclick="previewPdf('{{ $fileUrl }}', 'Skripsi Akhir - {{ addslashes($defense->thesis->student->user->name ?? '') }}')">
+                                            <i class="fa fa-eye me-1"></i>Lihat PDF
+                                        </button>
+                                        <a href="{{ $fileUrl }}" download class="btn btn-outline-secondary btn-xs">
+                                            <i class="fa fa-download me-1"></i>Unduh
+                                        </a>
+                                    </div>
                                     @else
                                     <span class="text-muted fs-12">Belum diunggah</span>
                                     @endif

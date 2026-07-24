@@ -31,11 +31,18 @@ class ThesisController extends Controller
         ]);
 
         $data = $request->all();
+        $student = Student::find($request->student_id);
+        $nim = $student ? $student->nim : 'unknown';
+
         if ($request->hasFile('proposal_file')) {
-            $data['proposal_file_path'] = $request->file('proposal_file')->store('proposals', 'public');
+            $ext = $request->file('proposal_file')->getClientOriginalExtension();
+            $fileName = 'proposal_' . $nim . '.' . $ext;
+            $data['proposal_file_path'] = $request->file('proposal_file')->storeAs('proposals', $fileName, 'public');
         }
         if ($request->hasFile('final_file')) {
-            $data['final_file_path'] = $request->file('final_file')->store('final_theses', 'public');
+            $ext = $request->file('final_file')->getClientOriginalExtension();
+            $fileName = 'skripsi_' . $nim . '.' . $ext;
+            $data['final_file_path'] = $request->file('final_file')->storeAs('final_theses', $fileName, 'public');
         }
 
         Thesis::create($data);
@@ -60,11 +67,18 @@ class ThesisController extends Controller
         ]);
 
         $data = $request->all();
+        $student = Student::find($request->student_id);
+        $nim = $student ? $student->nim : 'unknown';
+
         if ($request->hasFile('proposal_file')) {
-            $data['proposal_file_path'] = $request->file('proposal_file')->store('proposals', 'public');
+            $ext = $request->file('proposal_file')->getClientOriginalExtension();
+            $fileName = 'proposal_' . $nim . '.' . $ext;
+            $data['proposal_file_path'] = $request->file('proposal_file')->storeAs('proposals', $fileName, 'public');
         }
         if ($request->hasFile('final_file')) {
-            $data['final_file_path'] = $request->file('final_file')->store('final_theses', 'public');
+            $ext = $request->file('final_file')->getClientOriginalExtension();
+            $fileName = 'skripsi_' . $nim . '.' . $ext;
+            $data['final_file_path'] = $request->file('final_file')->storeAs('final_theses', $fileName, 'public');
         }
 
         $thesis->update($data);

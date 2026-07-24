@@ -40,6 +40,25 @@ class ThesisProposal extends Model
         return $this->belongsTo(Thesis::class);
     }
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::saving(function ($proposal) {
+            if ($proposal->is_baak_approved === true && 
+                $proposal->is_finance_approved === true && 
+                $proposal->is_kaprodi_approved === true) {
+                $proposal->eligibility_status = 'eligible';
+            } elseif ($proposal->is_baak_approved === false || 
+                      $proposal->is_finance_approved === false || 
+                      $proposal->is_kaprodi_approved === false) {
+                $proposal->eligibility_status = 'rejected';
+            } else {
+                $proposal->eligibility_status = 'pending';
+            }
+        });
+    }
+
     public function checkAndUpdateEligibility()
     {
         if ($this->is_baak_approved && $this->is_finance_approved && $this->is_kaprodi_approved) {

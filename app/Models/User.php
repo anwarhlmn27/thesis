@@ -51,4 +51,39 @@ class User extends Authenticatable
     {
         return $this->hasOne(Staff::class);
     }
+
+    public function student()
+    {
+        return $this->hasOne(Student::class);
+    }
+
+    public function lecturer()
+    {
+        return $this->hasOne(Lecturer::class);
+    }
+
+    public function getRoleAttribute()
+    {
+        // Check if admin
+        if ($this->email === 'admin@example.com' || str_starts_with($this->email, 'admin')) {
+            return 'admin';
+        }
+
+        // Check if staff (baak, finance, library)
+        if ($this->staff) {
+            return 'staff_' . strtolower($this->staff->department);
+        }
+
+        // Check if student
+        if ($this->student) {
+            return 'student';
+        }
+
+        // Check if lecturer
+        if ($this->lecturer) {
+            return 'lecturer';
+        }
+
+        return 'unknown';
+    }
 }

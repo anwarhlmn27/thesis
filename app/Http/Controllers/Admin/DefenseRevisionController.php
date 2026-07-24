@@ -32,7 +32,11 @@ class DefenseRevisionController extends Controller
 
         $filePath = $request->revision_file_path;
         if ($request->hasFile('revision_file')) {
-            $filePath = $request->file('revision_file')->store('revisions', 'public');
+            $defense = ThesisDefense::with('thesis.student')->find($request->thesis_defense_id);
+            $nim = ($defense && $defense->thesis && $defense->thesis->student) ? $defense->thesis->student->nim : 'unknown';
+            $ext = $request->file('revision_file')->getClientOriginalExtension();
+            $fileName = 'revisi_' . $nim . '.' . $ext;
+            $filePath = $request->file('revision_file')->storeAs('revisions', $fileName, 'public');
         }
 
         DefenseRevision::create([

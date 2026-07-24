@@ -62,8 +62,19 @@
                                 </td>
                                 <td>
                                     <div class="d-flex flex-wrap gap-1">
+                                        @if($yudisium->sk_file_path)
+                                        @php
+                                            $skFileUrl = asset(str_starts_with($yudisium->sk_file_path, 'yudisiums/') ? 'storage/' . $yudisium->sk_file_path : $yudisium->sk_file_path);
+                                        @endphp
+                                        <button type="button" class="btn btn-info shadow btn-xs text-white me-1" onclick="previewPdf('{{ $skFileUrl }}', 'SK Yudisium - {{ addslashes($yudisium->student->user->name ?? '') }}')">
+                                            <i class="fa fa-eye me-1"></i>Lihat SK
+                                        </button>
+                                        <a href="{{ $skFileUrl }}" download class="btn btn-outline-secondary shadow btn-xs me-1">
+                                            <i class="fa fa-download me-1"></i>Unduh SK
+                                        </a>
+                                        @endif
                                         <a href="{{ route('yudisiums.print', $yudisium->id) }}" target="_blank" class="btn btn-success shadow btn-xs me-1">
-                                            <i class="fa fa-print me-1"></i>Cetak SK (ttd Dekan)
+                                            <i class="fa fa-print me-1"></i>Cetak Draft SK
                                         </a>
                                         <button type="button" class="btn btn-primary shadow btn-xs sharp me-1 edit-btn" 
                                                 data-id="{{ $yudisium->id }}" 

@@ -28,7 +28,11 @@ class ThesisProposalController extends Controller
 
         $filePath = $request->proposal_file_path;
         if ($request->hasFile('proposal_file')) {
-            $filePath = $request->file('proposal_file')->store('proposals', 'public');
+            $thesis = Thesis::with('student')->find($request->thesis_id);
+            $nim = ($thesis && $thesis->student) ? $thesis->student->nim : 'unknown';
+            $ext = $request->file('proposal_file')->getClientOriginalExtension();
+            $fileName = 'proposal_' . $nim . '.' . $ext;
+            $filePath = $request->file('proposal_file')->storeAs('proposals', $fileName, 'public');
         }
 
         $proposal = ThesisProposal::create([

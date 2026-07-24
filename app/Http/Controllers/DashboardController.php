@@ -22,12 +22,21 @@ class DashboardController extends Controller
      */
     public function index()
     {
+        $user = auth()->user();
+        if ($user && $user->role !== 'admin') {
+            if ($user->role === 'student') return redirect()->route('dashboard.mahasiswa');
+            if ($user->role === 'lecturer') return redirect()->route('dashboard.dosen');
+            if ($user->role === 'staff_baak') return redirect()->route('dashboard.baak');
+            if ($user->role === 'staff_finance') return redirect()->route('dashboard.finance');
+            if ($user->role === 'staff_library') return redirect()->route('dashboard.perpustakaan');
+        }
+
         $stats = [
             'total_students' => Student::count(),
             'total_lecturers' => Lecturer::count(),
             'total_staff' => Staff::count(),
             'total_theses' => Thesis::count(),
-            'active_proposals' => ThesisProposal::where('status', 'submitted')->count(),
+            'active_proposals' => ThesisProposal::where('eligibility_status', 'pending')->count(),
             'scheduled_seminars' => ProposalSeminar::where('status', 'scheduled')->count(),
             'scheduled_defenses' => ThesisDefense::where('status', 'scheduled')->count(),
             'total_yudisiums' => Yudisium::count(),
@@ -46,8 +55,15 @@ class DashboardController extends Controller
      */
     public function mahasiswa(Request $request)
     {
-        $students = Student::with('user')->get();
-        $selectedStudentId = $request->get('student_id', $students->first()?->id);
+        $user = auth()->user();
+        $students = collect();
+        
+        if ($user && $user->role === 'student') {
+            $selectedStudentId = $user->student ? $user->student->id : null;
+        } else {
+            $students = Student::with('user')->get();
+            $selectedStudentId = $request->get('student_id', $students->first()?->id);
+        }
         
         $student = Student::with([
             'user',
@@ -86,7 +102,7 @@ class DashboardController extends Controller
         ];
 
         $pendingStudents = Student::with('user')->where('is_coursework_completed', false)->take(10)->get();
-        $pendingProposals = ThesisProposal::with('student.user')->where('is_baak_approved', false)->take(10)->get();
+        $pendingProposals = ThesisProposal::with('thesis.student.user')->where('is_baak_approved', false)->take(10)->get();
         $upcomingSeminars = ProposalSeminar::with('thesis.student.user')->where('status', 'scheduled')->get();
         $upcomingDefenses = ThesisDefense::with('thesis.student.user')->where('status', 'scheduled')->get();
 
@@ -112,7 +128,7 @@ class DashboardController extends Controller
         ];
 
         $students = Student::with('user')->orderBy('is_paid', 'asc')->get();
-        $pendingProposals = ThesisProposal::with('student.user')->where('is_finance_approved', false)->get();
+        $pendingProposals = ThesisProposal::with('thesis.student.user')->where('is_finance_approved', false)->get();
 
         return view('dashboard.finance', compact('stats', 'students', 'pendingProposals'));
     }
@@ -132,14 +148,12 @@ class DashboardController extends Controller
             'clear_count' => $clearCount,
             'pending_count' => $pendingCount,
             'clear_percentage' => $clearPercentage,
-            'pending_proposals' => ThesisProposal::where('is_library_approved', false)->count(),
             'final_submissions' => Thesis::whereNotNull('final_file_path')->count(),
         ];
 
         $students = Student::with('user')->orderBy('is_library_clear', 'asc')->get();
-        $pendingProposals = ThesisProposal::with('student.user')->where('is_library_approved', false)->get();
 
-        return view('dashboard.perpustakaan', compact('stats', 'students', 'pendingProposals'));
+        return view('dashboard.perpustakaan', compact('stats', 'students'));
     }
 
     /**
@@ -147,8 +161,15 @@ class DashboardController extends Controller
      */
     public function dosen(Request $request)
     {
-        $lecturers = Lecturer::with('user')->get();
-        $selectedLecturerId = $request->get('lecturer_id', $lecturers->first()?->id);
+        $user = auth()->user();
+        $lecturers = collect();
+        
+        if ($user && $user->role === 'lecturer') {
+            $selectedLecturerId = $user->lecturer ? $user->lecturer->id : null;
+        } else {
+            $lecturers = Lecturer::with('user')->get();
+            $selectedLecturerId = $request->get('lecturer_id', $lecturers->first()?->id);
+        }
 
         $lecturer = Lecturer::with('user')->find($selectedLecturerId);
 

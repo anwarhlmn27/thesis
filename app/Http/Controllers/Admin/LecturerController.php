@@ -38,6 +38,7 @@ class LecturerController extends Controller
                 'user_id' => $user->id,
                 'nidn' => $request->nidn,
                 'prodi' => $request->prodi,
+                'is_kaprodi' => $request->has('is_kaprodi'),
             ]);
         });
 
@@ -72,6 +73,7 @@ class LecturerController extends Controller
             $lecturer->update([
                 'nidn' => $request->nidn,
                 'prodi' => $request->prodi,
+                'is_kaprodi' => $request->has('is_kaprodi'),
             ]);
         });
 

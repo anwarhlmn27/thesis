@@ -30,6 +30,15 @@ class RoleUserSeeder extends Seeder
             ['nim' => '111222333', 'prodi' => 'Sistem Informasi', 'semester' => 8]
         );
 
+        $studentUser = \App\Models\User::firstOrCreate(
+            ['email' => 'mahasiswa2@example.com'],
+            ['name' => 'Mahasiswa Dummy 2', 'password' => $password]
+        );
+        \App\Models\Student::firstOrCreate(
+            ['user_id' => $studentUser->id],
+            ['nim' => '111222334', 'prodi' => 'Informatika', 'semester' => 8]
+        );
+
         // Lecturer
         $lecturerUser = \App\Models\User::firstOrCreate(
             ['email' => 'dosen@example.com'],

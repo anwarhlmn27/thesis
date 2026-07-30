@@ -49,12 +49,15 @@ function getUrlParams(dParam)
 		new dlabSettings(dlabSettingsOptions); 
 	});
 	
-	if(direction == 'rtl' || body.attr('direction') == 'rtl'){
-        direction = 'rtl';
-		jQuery('.main-css').attr('href','/css/style-rtl.css');
-    }else{
-        direction = 'ltr';
-		jQuery('.main-css').attr('href','/css/style.css');
+	var currentHref = jQuery('.main-css').attr('href');
+	if (currentHref) {
+		if(direction == 'rtl' || body.attr('direction') == 'rtl'){
+			direction = 'rtl';
+			jQuery('.main-css').attr('href', currentHref.replace('style.css', 'style-rtl.css'));
+		}else{
+			direction = 'ltr';
+			jQuery('.main-css').attr('href', currentHref.replace('style-rtl.css', 'style.css'));
+		}
 	}
 	
 	// Theme Mode Toggle Functionality

@@ -24,4 +24,4 @@
     <script src="{{ asset('js/dashboard/dashboard.js') }}"></script>
     
 	<script src="{{ asset('js/custom.min.js') }}"></script>
-    <script src="{{ asset('js/dlabnav-init.js') }}"></script>
+    <script src="{{ asset('js/dlabnav-init.js?v=1.0.1') }}"></script>

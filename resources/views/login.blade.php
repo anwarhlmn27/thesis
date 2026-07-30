@@ -85,7 +85,7 @@
 	<script src="{{ asset('vendor/bootstrap-select/dist/js/bootstrap-select.min.js')}}"></script>
     
     <script src="{{ asset('js/custom.min.js')}}"></script>
-    <script src="{{ asset('js/dlabnav-init.js')}}"></script>
+    <script src="{{ asset('js/dlabnav-init.js?v=1.0.1')}}"></script>
     
     
 

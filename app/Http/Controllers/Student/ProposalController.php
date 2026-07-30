@@ -19,7 +19,7 @@ class ProposalController extends Controller
         
         $seminar = null;
         if ($thesis) {
-            $seminar = ProposalSeminar::where('thesis_id', $thesis->id)->with('proposalExaminers.lecturer.user')->first();
+            $seminar = ProposalSeminar::where('thesis_id', $thesis->id)->with(['proposalExaminers.lecturer.user', 'proposalComments.lecturer.user'])->first();
         }
 
         return view('student.proposal.index', compact('thesis', 'seminar'));

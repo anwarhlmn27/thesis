@@ -151,6 +151,28 @@
             return false;
         }
 
+        // Global confirmation function for general actions
+        function confirmAction(event, form) {
+            event.preventDefault();
+            const confirmMsg = form.getAttribute('data-confirm-message') || 'Apakah Anda yakin ingin melanjutkan?';
+            const confirmBtn = form.getAttribute('data-confirm-btn') || 'Ya, Lanjutkan!';
+            Swal.fire({
+                title: 'Konfirmasi',
+                text: confirmMsg,
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#858796',
+                confirmButtonText: confirmBtn,
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit();
+                }
+            });
+            return false;
+        }
+
         // Global helper for Interactive PDF Modal Preview
         function previewPdf(url, title = 'Preview Dokumen PDF') {
             document.getElementById('pdfPreviewModalLabel').innerHTML = '<i class="fa fa-file-pdf-o me-2"></i> ' + title;

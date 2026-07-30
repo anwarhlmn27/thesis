@@ -8,11 +8,6 @@
             <p class="mb-0">Kelola pendaftaran sidang skripsi, tanggal sidang, tim penguji, dan verifikasi 5 prasyarat kelayakan sidang</p>
         </div>
     </div>
-    <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addModal">
-            <i class="fa fa-plus me-2"></i>Daftarkan / Jadwalkan Sidang
-        </button>
-    </div>
 </div>
 
 <div class="row">
@@ -47,9 +42,9 @@
                                     <small class="text-muted"><i class="fa fa-map-marker me-1"></i>Ruang: {{ $defense->room ?? '-' }}</small>
                                 </td>
                                 <td>
-                                    @if($defense->final_file_path)
+                                    @if($defense->thesis && $defense->thesis->final_file_path)
                                     @php
-                                        $fileUrl = asset(str_starts_with($defense->final_file_path, 'final_theses/') ? 'storage/' . $defense->final_file_path : $defense->final_file_path);
+                                        $fileUrl = asset(str_starts_with($defense->thesis->final_file_path, 'theses/final/') ? 'storage/' . $defense->thesis->final_file_path : (str_starts_with($defense->thesis->final_file_path, 'final_theses/') ? 'storage/' . $defense->thesis->final_file_path : $defense->thesis->final_file_path));
                                     @endphp
                                     <div class="d-flex flex-wrap gap-1 mb-1">
                                         <button type="button" class="btn btn-info btn-xs text-white" onclick="previewPdf('{{ $fileUrl }}', 'Skripsi Akhir - {{ addslashes($defense->thesis->student->user->name ?? '') }}')">
@@ -80,7 +75,7 @@
                                                 data-status="{{ $defense->status }}"
                                                 data-score="{{ $defense->score }}"
                                                 data-grade="{{ $defense->grade }}"
-                                                data-final_file_path="{{ $defense->final_file_path }}"
+                                                data-final_file_path="{{ $defense->thesis->final_file_path ?? '' }}"
                                                 data-bs-toggle="modal" 
                                                 data-bs-target="#editModal">
                                             <i class="fa fa-pencil"></i>
@@ -108,74 +103,7 @@
     </div>
 </div>
 
-<!-- Add Modal -->
-<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Daftar & Jadwalkan Sidang Skripsi</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <form action="{{ route('thesis-defenses.store') }}" method="POST">
-                @csrf
-                <div class="modal-body">
-                    <div class="form-group mb-3">
-                        <label class="form-label fw-bold">Pilih Skripsi Mahasiswa (Cek Status Prasyarat)</label>
-                        <select name="thesis_id" class="form-control" required>
-                            <option value="">-- Pilih Skripsi --</option>
-                            @foreach($theses as $thesis)
-                            @php
-                                $statusBadge = $thesis->is_eligible_for_defense ? '[ELIGIBLE SIDANG]' : '[BELUM ELIGIBLE - Min 10x Bimbingan, ACC Pembimbing, Finance, BAAK, Library]';
-                            @endphp
-                            <option value="{{ $thesis->id }}">
-                                {{ $thesis->student->nim ?? '' }} - {{ $thesis->student->user->name ?? '' }} | {{ Str::limit($thesis->title, 35) }} {{ $statusBadge }}
-                            </option>
-                            @endforeach
-                        </select>
-                        <small class="text-muted d-block mt-1">Syarat Eligible: Min 10x bimbingan approved + ACC Pembimbing + Lunas UKT/Finance + BAAK Clear + Library Clear</small>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">Tanggal & Waktu Sidang</label>
-                            <input type="datetime-local" name="defense_date" class="form-control">
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">Ruangan Sidang</label>
-                            <input type="text" name="room" class="form-control" placeholder="Contoh: Ruang Sidang Utama FEB">
-                        </div>
-                    </div>
-                    <div class="form-group mb-3">
-                        <label class="form-label">Path File Laporan Skripsi Akhir PDF</label>
-                        <input type="text" name="final_file_path" class="form-control" placeholder="uploads/skripsi_final.pdf">
-                    </div>
-                    <div class="form-group mb-3">
-                        <label class="form-label">Status Sidang</label>
-                        <select name="status" class="form-control" required>
-                            <option value="registered">Registered (Pendaftaran Baru)</option>
-                            <option value="scheduled">Scheduled (Jadwal Terbit)</option>
-                            <option value="passed">Passed (Lulus Sidang)</option>
-                            <option value="failed">Failed (Tidak Lulus)</option>
-                        </select>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">Skor Akhir (0-100)</label>
-                            <input type="number" step="0.01" name="score" class="form-control" placeholder="Contoh: 85.50">
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">Grade (Nilai Huruf)</label>
-                            <input type="text" name="grade" class="form-control" placeholder="Contoh: A, B+, C">
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger light" data-bs-dismiss="modal">Tutup</button>
-                    <button type="submit" class="btn btn-primary">Simpan</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
+
 
 <!-- Edit Modal -->
 <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-hidden="true">
@@ -208,10 +136,6 @@
                         </div>
                     </div>
                     <div class="form-group mb-3">
-                        <label class="form-label">Path File Laporan Skripsi Akhir PDF</label>
-                        <input type="text" name="final_file_path" id="edit_final_file_path" class="form-control">
-                    </div>
-                    <div class="form-group mb-3">
                         <label class="form-label">Status Sidang</label>
                         <select name="status" id="edit_status" class="form-control" required>
                             <option value="registered">Registered (Pendaftaran Baru)</option>
@@ -219,16 +143,6 @@
                             <option value="passed">Passed (Lulus Sidang)</option>
                             <option value="failed">Failed (Tidak Lulus)</option>
                         </select>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">Skor Akhir (0-100)</label>
-                            <input type="number" step="0.01" name="score" id="edit_score" class="form-control">
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">Grade (Nilai Huruf)</label>
-                            <input type="text" name="grade" id="edit_grade" class="form-control">
-                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -262,9 +176,9 @@
                 document.getElementById('edit_defense_date').value = date;
                 document.getElementById('edit_room').value = room || '';
                 document.getElementById('edit_status').value = status;
-                document.getElementById('edit_score').value = score || '';
-                document.getElementById('edit_grade').value = grade || '';
-                document.getElementById('edit_final_file_path').value = finalFile || '';
+                if(document.getElementById('edit_score')) document.getElementById('edit_score').value = score || '';
+                if(document.getElementById('edit_grade')) document.getElementById('edit_grade').value = grade || '';
+                if(document.getElementById('edit_final_file_path')) document.getElementById('edit_final_file_path').value = finalFile || '';
             });
         });
     });

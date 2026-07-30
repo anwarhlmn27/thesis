@@ -14,6 +14,7 @@ class DefenseExaminer extends Model
         'lecturer_id',
         'position',
         'score',
+        'notes',
     ];
 
     protected $casts = [

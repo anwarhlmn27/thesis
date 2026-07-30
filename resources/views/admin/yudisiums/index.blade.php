@@ -27,7 +27,7 @@
                         <thead>
                             <tr>
                                 <th style="width:50px;"><strong>#</strong></th>
-                                <th><strong>MAHASISWA & SKRIPSI</strong></th>
+                                <th><strong>TAHUN AKADEMIK & MAHASISWA</strong></th>
                                 <th><strong>NOMOR SK YUDISIUM</strong></th>
                                 <th><strong>TANGGAL KELULUSAN</strong></th>
                                 <th><strong>STATUS DRAFT / SK</strong></th>
@@ -39,9 +39,8 @@
                             <tr>
                                 <td><strong>{{ $index + 1 }}</strong></td>
                                 <td>
-                                    <strong>{{ $yudisium->student->user->name ?? '-' }}</strong><br>
-                                    <small class="text-muted">NIM: {{ $yudisium->student->nim ?? '-' }}</small><br>
-                                    <small class="text-dark">Title: {{ Str::limit($yudisium->thesis->title ?? '-', 40) }}</small>
+                                    <strong>TA: {{ $yudisium->academic_year ?? '-' }}</strong><br>
+                                    <span class="badge badge-primary">{{ $yudisium->students->count() }} Mahasiswa Dilampirkan</span>
                                 </td>
                                 <td>
                                     <strong class="text-primary">{{ $yudisium->sk_number ?? '-' }}</strong>
@@ -78,14 +77,14 @@
                                         </a>
                                         <button type="button" class="btn btn-primary shadow btn-xs sharp me-1 edit-btn" 
                                                 data-id="{{ $yudisium->id }}" 
-                                                data-student_id="{{ $yudisium->student_id }}" 
-                                                data-thesis_id="{{ $yudisium->thesis_id }}"
                                                 data-sk_number="{{ $yudisium->sk_number }}"
+                                                data-academic_year="{{ $yudisium->academic_year }}"
                                                 data-sk_file_path="{{ $yudisium->sk_file_path }}"
                                                 data-dekan_name="{{ $yudisium->dekan_name }}"
                                                 data-dekan_nip="{{ $yudisium->dekan_nip }}"
                                                 data-status="{{ $yudisium->status }}"
                                                 data-graduation_date="{{ $yudisium->graduation_date ? $yudisium->graduation_date->format('Y-m-d') : '' }}"
+                                                data-students="{{ $yudisium->students->map(function($s) { return ['id' => $s->id, 'ipk' => $s->pivot->ipk, 'predicate' => $s->pivot->predicate]; })->toJson() }}"
                                                 data-bs-toggle="modal" 
                                                 data-bs-target="#editModal">
                                             <i class="fa fa-pencil"></i>
@@ -124,29 +123,52 @@
             <form action="{{ route('yudisiums.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="modal-body">
-                    <div class="form-group mb-3">
-                        <label class="form-label">Mahasiswa</label>
-                        <select name="student_id" class="form-control" required>
-                            <option value="">-- Pilih Mahasiswa --</option>
-                            @foreach($students as $student)
-                            <option value="{{ $student->id }}">{{ $student->nim }} - {{ $student->user->name ?? '' }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="form-group mb-3">
-                        <label class="form-label">Skripsi</label>
-                        <select name="thesis_id" class="form-control" required>
-                            <option value="">-- Pilih Judul Skripsi --</option>
-                            @foreach($theses as $thesis)
-                            <option value="{{ $thesis->id }}">{{ $thesis->student->nim ?? '' }} - {{ Str::limit($thesis->title, 50) }}</option>
-                            @endforeach
-                        </select>
-                    </div>
+                <div class="modal-body">
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Nomor SK Yudisium</label>
                             <input type="text" name="sk_number" class="form-control" placeholder="Contoh: SK-YUD/2026/0001">
                         </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Tahun Akademik</label>
+                            <input type="text" name="academic_year" class="form-control" placeholder="Contoh: 2028/2029">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group mb-3">
+                        <label class="form-label font-weight-bold">Pilih Mahasiswa & Input Nilai (Lampiran)</label>
+                        <div class="table-responsive" style="max-height: 300px; overflow-y: auto; border: 1px solid #eee;">
+                            <table class="table table-bordered table-sm mb-0">
+                                <thead style="position: sticky; top: 0; background: #f8f9fa; z-index: 1;">
+                                    <tr>
+                                        <th style="width: 30px;" class="text-center"><i class="fa fa-check"></i></th>
+                                        <th>NIM - Nama</th>
+                                        <th style="width: 100px;">IPK</th>
+                                        <th>Predikat</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($students as $student)
+                                    <tr>
+                                        <td class="text-center align-middle">
+                                            <input type="checkbox" name="student_ids[]" value="{{ $student->id }}">
+                                        </td>
+                                        <td class="align-middle" style="font-size: 13px;">
+                                            <strong>{{ $student->nim }}</strong><br>
+                                            {{ $student->user->name ?? '' }} ({{ $student->prodi }})
+                                        </td>
+                                        <td>
+                                            <input type="number" name="ipk[{{ $student->id }}]" step="0.01" min="0" max="4" class="form-control form-control-sm" placeholder="3.00">
+                                        </td>
+                                        <td>
+                                            <input type="text" name="predicate[{{ $student->id }}]" class="form-control form-control-sm" placeholder="Sangat Memuaskan">
+                                        </td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Tanggal Kelulusan / Yudisium</label>
                             <input type="date" name="graduation_date" class="form-control">
@@ -196,27 +218,52 @@
                 @csrf
                 @method('PUT')
                 <div class="modal-body">
-                    <div class="form-group mb-3">
-                        <label class="form-label">Mahasiswa</label>
-                        <select name="student_id" id="edit_student_id" class="form-control" required>
-                            @foreach($students as $student)
-                            <option value="{{ $student->id }}">{{ $student->nim }} - {{ $student->user->name ?? '' }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="form-group mb-3">
-                        <label class="form-label">Skripsi</label>
-                        <select name="thesis_id" id="edit_thesis_id" class="form-control" required>
-                            @foreach($theses as $thesis)
-                            <option value="{{ $thesis->id }}">{{ $thesis->student->nim ?? '' }} - {{ Str::limit($thesis->title, 50) }}</option>
-                            @endforeach
-                        </select>
-                    </div>
+                <div class="modal-body">
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Nomor SK Yudisium</label>
-                            <input type="text" name="sk_number" id="edit_sk_number" class="form-control">
+                            <input type="text" name="sk_number" id="edit_sk_number" class="form-control" required>
                         </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Tahun Akademik</label>
+                            <input type="text" name="academic_year" id="edit_academic_year" class="form-control" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group mb-3">
+                        <label class="form-label font-weight-bold">Pilih Mahasiswa & Input Nilai (Lampiran)</label>
+                        <div class="table-responsive" style="max-height: 300px; overflow-y: auto; border: 1px solid #eee;">
+                            <table class="table table-bordered table-sm mb-0">
+                                <thead style="position: sticky; top: 0; background: #f8f9fa; z-index: 1;">
+                                    <tr>
+                                        <th style="width: 30px;" class="text-center"><i class="fa fa-check"></i></th>
+                                        <th>NIM - Nama</th>
+                                        <th style="width: 100px;">IPK</th>
+                                        <th>Predikat</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($students as $student)
+                                    <tr>
+                                        <td class="text-center align-middle">
+                                            <input type="checkbox" name="student_ids[]" value="{{ $student->id }}" class="edit-student-checkbox" data-student-id="{{ $student->id }}">
+                                        </td>
+                                        <td class="align-middle" style="font-size: 13px;">
+                                            <strong>{{ $student->nim }}</strong><br>
+                                            {{ $student->user->name ?? '' }} ({{ $student->prodi }})
+                                        </td>
+                                        <td>
+                                            <input type="number" name="ipk[{{ $student->id }}]" id="edit_ipk_{{ $student->id }}" step="0.01" min="0" max="4" class="form-control form-control-sm" placeholder="3.00">
+                                        </td>
+                                        <td>
+                                            <input type="text" name="predicate[{{ $student->id }}]" id="edit_predicate_{{ $student->id }}" class="form-control form-control-sm" placeholder="Sangat Memuaskan">
+                                        </td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Tanggal Kelulusan / Yudisium</label>
                             <input type="date" name="graduation_date" id="edit_graduation_date" class="form-control">
@@ -259,22 +306,45 @@
         editBtns.forEach(btn => {
             btn.addEventListener('click', function() {
                 const id = this.getAttribute('data-id');
-                const studentId = this.getAttribute('data-student_id');
-                const thesisId = this.getAttribute('data-thesis_id');
                 const skNumber = this.getAttribute('data-sk_number');
+                const academicYear = this.getAttribute('data-academic_year');
                 const date = this.getAttribute('data-graduation_date');
                 const dekanName = this.getAttribute('data-dekan_name');
                 const dekanNip = this.getAttribute('data-dekan_nip');
                 const status = this.getAttribute('data-status');
+                const studentsJson = this.getAttribute('data-students');
                 
                 document.getElementById('editForm').action = `/admin/yudisiums/${id}`;
-                document.getElementById('edit_student_id').value = studentId;
-                document.getElementById('edit_thesis_id').value = thesisId;
                 document.getElementById('edit_sk_number').value = skNumber || '';
+                document.getElementById('edit_academic_year').value = academicYear || '';
                 document.getElementById('edit_graduation_date').value = date;
                 document.getElementById('edit_dekan_name').value = dekanName || '';
                 document.getElementById('edit_dekan_nip').value = dekanNip || '';
                 document.getElementById('edit_status').value = status || 'draft';
+
+                // Reset all checkboxes and inputs first
+                document.querySelectorAll('.edit-student-checkbox').forEach(cb => cb.checked = false);
+                document.querySelectorAll('[id^="edit_ipk_"]').forEach(inp => inp.value = '');
+                document.querySelectorAll('[id^="edit_predicate_"]').forEach(inp => inp.value = '');
+
+                // Fill in the students for this yudisium
+                if (studentsJson) {
+                    try {
+                        const students = JSON.parse(studentsJson);
+                        students.forEach(student => {
+                            const cb = document.querySelector(`.edit-student-checkbox[data-student-id="${student.id}"]`);
+                            if (cb) cb.checked = true;
+                            
+                            const ipkInput = document.getElementById(`edit_ipk_${student.id}`);
+                            if (ipkInput) ipkInput.value = student.ipk;
+                            
+                            const predInput = document.getElementById(`edit_predicate_${student.id}`);
+                            if (predInput) predInput.value = student.predicate;
+                        });
+                    } catch (e) {
+                        console.error('Failed to parse students JSON', e);
+                    }
+                }
             });
         });
     });

@@ -13,7 +13,7 @@
 
     <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
       <li class="nav-item" role="presentation">
-        <button class="nav-link active" id="pills-akademik-tab" data-bs-toggle="pill" data-bs-target="#pills-akademik" type="button" role="tab">Validasi Kelulusan SKS (Pra-Sidang)</button>
+        <button class="nav-link active" id="pills-akademik-tab" data-bs-toggle="pill" data-bs-target="#pills-akademik" type="button" role="tab">Validasi Kelayakan Sidang Skripsi (Cek Nilai)</button>
       </li>
       <li class="nav-item" role="presentation">
         <button class="nav-link" id="pills-proposal-tab" data-bs-toggle="pill" data-bs-target="#pills-proposal" type="button" role="tab">Validasi Kelayakan Seminar Proposal</button>

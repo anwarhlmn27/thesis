@@ -37,6 +37,8 @@ class Student extends Model
 
     public function yudisiums()
     {
-        return $this->hasMany(Yudisium::class);
+        return $this->belongsToMany(Yudisium::class, 'yudisium_students')
+            ->withPivot('ipk', 'predicate')
+            ->withTimestamps();
     }
 }

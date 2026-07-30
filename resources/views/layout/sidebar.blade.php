@@ -103,7 +103,7 @@
 							<span class="nav-text">Validasi Akademik</span>
 						</a>
                         <ul aria-expanded="false">
-                            <li><a href="{{ route('baak.clearance.index') }}">SKS & Proposal</a></li>
+                            <li><a href="{{ route('baak.clearance.index') }}">Proposal & Skripsi</a></li>
                         </ul>
                     </li>
                     <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">

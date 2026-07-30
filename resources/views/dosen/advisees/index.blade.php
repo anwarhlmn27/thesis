@@ -23,6 +23,7 @@
                             <th>Status Pembimbing</th>
                             <th>Progress (Log)</th>
                             <th>Status Skripsi</th>
+                            <th>Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -38,17 +39,20 @@
                                 </td>
                                 <td>{{ $thesis->title }}</td>
                                 <td>
-                                    @if($advisorRole && $advisorRole->position == 'supervisor_1')
+                                    @if($advisorRole && $advisorRole->type == 'primary')
                                         <span class="badge badge-primary">Pembimbing 1</span>
-                                    @elseif($advisorRole && $advisorRole->position == 'supervisor_2')
+                                    @elseif($advisorRole && $advisorRole->type == 'secondary')
                                         <span class="badge badge-info">Pembimbing 2</span>
                                     @else
                                         <span class="badge badge-secondary">Pembimbing</span>
                                     @endif
                                 </td>
                                 <td>
-                                    {{ $thesis->mentoringLogs->count() }} Log<br>
-                                    <small class="text-success">{{ $thesis->mentoringLogs->where('status', 'approved')->count() }} Disetujui</small>
+                                    @php
+                                        $myLogs = $advisorRole ? $thesis->mentoringLogs->where('thesis_advisor_id', $advisorRole->id) : collect();
+                                    @endphp
+                                    {{ $myLogs->count() }} Log<br>
+                                    <small class="text-success">{{ $myLogs->where('status', 'approved')->count() }} Disetujui</small>
                                 </td>
                                 <td>
                                     @if($thesis->status == 'active')
@@ -59,10 +63,30 @@
                                         <span class="badge badge-secondary">{{ ucfirst($thesis->status) }}</span>
                                     @endif
                                 </td>
+                                <td>
+                                    <div class="d-flex gap-2">
+                                        <a href="{{ route('dosen.mentoring-logs.index') }}" class="btn btn-sm btn-primary">
+                                            <i class="la la-check-circle"></i> Review Log
+                                        </a>
+                                        @if($myLogs->where('status', 'approved')->count() >= 10)
+                                            @if($advisorRole->is_approved_for_defense)
+                                                <form action="{{ route('dosen.advisees.approve', $thesis->id) }}" method="POST" onsubmit="confirmAction(event, this)" data-confirm-message="Batalkan ACC sidang skripsi mahasiswa ini?">
+                                                    @csrf
+                                                    <button type="submit" class="btn btn-sm btn-outline-danger">Batalkan ACC Sidang</button>
+                                                </form>
+                                            @else
+                                                <form action="{{ route('dosen.advisees.approve', $thesis->id) }}" method="POST" onsubmit="confirmAction(event, this)" data-confirm-message="ACC kelayakan sidang mahasiswa ini? Pastikan bimbingan sudah cukup.">
+                                                    @csrf
+                                                    <button type="submit" class="btn btn-sm btn-success"><i class="la la-check"></i> ACC Sidang</button>
+                                                </form>
+                                            @endif
+                                        @endif
+                                    </div>
+                                </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="6" class="text-center">Tidak ada data mahasiswa bimbingan.</td>
+                                <td colspan="7" class="text-center">Tidak ada data mahasiswa bimbingan.</td>
                             </tr>
                         @endforelse
                     </tbody>

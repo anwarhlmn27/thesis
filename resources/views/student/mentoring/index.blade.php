@@ -30,13 +30,13 @@
                                 <select name="thesis_advisor_id" class="form-select" required>
                                     <option value="">-- Pilih Pembimbing --</option>
                                     @foreach($advisors as $advisor)
-                                        <option value="{{ $advisor->id }}">{{ $advisor->lecturer->user->name }} ({{ $advisor->position == 'supervisor_1' ? 'Pembimbing 1' : 'Pembimbing 2' }})</option>
+                                        <option value="{{ $advisor->id }}">{{ $advisor->lecturer->user->name }} ({{ $advisor->type === 'primary' ? 'Pembimbing 1' : 'Pembimbing 2' }})</option>
                                     @endforeach
                                 </select>
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Tanggal Bimbingan</label>
-                                <input type="date" name="mentoring_date" class="form-control" required max="{{ date('Y-m-d') }}">
+                                <input type="datetime-local" name="mentoring_date" class="form-control" required max="{{ date('Y-m-d\TH:i') }}">
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Materi / Catatan Bimbingan</label>
@@ -73,7 +73,7 @@
                             <tbody>
                                 @forelse($logs as $log)
                                     <tr>
-                                        <td>{{ \Carbon\Carbon::parse($log->mentoring_date)->format('d M Y') }}</td>
+                                        <td>{{ \Carbon\Carbon::parse($log->mentoring_date)->format('d M Y, H:i') }}</td>
                                         <td>{{ $log->thesisAdvisor->lecturer->user->name }}</td>
                                         <td>
                                             {{ $log->notes }}

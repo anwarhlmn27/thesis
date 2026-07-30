@@ -18,13 +18,21 @@
                     <h5 class="card-title mb-0">Cek Syarat Sidang</h5>
                 </div>
                 <div class="card-body">
-                    <ul class="list-group mb-4">
+                    <ul class="list-group list-group-flush mb-4">
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             Log Bimbingan (Min. 10)
                             @if($approvedLogs >= 10)
                                 <span class="badge badge-success badge-pill"><i class="fa fa-check"></i> {{ $approvedLogs }} Log</span>
                             @else
-                                <span class="badge badge-danger badge-pill">{{ $approvedLogs }} Log</span>
+                                <span class="badge badge-warning badge-pill">{{ $approvedLogs }} Log</span>
+                            @endif
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Persetujuan Pembimbing (ACC)
+                            @if($isAdvisorApproved)
+                                <span class="badge badge-success badge-pill"><i class="fa fa-check"></i> ACC</span>
+                            @else
+                                <span class="badge badge-danger badge-pill">Belum ACC</span>
                             @endif
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
@@ -43,19 +51,56 @@
                                 <span class="badge badge-danger badge-pill">Belum</span>
                             @endif
                         </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Bebas Akademik (BAAK)
+                            @if(auth()->user()->student->is_coursework_completed)
+                                <span class="badge badge-success badge-pill"><i class="fa fa-check"></i> Disetujui</span>
+                            @else
+                                <span class="badge badge-danger badge-pill">Belum</span>
+                            @endif
+                        </li>
                     </ul>
 
-                    @if($defense)
-                        <div class="alert alert-info">Anda sudah terdaftar untuk Sidang Skripsi.</div>
-                    @elseif($eligibleForDefense)
-                        <form action="{{ route('student.defenses.store') }}" method="POST" enctype="multipart/form-data">
+                    @if($defense && ($defense->status != 'registered' || $defense->defense_date))
+                        <div class="alert alert-info">Anda sudah terdaftar untuk Sidang Skripsi. Pendaftaran Anda sudah dijadwalkan.</div>
+                    @elseif($defense && $defense->status == 'registered')
+                        <div class="alert alert-warning mb-3">Pendaftaran Anda sedang menunggu jadwal dari BAAK. Anda masih dapat mengedit data di bawah ini.</div>
+                        <form action="{{ route('student.defenses.update') }}" method="POST" enctype="multipart/form-data" onsubmit="confirmAction(event, this)" data-confirm-message="Apakah Anda yakin ingin menyimpan perubahan pendaftaran?" data-confirm-btn="Ya, Simpan!">
                             @csrf
+                            @method('PUT')
+                            <div class="mb-3">
+                                <label class="form-label">Judul Skripsi Final</label>
+                                <textarea name="title" class="form-control" rows="3" required>{{ $thesis ? $thesis->title : '' }}</textarea>
+                                <small class="text-muted">Sesuaikan judul jika ada perubahan/revisi sejak seminar proposal.</small>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Update File Skripsi Final (PDF, Max 10MB)</label>
+                                <input type="file" name="final_file" class="form-control" accept=".pdf">
+                                <small class="text-muted">Kosongkan jika tidak ingin mengubah file. <a href="{{ asset('storage/'.$thesis->final_file_path) }}" target="_blank">Lihat File Saat Ini</a></small>
+                            </div>
+                            <div class="d-flex gap-2">
+                                <button type="submit" class="btn btn-warning flex-grow-1">Simpan Perubahan</button>
+                            </div>
+                        </form>
+                        <form action="{{ route('student.defenses.destroy') }}" method="POST" class="mt-2" onsubmit="confirmAction(event, this)" data-confirm-message="Apakah Anda yakin ingin membatalkan pendaftaran sidang ini? Anda harus mendaftar ulang jika ingin sidang." data-confirm-btn="Ya, Batalkan!">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-outline-danger w-100">Batalkan Pendaftaran</button>
+                        </form>
+                    @elseif($eligibleForDefense)
+                        <form action="{{ route('student.defenses.store') }}" method="POST" enctype="multipart/form-data" onsubmit="confirmAction(event, this)" data-confirm-message="Apakah Anda yakin ingin mendaftar sidang?" data-confirm-btn="Ya, Daftar!">
+                            @csrf
+                            <div class="mb-3">
+                                <label class="form-label">Judul Skripsi Final</label>
+                                <textarea name="title" class="form-control" rows="3" required>{{ $thesis ? $thesis->title : '' }}</textarea>
+                                <small class="text-muted">Sesuaikan judul jika ada perubahan/revisi sejak seminar proposal.</small>
+                            </div>
                             <div class="mb-3">
                                 <label class="form-label">File Skripsi Final (PDF, Max 10MB)</label>
                                 <input type="file" name="final_file" class="form-control" accept=".pdf" required>
                                 <small class="text-muted">Pastikan file sudah disetujui oleh dosen pembimbing.</small>
                             </div>
-                            <button type="submit" class="btn btn-primary w-100" onclick="return confirm('Apakah Anda yakin ingin mendaftar sidang?')">Daftar Sidang Skripsi</button>
+                            <button type="submit" class="btn btn-primary w-100">Daftar Sidang Skripsi</button>
                         </form>
                     @else
                         <div class="alert alert-warning">Persyaratan pendaftaran sidang belum terpenuhi. Silakan penuhi syarat di atas terlebih dahulu.</div>
@@ -72,16 +117,18 @@
                 </div>
                 <div class="card-body">
                     @if($defense)
-                        @if($defense->status == 'pending')
+                        @if(!$defense->defense_date && $defense->status == 'registered')
                             <div class="alert alert-warning">Pendaftaran sedang diproses oleh BAAK. Menunggu penetapan jadwal.</div>
                         @else
                             <div class="alert alert-info">
-                                <h5><i class="fa fa-calendar"></i> {{ \Carbon\Carbon::parse($defense->scheduled_at)->format('d F Y, H:i') }} WIB</h5>
-                                <p class="mb-0"><i class="fa fa-map-marker"></i> Ruangan: <strong>{{ $defense->room }}</strong></p>
+                                <h5><i class="fa fa-calendar"></i> {{ $defense->defense_date ? \Carbon\Carbon::parse($defense->defense_date)->format('d F Y, H:i') : 'Belum ditentukan' }} WIB</h5>
+                                <p class="mb-0"><i class="fa fa-map-marker"></i> Ruangan: <strong>{{ $defense->room ?? '-' }}</strong></p>
                             </div>
                             
-                            @if($defense->status == 'completed')
-                                <div class="alert alert-success mt-3"><i class="fa fa-check-circle"></i> Sidang telah selesai dilaksanakan.</div>
+                            @if($defense->status == 'passed')
+                                <div class="alert alert-success mt-3"><i class="fa fa-check-circle"></i> Sidang telah selesai dilaksanakan (Lulus).</div>
+                            @elseif($defense->status == 'failed')
+                                <div class="alert alert-danger mt-3"><i class="fa fa-times-circle"></i> Sidang telah selesai dilaksanakan (Tidak Lulus).</div>
                             @endif
 
                             <h6 class="mt-4">Tim Penguji:</h6>

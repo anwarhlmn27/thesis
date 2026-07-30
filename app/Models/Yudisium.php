@@ -12,9 +12,8 @@ class Yudisium extends Model
     protected $table = 'yudisiums';
 
     protected $fillable = [
-        'student_id',
-        'thesis_id',
         'sk_number',
+        'academic_year',
         'sk_file_path',
         'graduation_date',
         'dekan_name',
@@ -26,13 +25,10 @@ class Yudisium extends Model
         'graduation_date' => 'date',
     ];
 
-    public function student()
+    public function students()
     {
-        return $this->belongsTo(Student::class);
-    }
-
-    public function thesis()
-    {
-        return $this->belongsTo(Thesis::class);
+        return $this->belongsToMany(Student::class, 'yudisium_students')
+            ->withPivot('ipk', 'predicate')
+            ->withTimestamps();
     }
 }

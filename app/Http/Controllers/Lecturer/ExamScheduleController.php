@@ -51,4 +51,36 @@ class ExamScheduleController extends Controller
 
         return redirect()->back()->with('success', 'Penilaian berhasil disimpan.');
     }
+    public function evaluateDefense(Request $request, $id)
+    {
+        $request->validate([
+            'score' => 'required|numeric|min:0|max:100',
+            'notes' => 'nullable|string'
+        ]);
+
+        $lecturerId = Auth::user()->lecturer->id;
+        
+        // Find the examiner record
+        $examiner = \App\Models\DefenseExaminer::where('thesis_defense_id', $id)
+            ->where('lecturer_id', $lecturerId)
+            ->firstOrFail();
+
+        $examiner->update([
+            'score' => $request->score,
+            'notes' => $request->notes,
+        ]);
+
+        // Sync to DefenseRevision so student can see notes and upload revision
+        \App\Models\DefenseRevision::updateOrCreate(
+            [
+                'thesis_defense_id' => $id,
+                'lecturer_id' => $lecturerId,
+            ],
+            [
+                'description' => $request->notes ?? 'Tidak ada catatan khusus.',
+            ]
+        );
+
+        return redirect()->back()->with('success', 'Nilai sidang dan catatan revisi berhasil disimpan.');
+    }
 }

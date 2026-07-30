@@ -22,4 +22,23 @@ class AdviseeController extends Controller
 
         return view('dosen.advisees.index', compact('theses'));
     }
+
+    /**
+     * Setujui kelayakan sidang skripsi mahasiswa (ACC Pembimbing).
+     */
+    public function approve($id)
+    {
+        $lecturerId = Auth::user()->lecturer->id;
+        
+        $advisor = \App\Models\ThesisAdvisor::where('thesis_id', $id)
+            ->where('lecturer_id', $lecturerId)
+            ->firstOrFail();
+
+        $advisor->is_approved_for_defense = !$advisor->is_approved_for_defense;
+        $advisor->approved_at = $advisor->is_approved_for_defense ? now() : null;
+        $advisor->save();
+
+        $status = $advisor->is_approved_for_defense ? 'disetujui' : 'dibatalkan persetujuannya';
+        return redirect()->back()->with('success', "Kelayakan sidang mahasiswa berhasil $status.");
+    }
 }

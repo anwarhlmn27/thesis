@@ -42,7 +42,7 @@ class RevisionController extends Controller
         
         $path = $request->file('revision_file')->store('revisions', 'public');
         $revision->update([
-            'file_path' => $path,
+            'revision_file_path' => $path,
             'is_approved' => false // reset approval if they re-upload
         ]);
 

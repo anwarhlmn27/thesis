@@ -12,42 +12,54 @@ class YudisiumController extends Controller
 {
     public function index()
     {
-        $yudisiums = Yudisium::with(['student.user', 'thesis'])->orderBy('id', 'desc')->get();
-        $students = Student::with('user')->get();
-        $theses = Thesis::with('student.user')->get();
+        $yudisiums = Yudisium::with(['students.user'])->orderBy('id', 'desc')->get();
+        $students = Student::with(['user', 'theses' => function($q) {
+            $q->latest();
+        }])->get();
 
-        return view('admin.yudisiums.index', compact('yudisiums', 'students', 'theses'));
+        return view('admin.yudisiums.index', compact('yudisiums', 'students'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'student_id' => 'required|exists:students,id',
-            'thesis_id' => 'required|exists:theses,id',
-            'sk_number' => 'nullable|string|max:255',
+            'sk_number' => 'required|string|max:255',
+            'academic_year' => 'nullable|string|max:255',
             'sk_file' => 'nullable|file|mimes:pdf,doc,docx,png,jpg,jpeg|max:10240',
-            'sk_file_path' => 'nullable|string|max:255',
             'graduation_date' => 'nullable|date',
             'dekan_name' => 'nullable|string|max:255',
             'dekan_nip' => 'nullable|string|max:255',
             'status' => 'required|in:draft,approved,printed',
+            'student_ids' => 'nullable|array',
+            'ipk' => 'nullable|array',
+            'predicate' => 'nullable|array',
         ]);
 
-        $filePath = $request->sk_file_path;
+        $filePath = null;
         if ($request->hasFile('sk_file')) {
             $filePath = $request->file('sk_file')->store('yudisiums', 'public');
         }
 
-        Yudisium::create([
-            'student_id' => $request->student_id,
-            'thesis_id' => $request->thesis_id,
-            'sk_number' => $request->sk_number ?: 'SK-YUD/' . date('Y') . '/' . sprintf('%04d', $request->thesis_id),
+        $yudisium = Yudisium::create([
+            'sk_number' => $request->sk_number,
+            'academic_year' => $request->academic_year,
             'sk_file_path' => $filePath,
             'graduation_date' => $request->graduation_date ?: now(),
             'dekan_name' => $request->dekan_name ?: 'Dr. H. Ahmad Dahlan, M.Pd.',
             'dekan_nip' => $request->dekan_nip ?: '197508152002121001',
             'status' => $request->status,
         ]);
+
+        if ($request->student_ids) {
+            $syncData = [];
+            foreach ($request->student_ids as $studentId) {
+                $syncData[$studentId] = [
+                    'ipk' => $request->ipk[$studentId] ?? null,
+                    'predicate' => $request->predicate[$studentId] ?? null,
+                ];
+            }
+            $yudisium->students()->sync($syncData);
+        }
 
         return redirect()->back()->with('success', 'Data Draft SK Yudisium berhasil ditambahkan.');
     }
@@ -57,30 +69,43 @@ class YudisiumController extends Controller
         $yudisium = Yudisium::findOrFail($id);
 
         $request->validate([
-            'student_id' => 'required|exists:students,id',
-            'thesis_id' => 'required|exists:theses,id',
-            'sk_number' => 'nullable|string|max:255',
+            'sk_number' => 'required|string|max:255',
+            'academic_year' => 'nullable|string|max:255',
             'sk_file' => 'nullable|file|mimes:pdf,doc,docx,png,jpg,jpeg|max:10240',
-            'sk_file_path' => 'nullable|string|max:255',
             'graduation_date' => 'nullable|date',
             'dekan_name' => 'nullable|string|max:255',
             'dekan_nip' => 'nullable|string|max:255',
             'status' => 'required|in:draft,approved,printed',
+            'student_ids' => 'nullable|array',
+            'ipk' => 'nullable|array',
+            'predicate' => 'nullable|array',
         ]);
 
-        $data = $request->all();
+        $data = $request->only(['sk_number', 'academic_year', 'graduation_date', 'dekan_name', 'dekan_nip', 'status']);
+        
         if ($request->hasFile('sk_file')) {
             $data['sk_file_path'] = $request->file('sk_file')->store('yudisiums', 'public');
         }
 
         $yudisium->update($data);
 
+        $syncData = [];
+        if ($request->student_ids) {
+            foreach ($request->student_ids as $studentId) {
+                $syncData[$studentId] = [
+                    'ipk' => $request->ipk[$studentId] ?? null,
+                    'predicate' => $request->predicate[$studentId] ?? null,
+                ];
+            }
+        }
+        $yudisium->students()->sync($syncData);
+
         return redirect()->back()->with('success', 'Data SK Yudisium berhasil diperbarui.');
     }
 
     public function print($id)
     {
-        $yudisium = Yudisium::with(['student.user', 'thesis'])->findOrFail($id);
+        $yudisium = Yudisium::with(['students.user'])->findOrFail($id);
         $yudisium->update(['status' => 'printed']);
 
         return view('admin.yudisiums.print', compact('yudisium'));
@@ -89,6 +114,7 @@ class YudisiumController extends Controller
     public function destroy($id)
     {
         $yudisium = Yudisium::findOrFail($id);
+        $yudisium->students()->detach();
         $yudisium->delete();
 
         return redirect()->back()->with('success', 'Data SK Yudisium berhasil dihapus.');

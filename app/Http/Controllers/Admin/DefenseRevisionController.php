@@ -76,20 +76,8 @@ class DefenseRevisionController extends Controller
             $revision->is_approved = true;
             $revision->approved_at = now();
 
-            // Automatically register to Draft SK Yudisium if both approved
-            $thesisDefense = $revision->thesisDefense;
-            if ($thesisDefense && $thesisDefense->thesis) {
-                Yudisium::firstOrCreate([
-                    'student_id' => $thesisDefense->thesis->student_id,
-                    'thesis_id' => $thesisDefense->thesis_id,
-                ], [
-                    'sk_number' => 'SK-YUD/' . date('Y') . '/' . sprintf('%04d', $thesisDefense->thesis_id),
-                    'graduation_date' => now(),
-                    'dekan_name' => 'Dr. H. Ahmad Dahlan, M.Pd.',
-                    'dekan_nip' => '197508152002121001',
-                    'status' => 'draft',
-                ]);
-            }
+            // Automatically register to Draft SK Yudisium logic has been removed
+            // since Yudisium is now handled in batches.
         } else {
             $revision->is_approved = false;
         }

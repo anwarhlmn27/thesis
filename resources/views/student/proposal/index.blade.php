@@ -118,7 +118,7 @@
                 <div class="card-body">
                     @if($seminar)
                         <div class="alert alert-info">
-                            <h5><i class="fa fa-calendar"></i> {{ \Carbon\Carbon::parse($seminar->scheduled_at)->format('d F Y, H:i') }} WIB</h5>
+                            <h5><i class="fa fa-calendar"></i> {{ \Carbon\Carbon::parse($seminar->seminar_date)->format('d F Y, H:i') }} WIB</h5>
                             <p class="mb-0"><i class="fa fa-map-marker"></i> Ruangan: <strong>{{ $seminar->room }}</strong></p>
                         </div>
                         <h6>Tim Penguji:</h6>
@@ -127,6 +127,40 @@
                                 <li>{{ $examiner->lecturer->user->name }} ({{ $examiner->position === 'chairman' ? 'Ketua Penguji' : 'Anggota Penguji' }})</li>
                             @endforeach
                         </ul>
+
+                        <hr>
+                        <h6>Catatan / Revisi Seminar:</h6>
+                        @php
+                            $hasNotes = false;
+                            if ($seminar->proposalExaminers) {
+                                foreach($seminar->proposalExaminers as $examiner) {
+                                    if (!empty($examiner->notes)) {
+                                        $hasNotes = true;
+                                        break;
+                                    }
+                                }
+                            }
+                        @endphp
+
+                        @if($hasNotes)
+                            <div class="list-group">
+                                @foreach($seminar->proposalExaminers as $examiner)
+                                    @if(!empty($examiner->notes))
+                                        <div class="list-group-item">
+                                            <div class="d-flex w-100 justify-content-between">
+                                                <h6 class="mb-1 text-primary">{{ $examiner->lecturer->user->name }} ({{ $examiner->position === 'chairman' ? 'Ketua Penguji' : 'Anggota Penguji' }})</h6>
+                                                <small class="text-muted">{{ $examiner->updated_at->format('d M Y, H:i') }}</small>
+                                            </div>
+                                            <p class="mb-1">{!! nl2br(e($examiner->notes)) !!}</p>
+                                        </div>
+                                    @endif
+                                @endforeach
+                            </div>
+                        @else
+                            <div class="alert alert-light border text-center">
+                                Belum ada catatan dari penguji.
+                            </div>
+                        @endif
                     @else
                         <div class="alert alert-secondary text-center">Belum ada jadwal seminar. Silakan tunggu penetapan dari BAAK setelah proposal Anda disetujui.</div>
                     @endif

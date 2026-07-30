@@ -13,7 +13,9 @@
 
     <div class="card shadow-sm border-0">
         <div class="card-body">
-            @if(!$defense || $defense->status != 'completed')
+            @if(!$defense)
+                <div class="alert alert-warning text-center">Anda belum terdaftar untuk Sidang Skripsi.</div>
+            @elseif($revisions->isEmpty() && !in_array($defense->status, ['passed', 'failed', 'completed']))
                 <div class="alert alert-warning text-center">Anda belum melaksanakan Sidang Skripsi atau status sidang belum dinyatakan selesai. Anda tidak dapat mengunggah revisi.</div>
             @elseif($revisions->isEmpty())
                 <div class="alert alert-secondary text-center">Tim penguji belum menginput data perbaikan revisi untuk Anda.</div>
@@ -23,6 +25,7 @@
                         <thead class="table-light">
                             <tr>
                                 <th>Dosen Penguji</th>
+                                <th>Catatan Revisi</th>
                                 <th>Status Persetujuan Revisi</th>
                                 <th>Dokumen Revisi Anda</th>
                                 <th>Aksi (Upload)</th>
@@ -35,6 +38,9 @@
                                         <strong>{{ $revision->lecturer->user->name }}</strong>
                                     </td>
                                     <td>
+                                        {!! nl2br(e($revision->description)) !!}
+                                    </td>
+                                    <td>
                                         @if($revision->is_approved)
                                             <span class="badge badge-success"><i class="fa fa-check"></i> Revisi Disetujui</span>
                                         @else
@@ -42,8 +48,8 @@
                                         @endif
                                     </td>
                                     <td>
-                                        @if($revision->file_path)
-                                            <a href="{{ Storage::url($revision->file_path) }}" target="_blank" class="btn btn-sm btn-info"><i class="fa fa-download"></i> Lihat File Revisi</a>
+                                        @if($revision->revision_file_path)
+                                            <a href="{{ Storage::url($revision->revision_file_path) }}" target="_blank" class="btn btn-sm btn-info"><i class="fa fa-download"></i> Lihat File Revisi</a>
                                         @else
                                             <span class="text-danger">Belum diunggah</span>
                                         @endif

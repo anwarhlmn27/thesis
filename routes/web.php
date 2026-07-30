@@ -41,12 +41,14 @@ Route::middleware('auth')->group(function () {
 
     Route::prefix('dosen')->middleware('role:lecturer')->name('dosen.')->group(function () {
         Route::get('/advisees', [\App\Http\Controllers\Lecturer\AdviseeController::class, 'index'])->name('advisees.index');
+        Route::post('/advisees/{id}/approve', [\App\Http\Controllers\Lecturer\AdviseeController::class, 'approve'])->name('advisees.approve');
         
         Route::get('/mentoring-logs', [\App\Http\Controllers\Lecturer\MentoringLogController::class, 'index'])->name('mentoring-logs.index');
         Route::post('/mentoring-logs/{id}', [\App\Http\Controllers\Lecturer\MentoringLogController::class, 'update'])->name('mentoring-logs.update');
         
         Route::get('/exams', [\App\Http\Controllers\Lecturer\ExamScheduleController::class, 'index'])->name('exams.index');
         Route::post('/exams/proposal/{id}/evaluate', [\App\Http\Controllers\Lecturer\ExamScheduleController::class, 'evaluateProposal'])->name('exams.proposal.evaluate');
+        Route::post('/exams/defense/{id}/evaluate', [\App\Http\Controllers\Lecturer\ExamScheduleController::class, 'evaluateDefense'])->name('exams.defense.evaluate');
         
         Route::get('/revisions', [\App\Http\Controllers\Lecturer\RevisionController::class, 'index'])->name('revisions.index');
         Route::post('/revisions/{id}/approve', [\App\Http\Controllers\Lecturer\RevisionController::class, 'approve'])->name('revisions.approve');
@@ -61,6 +63,7 @@ Route::middleware('auth')->group(function () {
         
         Route::get('/examiners', [\App\Http\Controllers\Kaprodi\ExaminerController::class, 'index'])->name('examiners.index');
         Route::post('/examiners', [\App\Http\Controllers\Kaprodi\ExaminerController::class, 'store'])->name('examiners.store');
+        Route::post('/examiners/defense', [\App\Http\Controllers\Kaprodi\ExaminerController::class, 'storeDefense'])->name('examiners.store_defense');
     });
 
     Route::prefix('finance')->middleware('role:staff_finance')->name('finance.')->group(function () {
@@ -79,6 +82,8 @@ Route::middleware('auth')->group(function () {
         
         Route::get('/defenses', [\App\Http\Controllers\Student\DefenseController::class, 'index'])->name('defenses.index');
         Route::post('/defenses', [\App\Http\Controllers\Student\DefenseController::class, 'store'])->name('defenses.store');
+        Route::put('/defenses', [\App\Http\Controllers\Student\DefenseController::class, 'update'])->name('defenses.update');
+        Route::delete('/defenses', [\App\Http\Controllers\Student\DefenseController::class, 'destroy'])->name('defenses.destroy');
         
         Route::get('/revisions', [\App\Http\Controllers\Student\RevisionController::class, 'index'])->name('revisions.index');
         Route::post('/revisions', [\App\Http\Controllers\Student\RevisionController::class, 'store'])->name('revisions.store');

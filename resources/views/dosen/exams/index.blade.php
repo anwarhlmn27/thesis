@@ -59,7 +59,7 @@
                                     @endif
                                 </td>
                                 <td>
-                                    <button type="button" class="btn btn-sm btn-primary eval-btn"
+                                    <button type="button" class="btn btn-sm {{ ($examinerRole && $examinerRole->status != 'pending') ? 'btn-success' : 'btn-primary' }} eval-btn"
                                             data-id="{{ $seminar->id }}"
                                             data-student="{{ $seminar->thesis->student->user->name }}"
                                             data-title="{{ $seminar->thesis->title }}"
@@ -67,7 +67,8 @@
                                             data-notes="{{ $examinerRole->notes ?? '' }}"
                                             data-bs-toggle="modal"
                                             data-bs-target="#evalModal">
-                                        <i class="fa fa-edit"></i> {{ ($examinerRole && $examinerRole->status != 'pending') ? 'Edit Penilaian' : 'Beri Penilaian' }}
+                                        <i class="fa {{ ($examinerRole && $examinerRole->status != 'pending') ? 'fa-check-circle' : 'fa-edit' }}"></i> 
+                                        {{ ($examinerRole && $examinerRole->status != 'pending') ? 'Sudah Dinilai (Edit)' : 'Beri Penilaian' }}
                                     </button>
                                 </td>
                             </tr>
@@ -95,6 +96,7 @@
                             <th>Judul Skripsi</th>
                             <th>Peran Anda</th>
                             <th>Status Sidang</th>
+                            <th>Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -113,7 +115,7 @@
                                 </td>
                                 <td>{{ $defense->thesis->title }}</td>
                                 <td>
-                                    @if($examinerRole && $examinerRole->position == 'chief')
+                                    @if($examinerRole && $examinerRole->position == 'chairman')
                                         <span class="badge badge-primary">Ketua Penguji</span>
                                     @elseif($examinerRole && $examinerRole->position == 'secretary')
                                         <span class="badge badge-info">Sekretaris</span>
@@ -124,16 +126,29 @@
                                 <td>
                                     @if($defense->status == 'scheduled')
                                         <span class="badge badge-warning">Terjadwal</span>
-                                    @elseif($defense->status == 'completed')
+                                    @elseif($defense->status == 'passed' || $defense->status == 'failed')
                                         <span class="badge badge-success">Selesai</span>
                                     @else
                                         <span class="badge badge-secondary">{{ ucfirst($defense->status) }}</span>
                                     @endif
                                 </td>
+                                <td>
+                                    <button type="button" class="btn btn-sm {{ ($examinerRole && $examinerRole->score !== null) ? 'btn-success' : 'btn-primary' }} eval-defense-btn"
+                                            data-id="{{ $defense->id }}"
+                                            data-student="{{ $defense->thesis->student->user->name }}"
+                                            data-title="{{ $defense->thesis->title }}"
+                                            data-score="{{ $examinerRole->score ?? '' }}"
+                                            data-notes="{{ $examinerRole->notes ?? '' }}"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#evalDefenseModal">
+                                        <i class="fa {{ ($examinerRole && $examinerRole->score !== null) ? 'fa-check-circle' : 'fa-edit' }}"></i> 
+                                        {{ ($examinerRole && $examinerRole->score !== null) ? 'Sudah Dinilai (Edit)' : 'Beri Penilaian' }}
+                                    </button>
+                                </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="5" class="text-center">Tidak ada jadwal sidang skripsi.</td>
+                                <td colspan="6" class="text-center">Tidak ada jadwal sidang skripsi.</td>
                             </tr>
                         @endforelse
                     </tbody>
@@ -188,11 +203,51 @@
     </div>
 </div>
 
+<!-- Modal Evaluasi Sidang Skripsi -->
+<div class="modal fade" id="evalDefenseModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Penilaian Sidang Skripsi</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form action="" method="POST" id="evalDefenseForm">
+                @csrf
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Mahasiswa</label>
+                        <input type="text" id="eval_defense_student" class="form-control" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Judul Skripsi</label>
+                        <textarea id="eval_defense_title" class="form-control" rows="2" readonly></textarea>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label text-primary font-weight-bold">Nilai (0-100) <span class="text-danger">*</span></label>
+                        <input type="number" name="score" id="eval_defense_score" class="form-control form-control-lg" min="0" max="100" step="0.01" required placeholder="Masukkan nilai angka (misal: 85.50)">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label text-primary font-weight-bold">Catatan Perbaikan / Revisi</label>
+                        <textarea name="notes" id="eval_defense_notes" class="form-control" rows="5" placeholder="Tuliskan catatan revisi, perbaikan, atau masukan untuk mahasiswa..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger light" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-primary">Simpan Penilaian</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 @endsection
 
 @section('scripts')
 <script>
     document.addEventListener("DOMContentLoaded", function() {
+        // Evaluasi Seminar Proposal
         const evalBtns = document.querySelectorAll('.eval-btn');
         evalBtns.forEach(btn => {
             btn.addEventListener('click', function() {
@@ -212,6 +267,29 @@
                 } else {
                     $('#eval_status').val('').trigger('change');
                 }
+                
+                // Refresh bootstrap-select for UI update
+                if ($('#eval_status').hasClass('default-select')) {
+                    $('#eval_status').selectpicker('refresh');
+                }
+            });
+        });
+
+        // Evaluasi Sidang Skripsi
+        const evalDefenseBtns = document.querySelectorAll('.eval-defense-btn');
+        evalDefenseBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const id = this.getAttribute('data-id');
+                const student = this.getAttribute('data-student');
+                const title = this.getAttribute('data-title');
+                const score = this.getAttribute('data-score');
+                const notes = this.getAttribute('data-notes');
+                
+                document.getElementById('evalDefenseForm').action = `/dosen/exams/defense/${id}/evaluate`;
+                document.getElementById('eval_defense_student').value = student;
+                document.getElementById('eval_defense_title').value = title;
+                document.getElementById('eval_defense_score').value = score;
+                document.getElementById('eval_defense_notes').value = notes;
             });
         });
     });

@@ -20,7 +20,7 @@ class MentoringLog extends Model
     ];
 
     protected $casts = [
-        'mentoring_date' => 'date',
+        'mentoring_date' => 'datetime',
     ];
 
     public function thesis()

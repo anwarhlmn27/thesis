@@ -74,16 +74,19 @@ class ThesisDefenseController extends Controller
             }
         }
 
-        ThesisDefense::create([
+        $data = [
             'thesis_id' => $request->thesis_id,
             'defense_date' => $request->defense_date,
             'room' => $request->room,
             'status' => $request->status,
             'is_advisor_approved' => true,
-            'final_file_path' => $request->final_file_path,
-            'score' => $request->score,
-            'grade' => $request->grade,
-        ]);
+        ];
+        
+        if ($request->has('final_file_path')) $data['final_file_path'] = $request->final_file_path;
+        if ($request->has('score')) $data['score'] = $request->score;
+        if ($request->has('grade')) $data['grade'] = $request->grade;
+
+        ThesisDefense::create($data);
 
         if ($thesis) {
             $thesis->update(['status' => 'defense_scheduled']);
@@ -106,15 +109,18 @@ class ThesisDefenseController extends Controller
             'final_file_path' => 'nullable|string|max:255',
         ]);
 
-        $defense->update([
+        $data = [
             'thesis_id' => $request->thesis_id,
             'defense_date' => $request->defense_date,
             'room' => $request->room,
             'status' => $request->status,
-            'final_file_path' => $request->final_file_path,
-            'score' => $request->score,
-            'grade' => $request->grade,
-        ]);
+        ];
+        
+        if ($request->has('final_file_path')) $data['final_file_path'] = $request->final_file_path;
+        if ($request->has('score')) $data['score'] = $request->score;
+        if ($request->has('grade')) $data['grade'] = $request->grade;
+
+        $defense->update($data);
 
         return redirect()->back()->with('success', 'Jadwal / Status Sidang Skripsi berhasil diperbarui.');
     }

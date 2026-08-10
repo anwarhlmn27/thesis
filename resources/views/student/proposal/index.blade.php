@@ -67,7 +67,7 @@
                         <table class="table table-bordered">
                             <tr>
                                 <th width="30%">File Proposal</th>
-                                <td><a href="{{ Storage::url($thesis->latestProposal->proposal_file_path) }}" target="_blank" class="btn btn-sm btn-info"><i class="fa fa-file-pdf"></i> Lihat File</a></td>
+                                <td><a href="{{ asset('storage/' . $thesis->latestProposal->proposal_file_path) }}" target="_blank" class="btn btn-sm btn-info"><i class="fa fa-file-pdf"></i> Lihat File</a></td>
                             </tr>
                             <tr>
                                 <th>Validasi Akademik (BAAK)</th>

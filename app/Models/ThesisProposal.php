@@ -45,14 +45,10 @@ class ThesisProposal extends Model
         parent::boot();
 
         static::saving(function ($proposal) {
-            if ($proposal->is_baak_approved === true && 
-                $proposal->is_finance_approved === true && 
-                $proposal->is_kaprodi_approved === true) {
+            if ($proposal->is_baak_approved && 
+                $proposal->is_finance_approved && 
+                $proposal->is_kaprodi_approved) {
                 $proposal->eligibility_status = 'eligible';
-            } elseif ($proposal->is_baak_approved === false || 
-                      $proposal->is_finance_approved === false || 
-                      $proposal->is_kaprodi_approved === false) {
-                $proposal->eligibility_status = 'rejected';
             } else {
                 $proposal->eligibility_status = 'pending';
             }

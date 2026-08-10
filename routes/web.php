@@ -105,14 +105,14 @@ Route::middleware('auth')->group(function () {
         Route::resource('users', UserController::class);
         Route::resource('staff', StaffController::class);
         Route::resource('lecturers', LecturerController::class);
-        Route::resource('students', StudentController::class);
         Route::resource('theses', ThesisController::class);
         Route::resource('thesis-advisors', ThesisAdvisorController::class);
         Route::resource('mentoring-logs', MentoringLogController::class);
     });
 
-    // Admin & BAAK Shared (Scheduling & Approval)
+    // Admin & BAAK Shared (Scheduling & Approval & Student Management)
     Route::prefix('admin')->middleware('role:admin,staff_baak')->group(function () {
+        Route::resource('students', StudentController::class);
         Route::resource('thesis-proposals', ThesisProposalController::class);
         Route::post('thesis-proposals/{id}/approve', [ThesisProposalController::class, 'approve'])->name('thesis-proposals.approve');
         Route::resource('proposal-seminars', ProposalSeminarController::class);
@@ -123,6 +123,9 @@ Route::middleware('auth')->group(function () {
         Route::resource('defense-revisions', DefenseRevisionController::class);
         Route::post('defense-revisions/{id}/approve', [DefenseRevisionController::class, 'approve'])->name('defense-revisions.approve');
         Route::resource('yudisiums', YudisiumController::class);
-        Route::get('yudisiums/{id}/print', [YudisiumController::class, 'print'])->name('yudisiums.print');
     });
+
+    Route::get('admin/yudisiums/{id}/print', [YudisiumController::class, 'print'])
+        ->name('yudisiums.print')
+        ->middleware('role:admin,staff_baak,student');
 });

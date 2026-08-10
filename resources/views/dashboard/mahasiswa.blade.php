@@ -91,18 +91,27 @@
         
         <!-- Step 1: Proposal -->
         <div class="col-md-3 mb-3">
-            <div class="card border-0 shadow-sm h-100 {{ $thesis ? 'border-start border-4 border-success' : 'border-start border-4 border-secondary' }}">
+            <div class="card border-0 shadow-sm h-100 {{ ($thesis?->latestProposal?->is_baak_approved && $thesis?->latestProposal?->is_finance_approved && $thesis?->latestProposal?->is_kaprodi_approved) ? 'border-start border-4 border-success' : ($thesis ? 'border-start border-4 border-warning' : 'border-start border-4 border-secondary') }}">
                 <div class="card-body">
                     <div class="d-flex align-items-center mb-2">
-                        <div class="rounded-circle bg-success text-white px-3 py-2 me-2 font-w700">1</div>
+                        <div class="rounded-circle {{ ($thesis?->latestProposal?->is_baak_approved && $thesis?->latestProposal?->is_finance_approved && $thesis?->latestProposal?->is_kaprodi_approved) ? 'bg-success' : ($thesis ? 'bg-warning' : 'bg-secondary') }} text-white px-3 py-2 me-2 font-w700">1</div>
                         <h6 class="mb-0 font-w600">Proposal & Seminar</h6>
                     </div>
                     @if($thesis)
                         <p class="small text-muted mb-2">Judul: {{ Str::limit($thesis->title, 45) }}</p>
-                        <span class="badge bg-success-soft text-success"><i class="la la-check"></i> Disetujui</span>
+                        <div class="d-flex align-items-center justify-content-between">
+                            @if($thesis->latestProposal && $thesis->latestProposal->is_baak_approved && $thesis->latestProposal->is_finance_approved && $thesis->latestProposal->is_kaprodi_approved)
+                                <span class="badge bg-success-soft text-success"><i class="la la-check"></i> Siap Seminar</span>
+                            @elseif($thesis->latestProposal && ($thesis->latestProposal->is_baak_approved || $thesis->latestProposal->is_finance_approved || $thesis->latestProposal->is_kaprodi_approved))
+                                <span class="badge bg-info-soft text-info"><i class="la la-clock"></i> Validasi Sebagian</span>
+                            @else
+                                <span class="badge bg-warning-soft text-warning"><i class="la la-hourglass-half"></i> Menunggu Validasi</span>
+                            @endif
+                            <a href="{{ route('student.proposal.index') }}" class="btn btn-xs btn-outline-primary">Lihat Detail</a>
+                        </div>
                     @else
                         <p class="small text-muted mb-2">Belum mengunggah draf proposal.</p>
-                        <a href="{{ route('thesis-proposals.create') }}" class="btn btn-xs btn-outline-primary">Upload Proposal</a>
+                        <a href="{{ route('student.proposal.index') }}" class="btn btn-xs btn-outline-primary">Upload Proposal</a>
                     @endif
                 </div>
             </div>
@@ -120,7 +129,7 @@
                     <div class="progress mb-2" style="height: 8px;">
                         <div class="progress-bar bg-warning" style="width: {{ min(100, ($approvedLogsCount/10)*100) }}%"></div>
                     </div>
-                    <a href="{{ route('mentoring-logs.index') }}" class="btn btn-xs btn-outline-warning">Input Bimbingan</a>
+                    <a href="{{ route('student.mentoring-logs.index') }}" class="btn btn-xs btn-outline-warning">Input Bimbingan</a>
                 </div>
             </div>
         </div>
@@ -137,10 +146,10 @@
                         @php $def = $thesis->thesisDefenses->last(); @endphp
                         <p class="small text-muted mb-1">Status: <strong>{{ ucfirst($def->status) }}</strong></p>
                         <p class="small text-muted mb-2">Nilai: <span class="badge bg-primary">{{ $def->grade ?? 'Pending' }}</span></p>
-                        <a href="{{ route('defense-revisions.index') }}" class="btn btn-xs btn-outline-info">Cek Revisi</a>
+                        <a href="{{ route('student.revisions.index') }}" class="btn btn-xs btn-outline-info">Cek Revisi</a>
                     @else
                         <p class="small text-muted mb-2">Belum mendaftar sidang skripsi.</p>
-                        <a href="{{ route('thesis-defenses.create') }}" class="btn btn-xs btn-outline-secondary">Daftar Sidang</a>
+                        <a href="{{ route('student.defenses.index') }}" class="btn btn-xs btn-outline-secondary">Daftar Sidang</a>
                     @endif
                 </div>
             </div>
@@ -202,7 +211,7 @@
             <div class="card shadow-sm border-0 h-100">
                 <div class="card-header bg-white d-flex justify-content-between align-items-center">
                     <h5 class="card-title text-primary mb-0"><i class="la la-history me-1"></i> Log Bimbingan Terbaru</h5>
-                    <a href="{{ route('mentoring-logs.index') }}" class="btn btn-xs btn-outline-primary">Lihat Semua</a>
+                    <a href="{{ route('student.mentoring-logs.index') }}" class="btn btn-xs btn-outline-primary">Lihat Semua</a>
                 </div>
                 <div class="card-body p-0">
                     @if($thesis && $thesis->mentoringLogs->count() > 0)

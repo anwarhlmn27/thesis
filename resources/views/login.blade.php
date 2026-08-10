@@ -32,15 +32,6 @@
                             <h4 class="text-center mb-4">Sign in your account</h4>
                             <form action="{{ route('login.post') }}" method="POST">
                                 @csrf
-                                @if ($errors->any())
-                                    <div class="alert alert-danger shadow-sm border-0">
-                                        <ul class="mb-0 pl-3">
-                                            @foreach ($errors->all() as $error)
-                                                <li>{{ $error }}</li>
-                                            @endforeach
-                                        </ul>
-                                    </div>
-                                @endif
                                 <div class="form-group">
                                     <label class="form-label" for="email">Email</label>
                                     <input type="email" class="form-control" name="email" value="{{ old('email') }}" placeholder="admin@example.com" id="email" required>
@@ -68,9 +59,9 @@
                                     <button type="submit" class="btn btn-primary btn-block">Sign Me In</button>
                                 </div>
                             </form>
-                            <div class="new-account mt-3">
+                            <!-- <div class="new-account mt-3">
                                 <p>Don't have an account? <a class="text-primary" href="./page-register.html">Sign up</a></p>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                 </div>
@@ -87,7 +78,48 @@
     <script src="{{ asset('js/custom.min.js')}}"></script>
     <script src="{{ asset('js/dlabnav-init.js?v=1.0.1')}}"></script>
     
-    
+    <!-- SweetAlert2 Toast -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.addEventListener('mouseenter', Swal.stopTimer);
+                toast.addEventListener('mouseleave', Swal.resumeTimer);
+            }
+        });
 
+        @if(session('success'))
+            Toast.fire({
+                icon: 'success',
+                title: {!! json_encode(session('success')) !!}
+            });
+        @endif
+
+        @if(session('error'))
+            Toast.fire({
+                icon: 'error',
+                title: {!! json_encode(session('error')) !!}
+            });
+        @endif
+
+        @if(session('status'))
+            Toast.fire({
+                icon: 'info',
+                title: {!! json_encode(session('status')) !!}
+            });
+        @endif
+
+        @if($errors->any())
+            Toast.fire({
+                icon: 'error',
+                title: {!! json_encode($errors->first()) !!}
+            });
+        @endif
+    </script>
 </body>
 </html>

@@ -34,8 +34,8 @@
                             @endphp
                             <tr>
                                 <td>
-                                    <strong>{{ \Carbon\Carbon::parse($seminar->scheduled_at)->format('d M Y, H:i') }}</strong><br>
-                                    <small class="text-muted"><i class="fa fa-map-marker"></i> {{ $seminar->room }}</small>
+                                    <strong>{{ $seminar->seminar_date ? \Carbon\Carbon::parse($seminar->seminar_date)->format('d M Y, H:i') : 'Belum ditentukan' }}</strong><br>
+                                    <small class="text-muted"><i class="fa fa-map-marker"></i> {{ $seminar->room ?? '-' }}</small>
                                 </td>
                                 <td>
                                     <strong>{{ $seminar->thesis->student->user->name }}</strong><br>
@@ -52,7 +52,7 @@
                                 <td>
                                     @if($seminar->status == 'scheduled')
                                         <span class="badge badge-warning">Terjadwal</span>
-                                    @elseif($seminar->status == 'completed')
+                                    @elseif($seminar->status == 'completed' || $seminar->status == 'passed')
                                         <span class="badge badge-success">Selesai</span>
                                     @else
                                         <span class="badge badge-secondary">{{ ucfirst($seminar->status) }}</span>
@@ -106,8 +106,8 @@
                             @endphp
                             <tr>
                                 <td>
-                                    <strong>{{ \Carbon\Carbon::parse($defense->scheduled_at)->format('d M Y, H:i') }}</strong><br>
-                                    <small class="text-muted"><i class="fa fa-map-marker"></i> {{ $defense->room }}</small>
+                                    <strong>{{ $defense->defense_date ? \Carbon\Carbon::parse($defense->defense_date)->format('d M Y, H:i') : 'Belum ditentukan' }}</strong><br>
+                                    <small class="text-muted"><i class="fa fa-map-marker"></i> {{ $defense->room ?? '-' }}</small>
                                 </td>
                                 <td>
                                     <strong>{{ $defense->thesis->student->user->name }}</strong><br>

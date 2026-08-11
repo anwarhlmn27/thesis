@@ -22,6 +22,7 @@
                             <th>Waktu & Tempat</th>
                             <th>Mahasiswa</th>
                             <th>Judul Proposal</th>
+                            <th>File Dokumen</th>
                             <th>Peran Anda</th>
                             <th>Status Seminar</th>
                             <th>Aksi</th>
@@ -42,6 +43,21 @@
                                     <small class="text-muted">NIM: {{ $seminar->thesis->student->nim }}</small>
                                 </td>
                                 <td>{{ $seminar->thesis->title }}</td>
+                                <td>
+                                    @php
+                                        $proposalFile = $seminar->thesis->proposal_file_path ?? ($seminar->thesis->latestProposal->proposal_file_path ?? null);
+                                    @endphp
+                                    @if($proposalFile)
+                                    @php
+                                        $fileUrl = asset(str_starts_with($proposalFile, 'proposals/') ? 'storage/' . $proposalFile : (str_starts_with($proposalFile, 'theses/proposals/') ? 'storage/' . $proposalFile : $proposalFile));
+                                    @endphp
+                                    <button type="button" class="btn btn-sm btn-info text-white" onclick="previewPdf('{{ $fileUrl }}', 'Proposal - {{ addslashes($seminar->thesis->student->user->name ?? '') }}')">
+                                        <i class="fa fa-eye me-1"></i> Lihat PDF
+                                    </button>
+                                    @else
+                                    <span class="text-muted fs-12">Belum diunggah</span>
+                                    @endif
+                                </td>
                                 <td>
                                     @if($examinerRole && $examinerRole->position == 'chairman')
                                         <span class="badge badge-primary">Ketua Penguji</span>
@@ -68,13 +84,13 @@
                                             data-bs-toggle="modal"
                                             data-bs-target="#evalModal">
                                         <i class="fa {{ ($examinerRole && $examinerRole->status != 'pending') ? 'fa-check-circle' : 'fa-edit' }}"></i> 
-                                        {{ ($examinerRole && $examinerRole->status != 'pending') ? 'Sudah Dinilai (Edit)' : 'Beri Penilaian' }}
+                                        {{ ($examinerRole && $examinerRole->status != 'pending') ? 'Sudah Dinilai' : 'Beri Penilaian' }}
                                     </button>
                                 </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="6" class="text-center">Tidak ada jadwal seminar proposal.</td>
+                                <td colspan="7" class="text-center">Tidak ada jadwal seminar proposal.</td>
                             </tr>
                         @endforelse
                     </tbody>
@@ -94,6 +110,7 @@
                             <th>Waktu & Tempat</th>
                             <th>Mahasiswa</th>
                             <th>Judul Skripsi</th>
+                            <th>File Dokumen</th>
                             <th>Peran Anda</th>
                             <th>Status Sidang</th>
                             <th>Aksi</th>
@@ -114,6 +131,18 @@
                                     <small class="text-muted">NIM: {{ $defense->thesis->student->nim }}</small>
                                 </td>
                                 <td>{{ $defense->thesis->title }}</td>
+                                <td>
+                                    @if($defense->thesis && $defense->thesis->final_file_path)
+                                    @php
+                                        $fileUrl = asset(str_starts_with($defense->thesis->final_file_path, 'theses/final/') ? 'storage/' . $defense->thesis->final_file_path : (str_starts_with($defense->thesis->final_file_path, 'final_theses/') ? 'storage/' . $defense->thesis->final_file_path : $defense->thesis->final_file_path));
+                                    @endphp
+                                    <button type="button" class="btn btn-sm btn-info text-white" onclick="previewPdf('{{ $fileUrl }}', 'Skripsi Akhir - {{ addslashes($defense->thesis->student->user->name ?? '') }}')">
+                                        <i class="fa fa-eye me-1"></i> Lihat PDF
+                                    </button>
+                                    @else
+                                    <span class="text-muted fs-12">Belum diunggah</span>
+                                    @endif
+                                </td>
                                 <td>
                                     @if($examinerRole && $examinerRole->position == 'chairman')
                                         <span class="badge badge-primary">Ketua Penguji</span>
@@ -142,13 +171,13 @@
                                             data-bs-toggle="modal"
                                             data-bs-target="#evalDefenseModal">
                                         <i class="fa {{ ($examinerRole && $examinerRole->score !== null) ? 'fa-check-circle' : 'fa-edit' }}"></i> 
-                                        {{ ($examinerRole && $examinerRole->score !== null) ? 'Sudah Dinilai (Edit)' : 'Beri Penilaian' }}
+                                        {{ ($examinerRole && $examinerRole->score !== null) ? 'Sudah Dinilai' : 'Beri Penilaian' }}
                                     </button>
                                 </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="6" class="text-center">Tidak ada jadwal sidang skripsi.</td>
+                                <td colspan="7" class="text-center">Tidak ada jadwal sidang skripsi.</td>
                             </tr>
                         @endforelse
                     </tbody>

@@ -110,7 +110,7 @@
                     </div>
                     <div class="form-group mb-3">
                         <label class="form-label">Tanggal & Waktu Seminar</label>
-                        <input type="datetime-local" name="seminar_date" class="form-control">
+                        <input type="datetime-local" name="seminar_date" class="form-control" min="{{ now()->format('Y-m-d\T00:00') }}">
                     </div>
                     <div class="form-group mb-3">
                         <label class="form-label">Ruangan</label>

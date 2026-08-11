@@ -99,7 +99,7 @@ class RoleUserSeeder extends Seeder
         $u1 = User::firstOrCreate(['email' => 'mahasiswa@example.com'], ['name' => 'Budi Santoso', 'password' => $password]);
         $s1 = Student::firstOrCreate(
             ['user_id' => $u1->id],
-            ['nim' => '191054101', 'prodi' => 'Sistem Informasi', 'semester' => 8, 'is_paid' => true, 'is_coursework_completed' => true, 'is_library_clear' => true]
+            ['nim' => '191054101', 'prodi' => 'Sistem Informasi', 'semester' => 8]
         );       
     }
 }

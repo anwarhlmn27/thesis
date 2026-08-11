@@ -63,12 +63,12 @@
                                     </td>
                                     <td>
                                         @if($proposal->is_baak_approved)
-                                            <form action="{{ route('baak.clearance.update_proposal', $proposal->id) }}" method="POST" onsubmit="confirmDelete(event, this)" data-confirm-message="Batalkan validasi kelayakan seminar proposal ini?">
+                                            <form action="{{ route('baak.clearance.update_proposal', $proposal->id) }}" method="POST" onsubmit="confirmAction(event, this)" data-confirm-message="Batalkan validasi kelayakan seminar proposal ini?" data-confirm-btn="Ya, Batalkan!">
                                                 @csrf
                                                 <button type="submit" class="btn btn-sm btn-outline-danger">Batalkan Validasi</button>
                                             </form>
                                         @else
-                                            <form action="{{ route('baak.clearance.update_proposal', $proposal->id) }}" method="POST" onsubmit="confirmDelete(event, this)" data-confirm-message="Tandai proposal ini layak untuk diseminarkan?">
+                                            <form action="{{ route('baak.clearance.update_proposal', $proposal->id) }}" method="POST" onsubmit="confirmAction(event, this)" data-confirm-message="Tandai proposal ini layak untuk diseminarkan?" data-confirm-btn="Ya, Validasi!">
                                                 @csrf
                                                 <input type="hidden" name="is_baak_approved" value="1">
                                                 <button type="submit" class="btn btn-sm btn-success"><i class="fa fa-check"></i> Validasi Proposal</button>
@@ -119,12 +119,12 @@
                                     </td>
                                     <td>
                                         @if($student->is_coursework_completed)
-                                            <form action="{{ route('baak.clearance.update_student', $student->id) }}" method="POST" onsubmit="confirmDelete(event, this)" data-confirm-message="Batalkan status layak akademik mahasiswa ini?">
+                                            <form action="{{ route('baak.clearance.update_student', $student->id) }}" method="POST" onsubmit="confirmAction(event, this)" data-confirm-message="Batalkan status layak akademik mahasiswa ini?" data-confirm-btn="Ya, Batalkan!">
                                                 @csrf
                                                 <button type="submit" class="btn btn-sm btn-outline-danger">Batalkan Status</button>
                                             </form>
                                         @else
-                                            <form action="{{ route('baak.clearance.update_student', $student->id) }}" method="POST" onsubmit="confirmDelete(event, this)" data-confirm-message="Tandai mahasiswa ini memenuhi syarat SKS?">
+                                            <form action="{{ route('baak.clearance.update_student', $student->id) }}" method="POST" onsubmit="confirmAction(event, this)" data-confirm-message="Tandai mahasiswa ini memenuhi syarat SKS?" data-confirm-btn="Ya, Validasi!">
                                                 @csrf
                                                 <input type="hidden" name="is_coursework_completed" value="1">
                                                 <button type="submit" class="btn btn-sm btn-success"><i class="fa fa-check"></i> Validasi SKS</button>

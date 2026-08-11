@@ -55,12 +55,12 @@
                                   </td>
                                   <td>
                                       @if($proposal->is_finance_approved)
-                                          <form action="{{ route('finance.clearance.update_proposal', $proposal->id) }}" method="POST" onsubmit="confirmDelete(event, this)" data-confirm-message="Batalkan validasi biaya seminar proposal ini?">
+                                          <form action="{{ route('finance.clearance.update_proposal', $proposal->id) }}" method="POST" onsubmit="confirmAction(event, this)" data-confirm-message="Batalkan validasi biaya seminar proposal ini?" data-confirm-btn="Ya, Batalkan!">
                                               @csrf
                                               <button type="submit" class="btn btn-sm btn-outline-danger">Batalkan Validasi</button>
                                           </form>
                                       @else
-                                          <form action="{{ route('finance.clearance.update_proposal', $proposal->id) }}" method="POST" onsubmit="confirmDelete(event, this)" data-confirm-message="Tandai biaya seminar proposal ini telah dilunasi?">
+                                          <form action="{{ route('finance.clearance.update_proposal', $proposal->id) }}" method="POST" onsubmit="confirmAction(event, this)" data-confirm-message="Tandai biaya seminar proposal ini telah dilunasi?" data-confirm-btn="Ya, Validasi!">
                                               @csrf
                                               <input type="hidden" name="is_finance_approved" value="1">
                                               <button type="submit" class="btn btn-sm btn-success"><i class="fa fa-check"></i> Validasi Bayar</button>
@@ -111,12 +111,12 @@
                                   </td>
                                   <td>
                                       @if($student->is_paid)
-                                          <form action="{{ route('finance.clearance.update_student', $student->id) }}" method="POST" onsubmit="confirmDelete(event, this)" data-confirm-message="Batalkan status lunas UKT mahasiswa ini?">
+                                          <form action="{{ route('finance.clearance.update_student', $student->id) }}" method="POST" onsubmit="confirmAction(event, this)" data-confirm-message="Batalkan status lunas UKT mahasiswa ini?" data-confirm-btn="Ya, Batalkan!">
                                               @csrf
                                               <button type="submit" class="btn btn-sm btn-outline-danger">Batalkan Lunas</button>
                                           </form>
                                       @else
-                                          <form action="{{ route('finance.clearance.update_student', $student->id) }}" method="POST" onsubmit="confirmDelete(event, this)" data-confirm-message="Tandai mahasiswa ini telah lunas UKT?">
+                                          <form action="{{ route('finance.clearance.update_student', $student->id) }}" method="POST" onsubmit="confirmAction(event, this)" data-confirm-message="Tandai mahasiswa ini telah lunas UKT?" data-confirm-btn="Ya, Validasi!">
                                               @csrf
                                               <input type="hidden" name="is_paid" value="1">
                                               <button type="submit" class="btn btn-sm btn-success"><i class="fa fa-check"></i> Setujui Lunas</button>

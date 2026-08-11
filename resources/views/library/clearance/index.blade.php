@@ -40,12 +40,12 @@
                             </td>
                             <td>
                                 @if($student->is_library_clear)
-                                    <form action="{{ route('library.clearance.update_student', $student->id) }}" method="POST" onsubmit="confirmDelete(event, this)" data-confirm-message="Batalkan status bebas perpustakaan mahasiswa ini?">
+                                    <form action="{{ route('library.clearance.update_student', $student->id) }}" method="POST" onsubmit="confirmAction(event, this)" data-confirm-message="Batalkan status bebas perpustakaan mahasiswa ini?" data-confirm-btn="Ya, Batalkan!">
                                         @csrf
                                         <button type="submit" class="btn btn-sm btn-outline-danger">Batalkan Status</button>
                                     </form>
                                 @else
-                                    <form action="{{ route('library.clearance.update_student', $student->id) }}" method="POST" onsubmit="confirmDelete(event, this)" data-confirm-message="Tandai mahasiswa ini bebas dari tanggungan perpustakaan?">
+                                    <form action="{{ route('library.clearance.update_student', $student->id) }}" method="POST" onsubmit="confirmAction(event, this)" data-confirm-message="Tandai mahasiswa ini bebas dari tanggungan perpustakaan?" data-confirm-btn="Ya, Validasi!">
                                         @csrf
                                         <input type="hidden" name="is_library_clear" value="1">
                                         <button type="submit" class="btn btn-sm btn-success"><i class="fa fa-check"></i> Validasi Bebas Perpus</button>

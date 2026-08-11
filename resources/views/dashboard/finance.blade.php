@@ -138,7 +138,7 @@
                                                 <span class="badge badge-light text-warning"><i class="fa fa-clock-o mr-1"></i> Belum Lunas</span>
                                             </td>
                                             <td>
-                                                <form action="{{ route('finance.clearance.update_proposal', $proposal->id) }}" method="POST" onsubmit="confirmDelete(event, this)" data-confirm-message="Tandai biaya seminar proposal mahasiswa ini telah lunas?">
+                                                <form action="{{ route('finance.clearance.update_proposal', $proposal->id) }}" method="POST" onsubmit="confirmAction(event, this)" data-confirm-message="Tandai biaya seminar proposal mahasiswa ini telah lunas?" data-confirm-btn="Ya, Validasi!">
                                                     @csrf
                                                     <input type="hidden" name="is_finance_approved" value="1">
                                                     <button type="submit" class="btn btn-sm btn-success"><i class="fa fa-check mr-1"></i> Setujui Lunas</button>
@@ -183,7 +183,7 @@
                                                 <span class="badge badge-light text-danger"><i class="fa fa-times-circle mr-1"></i> Belum Lunas UKT</span>
                                             </td>
                                             <td>
-                                                <form action="{{ route('finance.clearance.update_student', $student->id) }}" method="POST" onsubmit="confirmDelete(event, this)" data-confirm-message="Tandai mahasiswa ini telah melunasi seluruh pembayaran UKT?">
+                                                <form action="{{ route('finance.clearance.update_student', $student->id) }}" method="POST" onsubmit="confirmAction(event, this)" data-confirm-message="Tandai mahasiswa ini telah melunasi seluruh pembayaran UKT?" data-confirm-btn="Ya, Validasi!">
                                                     @csrf
                                                     <input type="hidden" name="is_paid" value="1">
                                                     <button type="submit" class="btn btn-sm btn-success"><i class="fa fa-check mr-1"></i> Setujui Lunas</button>

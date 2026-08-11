@@ -275,7 +275,7 @@
                                             </td>
                                             <td>{{ $student->updated_at ? $student->updated_at->format('d M Y H:i') : '-' }}</td>
                                             <td>
-                                                <form action="{{ route('library.clearance.update_student', $student->id) }}" method="POST" onsubmit="confirmDelete(event, this)" data-confirm-message="Batalkan status bebas perpustakaan untuk mahasiswa {{ $student->user->name ?? $student->nim }}?">
+                                                <form action="{{ route('library.clearance.update_student', $student->id) }}" method="POST" onsubmit="confirmAction(event, this)" data-confirm-message="Batalkan status bebas perpustakaan untuk mahasiswa {{ $student->user->name ?? $student->nim }}?" data-confirm-btn="Ya, Batalkan!">
                                                     @csrf
                                                     <button type="submit" class="btn btn-sm btn-outline-danger">
                                                         <i class="fa fa-undo mr-1"></i> Batalkan Status
